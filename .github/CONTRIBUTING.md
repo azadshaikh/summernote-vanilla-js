@@ -17,47 +17,43 @@ This is a rough outline of what a contributor's workflow looks like:
 
 ### Building Summernote
 
-For building Summernote, you will need to have Node.js and Yarn installed on your machine.
+For building Summernote, you will need to have Node.js and npm installed on your machine.
 
 - Node.js: https://nodejs.org/
-- Yarn: https://yarnpkg.com/
 
 ```bash
 # Install dependencies
-$ yarn install
+$ npm ci
 
 # Build summernote
-$ yarn build
+$ npm run build
 ```
 
-After running `yarn build`, you should now have a `dist/` directory populated with everything you need to use Summernote.
+After running `npm run build`, you should now have a `dist/` directory populated with everything you need to use Summernote.
 
 ### Starting the local server
 
 For developing Summernote, you can start a local server. This will allow you to make changes to the source code and see the changes in real-time.
 
-````bash
-
-## Start local server for developing Summernote.
-
 ```bash
-$ yarn dev
+# Start local dev server for Summernote
+$ npm run dev
 # Open a browser on http://localhost:3000.
-# If you change source code, automatically reload your page.
-````
+# If you change source code, the page auto-reloads.
+```
 
 ### Testing Summernote
 
 To run the tests, you can use the following command:
 
 ```bash
-$ yarn test
+$ npm test
 ```
 
-You can also run the tests in a specific browser. To do this, you can pass the `--browser` argument to the `yarn test` command.
+You can also run the tests in a specific browser. To do this, you can pass the `--browser` argument to the `npm test` command.
 
 ```bash
-$ yarn test --browser=chrome
+$ npm test -- --browser=chrome
 ```
 
 The following browsers are supported: https://vitest.dev/guide/browser.html#browser-option-types
@@ -67,7 +63,7 @@ The following browsers are supported: https://vitest.dev/guide/browser.html#brow
 If you would like to run some part of your test codes, use the watch mode.
 
 ```bash
-$ yarn test:watch
+$ npm run test:watch
 ```
 
 `vitest` will run test and keep waiting other test requests.
@@ -77,7 +73,7 @@ $ yarn test:watch
 If you want to run some part of your test codes, below shows how to run `dom.spec.js` related tests only.
 
 ```bash
-$ yarn test test/base/core/dom.spec.js
+$ npm test -- test/base/core/dom.spec.js
 ```
 
 ### Debugging Tests
@@ -111,7 +107,7 @@ You can debug unit tests with VSCode following the steps:
 3. On terminal, run test with command:
 
 ```bash
-$ yarn test
+$ npm test
 ```
 
 4. Open vscode

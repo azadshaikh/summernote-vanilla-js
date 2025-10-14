@@ -12,17 +12,13 @@ This directory contains the v2.0 rewrite of Summernote with vanilla JavaScript (
 
 ## Installation
 
-To install Summernote, you can use npm or yarn:
+To install Summernote, use npm:
 
 ```bash
 npm install summernote
 ```
 
-or
 
-```bash
-yarn add summernote
-```
 
 ## Usage
 
@@ -48,4 +44,3 @@ We welcome contributions to Summernote! Please read our [CONTRIBUTING.md](CONTRI
 ## License
 
 Summernote is licensed under the MIT license. See the [LICENSE.md](LICENSE.md) file for more information.
-
