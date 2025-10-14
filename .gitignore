@@ -58,3 +58,10 @@ selenium-debug.log
 
 # build files
 dist/
+
+# v2.0 build outputs
+dist/v2/
+*.map
+
+# Development files
+.rollup.cache/

@@ -15,7 +15,30 @@
     "name": "hackerwins",
     "email": "susukang98@gmail.com"
   },
-  "main": "dist/summernote.js",
+  "main": "dist/v2/summernote.js",
+  "module": "dist/v2/summernote.esm.js",
+  "exports": {
+    ".": {
+      "require": "./dist/v2/summernote.js",
+      "import": "./dist/v2/summernote.esm.js"
+    },
+    "./core": {
+      "require": "./dist/v2/summernote-core.js",
+      "import": "./dist/v2/summernote-core.esm.js"
+    },
+    "./full": {
+      "require": "./dist/v2/summernote-full.js",
+      "import": "./dist/v2/summernote-full.esm.js"
+    },
+    "./plugins/*": {
+      "require": "./dist/v2/plugins/*.js",
+      "import": "./dist/v2/plugins/*.esm.js"
+    }
+  },
+  "files": [
+    "dist/v2",
+    "src/v2"
+  ],
   "type": "module",
   "engines": {
     "node": ">=17.0.0"
@@ -29,49 +52,57 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable"
+    "postpublish": "pinst --enable",
+    "build:v2": "rollup -c rollup.config.js",
+    "build:v2:watch": "rollup -c rollup.config.js --watch",
+    "build:v2:dev": "rollup -c rollup.config.js --environment BUILD:development",
+    "build:v2:prod": "rollup -c rollup.config.js --environment BUILD:production"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/eslint-parser": "^7.12.16",
-    "@babel/plugin-external-helpers": "^7.8.3",
-    "@babel/preset-env": "^7.9.5",
-    "@popperjs/core": "^2.9.2",
-    "@vitest/browser": "^1.6.0",
+    "@babel/core": "^7.28.4",
+    "@babel/eslint-parser": "^7.28.4",
+    "@babel/plugin-external-helpers": "^7.27.1",
+    "@babel/preset-env": "^7.28.3",
+    "@popperjs/core": "^2.11.8",
+    "@vitest/browser": "^3.2.4",
     "adm-zip": "^0.5.16",
-    "autoprefixer": "^10.2.4",
+    "autoprefixer": "^10.4.21",
     "babel-plugin-module-resolver": "^5.0.2",
-    "bootstrap": "^5.0.1",
-    "chromedriver": "^126.0.4",
-    "concurrently": "^8.2.2",
-    "cross-env": "^7.0.3",
+    "bootstrap": "^5.3.8",
+    "chromedriver": "^141.0.2",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
     "css-loader": "^7.1.2",
-    "cssnano": "^7.0.3",
-    "eslint": "^8.13.0",
+    "cssnano": "^7.1.1",
+    "eslint": "^9.37.0",
     "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-chai-friendly": "^1.0.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-n": "^16.0.0",
+    "eslint-plugin-chai-friendly": "^1.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^17.23.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.2.0",
-    "jquery": "3.6.0",
-    "less": "^4.1.1",
-    "less-loader": "^12.2.0",
-    "mocha": "^10.5.2",
+    "eslint-plugin-promise": "^7.2.1",
+    "less": "^4.4.2",
+    "less-loader": "^12.3.0",
+    "mocha": "^11.7.4",
     "pinst": "^3.0.0",
-    "postcss": "^8.2.6",
+    "postcss": "^8.5.6",
     "postcss-escape-generated-content-string": "^3.0.0",
-    "postcss-loader": "^8.1.1",
+    "postcss-loader": "^8.2.0",
     "resolve-url-loader": "^5.0.0",
-    "rollup-plugin-external-globals": "^0.11.0",
-    "sass": "^1.26.3",
-    "sass-loader": "^14.2.1",
-    "serve-static": "^1.14.1",
-    "uglify-js": "^3.9.1",
-    "vite": "^5.4.9",
-    "vite-plugin-banner": "^0.8.0",
-    "vitest": "^1.6.0",
-    "webdriverio": "^8.35.1",
-    "webfont": "^11.1.1"
+    "rollup-plugin-external-globals": "^0.13.0",
+    "sass": "^1.93.2",
+    "sass-loader": "^16.0.5",
+    "serve-static": "^2.2.0",
+    "uglify-js": "^3.19.3",
+    "vite": "^7.1.10",
+    "vite-plugin-banner": "^0.8.1",
+    "vitest": "^3.2.4",
+    "webdriverio": "^9.20.0",
+    "webfont": "^11.2.26",
+    "rollup": "^4.52.4",
+    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^0.4.4"
   }
 }
