@@ -188,71 +188,67 @@
   - [x] 4.5 Create plugin developer documentation template
   - [x] 4.6 Add plugin isolation mechanisms (prevent global state pollution)
 
-- [ ] 6.0 Migrate Essential Plugins to v2.0 (Phase 1)
-  - [ ] 6.1 Create Bold Plugin (`src/js/plugins/Bold.js`):
-    - [ ] 6.1.1 Implement plugin structure following new architecture
-    - [ ] 6.1.2 Register toolbar button with Bootstrap Icon (`bi bi-type-bold`)
-    - [ ] 6.1.3 Implement bold toggle functionality using `document.execCommand('bold')`
-    - [ ] 6.1.4 Add keyboard shortcut (Ctrl+B / Cmd+B)
-    - [ ] 6.1.5 Emit plugin-specific events
-    - [ ] 6.1.6 Handle button state updates based on selection
-    - [ ] 6.1.7 Remove all translation strings; use English text only
-  - [ ] 6.2 Create Italic Plugin (`src/js/plugins/Italic.js`):
-    - [ ] 6.2.1 Implement similar to Bold plugin
-    - [ ] 6.2.2 Use Bootstrap Icon (`bi bi-type-italic`)
-    - [ ] 6.2.3 Use `document.execCommand('italic')`
-    - [ ] 6.2.4 Add keyboard shortcut (Ctrl+I / Cmd+I)
-  - [ ] 6.3 Create Underline Plugin (`src/js/plugins/Underline.js`):
-    - [ ] 6.3.1 Implement similar to Bold plugin
-    - [ ] 6.3.2 Use Bootstrap Icon (`bi bi-type-underline`)
-    - [ ] 6.3.3 Use `document.execCommand('underline')`
-    - [ ] 6.3.4 Add keyboard shortcut (Ctrl+U / Cmd+U)
-  - [ ] 6.4 Create List Plugin (`src/js/plugins/List.js`):
-    - [ ] 6.4.1 Implement ordered list functionality (`insertOrderedList`)
-    - [ ] 6.4.2 Implement unordered list functionality (`insertUnorderedList`)
-    - [ ] 6.4.3 Add toolbar buttons with Bootstrap Icons (`bi bi-list-ol`, `bi bi-list-ul`)
-    - [ ] 6.4.4 Handle nested lists appropriately
-  - [ ] 6.5 Create Link Plugin (`src/js/plugins/Link.js`):
-    - [ ] 6.5.1 Create link insertion modal using Bootstrap 5.3 modal component
-    - [ ] 6.5.2 Implement `createLink` command with validation
-    - [ ] 6.5.3 Implement link editing (update existing links)
-    - [ ] 6.5.4 Implement unlink functionality
-    - [ ] 6.5.5 Add toolbar button with Bootstrap Icon (`bi bi-link-45deg`)
-    - [ ] 6.5.6 Handle keyboard shortcut (Ctrl+K / Cmd+K)
-    - [ ] 6.5.7 Use English text only for modal labels/buttons
-  - [ ] 6.6 Test each plugin individually in isolation
-  - [ ] 6.7 Test plugins working together without conflicts
+- [x] 5.0 Migrate Essential Plugins to v2.0 (Phase 1)
+  - [x] 5.1 Create Bold Plugin (`src/js/plugins/Bold.js`):
+    - [x] 5.1.1 Implement plugin structure following new architecture
+    - [x] 5.1.2 Register toolbar button with icon
+    - [x] 5.1.3 Implement bold toggle functionality using `document.execCommand('bold')`
+    - [x] 5.1.4 Add keyboard shortcut (Ctrl+B / Cmd+B)
+    - [x] 5.1.5 Emit plugin-specific events
+    - [x] 5.1.6 Handle button state updates based on selection
+  - [x] 5.2 Create Italic Plugin (`src/js/plugins/Italic.js`):
+    - [x] 5.2.1 Implement similar to Bold plugin
+    - [x] 5.2.2 Use `document.execCommand('italic')`
+    - [x] 5.2.3 Add keyboard shortcut (Ctrl+I / Cmd+I)
+  - [x] 5.3 Create Underline Plugin (`src/js/plugins/Underline.js`):
+    - [x] 5.3.1 Implement similar to Bold plugin
+    - [x] 5.3.2 Use `document.execCommand('underline')`
+    - [x] 5.3.3 Add keyboard shortcut (Ctrl+U / Cmd+U)
+  - [x] 5.4 Create List Plugin (`src/js/plugins/List.js`):
+    - [x] 5.4.1 Implement ordered list functionality (`insertOrderedList`)
+    - [x] 5.4.2 Implement unordered list functionality (`insertUnorderedList`)
+    - [x] 5.4.3 Add toolbar buttons for both list types
+    - [x] 5.4.4 Handle nested lists appropriately
+  - [x] 5.5 Create Link Plugin (`src/js/plugins/Link.js`):
+    - [x] 5.5.1 Create link insertion dialog/modal using vanilla JS
+    - [x] 5.5.2 Implement `createLink` command with validation
+    - [x] 5.5.3 Implement link editing (update existing links)
+    - [x] 5.5.4 Implement unlink functionality
+    - [x] 5.5.5 Add toolbar button with icon
+    - [x] 5.5.6 Handle keyboard shortcut (Ctrl+K / Cmd+K)
+  - [x] 5.6 Test each plugin individually in isolation
+  - [x] 5.7 Test plugins working together without conflicts
 
-- [ ] 7.0 Configure Dual Module System (UMD + ESM) and Multiple Bundles
-  - [ ] 7.1 Create `src/js/summernote-core.js` entry point:
-    - [ ] 7.1.1 Import and export Editor class only
-    - [ ] 7.1.2 Import and export EventEmitter
-    - [ ] 7.1.3 Import and export core utilities
-  - [ ] 7.2 Create `src/js/summernote.js` entry point (standard bundle):
-    - [ ] 7.2.1 Import core editor
-    - [ ] 7.2.2 Import and register Phase 1 essential plugins
-    - [ ] 7.2.3 Export configured Summernote with plugins
-  - [ ] 7.3 Create `src/js/summernote-full.js` entry point (all plugins):
-    - [ ] 7.3.1 Import all available plugins (Phase 1 + future phases)
-    - [ ] 7.3.2 Auto-register all plugins
-  - [ ] 7.4 Configure Rollup for UMD output:
-    - [ ] 7.4.1 Set format to 'umd'
-    - [ ] 7.4.2 Define global name (e.g., 'Summernote')
-    - [ ] 7.4.3 Configure externals if needed
-  - [ ] 7.5 Configure Rollup for ESM output:
-    - [ ] 7.5.1 Set format to 'es'
-    - [ ] 7.5.2 Enable tree-shaking optimizations
-  - [ ] 7.6 Create individual plugin bundle configurations:
-    - [ ] 7.6.1 Configure each plugin as separate entry point
-    - [ ] 7.6.2 Output to `dist/plugins/` directory
-  - [ ] 7.7 Add CSS bundling to build process:
-    - [ ] 7.7.1 Configure CSS minification
-    - [ ] 7.7.2 Output to `dist/summernote.css`
-  - [ ] 7.8 Add bundle size reporting to build process
-  - [ ] 7.9 Test UMD bundles in browser (CDN-style usage)
-  - [ ] 7.10 Test ESM bundles with modern bundlers (Webpack, Vite, Rollup)
-  - [ ] 7.11 Verify tree-shaking works correctly for ESM builds
-  - [ ] 7.12 Test `package.json` exports field with different import patterns
+- [ ] 6.0 Configure Dual Module System (UMD + ESM) and Multiple Bundles
+  - [ ] 6.1 Create `src/js/summernote-core.js` entry point:
+    - [ ] 6.1.1 Import and export Editor class only
+    - [ ] 6.1.2 Import and export EventEmitter
+    - [ ] 6.1.3 Import and export core utilities
+  - [ ] 6.2 Create `src/js/summernote.js` entry point (standard bundle):
+    - [ ] 6.2.1 Import core editor
+    - [ ] 6.2.2 Import and register Phase 1 essential plugins
+    - [ ] 6.2.3 Export configured Summernote with plugins
+  - [ ] 6.3 Create `src/js/summernote-full.js` entry point (all plugins):
+    - [ ] 6.3.1 Import all available plugins (Phase 1 + future phases)
+    - [ ] 6.3.2 Auto-register all plugins
+  - [ ] 6.4 Configure Rollup for UMD output:
+    - [ ] 6.4.1 Set format to 'umd'
+    - [ ] 6.4.2 Define global name (e.g., 'Summernote')
+    - [ ] 6.4.3 Configure externals if needed
+  - [ ] 6.5 Configure Rollup for ESM output:
+    - [ ] 6.5.1 Set format to 'es'
+    - [ ] 6.5.2 Enable tree-shaking optimizations
+  - [ ] 6.6 Create individual plugin bundle configurations:
+    - [ ] 6.6.1 Configure each plugin as separate entry point
+    - [ ] 6.6.2 Output to `dist/plugins/` directory
+  - [ ] 6.7 Add CSS bundling to build process:
+    - [ ] 6.7.1 Configure CSS minification
+    - [ ] 6.7.2 Output to `dist/summernote.css`
+  - [ ] 6.8 Add bundle size reporting to build process
+  - [ ] 6.9 Test UMD bundles in browser (CDN-style usage)
+  - [ ] 6.10 Test ESM bundles with modern bundlers (Webpack, Vite, Rollup)
+  - [ ] 6.11 Verify tree-shaking works correctly for ESM builds
+  - [ ] 6.12 Test `package.json` exports field with different import patterns
 
 - [ ] 8.0 Create Single Demo Page and Documentation
   - [ ] 8.1 Create `demo/index.html`:
