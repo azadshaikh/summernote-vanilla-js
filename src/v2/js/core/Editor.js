@@ -385,6 +385,20 @@ export default class Editor extends EventEmitter {
   }
 
   /**
+   * Place caret at the end of the editable area
+   */
+  placeCaretAtEnd() {
+    if (!this.editable) return;
+    this.focus();
+    const range = document.createRange();
+    range.selectNodeContents(this.editable);
+    range.collapse(false); // to end
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  /**
    * Blur the editor
    */
   blur() {

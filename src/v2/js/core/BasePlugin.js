@@ -165,8 +165,14 @@ export default class BasePlugin {
     // Attach click handler
     button.addEventListener('click', (e) => {
       e.preventDefault();
+      // Ensure editor has focus and a valid range before executing
+      this.ensureFocusAndRange();
       if (this.enabled) {
         callback.call(this, e);
+        // Prompt immediate state refresh for snappy UI
+        if (this.editor && typeof this.editor.emit === 'function') {
+          this.editor.emit('summernote.selectionchange');
+        }
       }
     });
 
@@ -233,9 +239,43 @@ export default class BasePlugin {
    */
   execCommand(command, value = null) {
     if (this.editor.editable) {
+      this.ensureFocusAndRange();
       document.execCommand(command, false, value);
       this.editor.emit('summernote.change', this.editor.getContent());
+      // Trigger quick UI refresh
+      this.editor.emit('summernote.selectionchange');
     }
+  }
+
+  /**
+   * Ensure the editor has focus and a caret/range inside the editable area.
+   * If selection is outside, place caret at end of the editor.
+   */
+  ensureFocusAndRange() {
+    if (!this.editor || !this.editor.editable) return;
+    const sel = this.getSelection();
+    const within = this.isSelectionInsideEditor(sel);
+    if (!within) {
+      this.editor.placeCaretAtEnd();
+    } else {
+      // If no range, also place caret at end
+      if (!sel || sel.rangeCount === 0) {
+        this.editor.placeCaretAtEnd();
+      }
+    }
+    this.editor.focus();
+  }
+
+  /**
+   * Check whether current selection is inside the editor
+   */
+  isSelectionInsideEditor(sel) {
+    if (!sel || sel.rangeCount === 0) return false;
+    let node = sel.anchorNode;
+    if (!node) return false;
+    if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+    if (!node) return false;
+    return !!(this.editor.editable && (node === this.editor.editable || this.editor.editable.contains(node)));
   }
 
   /**

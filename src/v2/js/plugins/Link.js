@@ -34,6 +34,8 @@ export default class LinkPlugin extends BasePlugin {
   }
 
   showLinkDialog() {
+    // Ensure we have a valid caret/range inside editor
+    this.ensureFocusAndRange();
     this.savedRange = this.saveRange();
     const existing = this.getLinkAtCursor();
     const existingUrl = existing ? existing.href : '';
@@ -113,9 +115,11 @@ export default class LinkPlugin extends BasePlugin {
     const text = (textInput.value || '').trim();
     if (!url) return;
 
-    this.restoreRange(this.savedRange);
+    // Ensure focus; if we have a saved range use it, else place caret at end
+    this.ensureFocusAndRange();
+    if (this.savedRange) this.restoreRange(this.savedRange);
 
-    const existing = this.getLinkAtCursor();
+    let existing = this.getLinkAtCursor();
     if (existing) {
       existing.href = url;
       if (text) existing.textContent = text;
@@ -126,7 +130,11 @@ export default class LinkPlugin extends BasePlugin {
         a.textContent = text;
         this.insertNode(a);
       } else {
-        document.execCommand('createLink', false, url);
+        // No selection and no text: insert a link with URL as text
+        const a = document.createElement('a');
+        a.href = url;
+        a.textContent = url;
+        this.insertNode(a);
       }
     }
 
@@ -136,7 +144,8 @@ export default class LinkPlugin extends BasePlugin {
   }
 
   removeLink() {
-    this.restoreRange(this.savedRange);
+    this.ensureFocusAndRange();
+    if (this.savedRange) this.restoreRange(this.savedRange);
     document.execCommand('unlink');
     this.hideDialog();
     this.editor.focus();
