@@ -41,7 +41,8 @@ const configs = [
     output: {
       file: 'dist/v2/summernote-core.js',
       format: 'umd',
-      name: 'Summernote',
+      name: 'SummernoteCore',
+      exports: 'named',
       sourcemap
     },
     plugins: [...commonPlugins, ...productionPlugins]
@@ -63,6 +64,7 @@ const configs = [
       file: 'dist/v2/summernote.js',
       format: 'umd',
       name: 'Summernote',
+      exports: 'named', // Changed from 'default' to 'named'
       sourcemap
     },
     plugins: [...commonPlugins, ...productionPlugins]
@@ -84,6 +86,7 @@ const configs = [
       file: 'dist/v2/summernote-full.js',
       format: 'umd',
       name: 'Summernote',
+      exports: 'named', // Changed from 'default' to 'named'
       sourcemap
     },
     plugins: [...commonPlugins, ...productionPlugins]

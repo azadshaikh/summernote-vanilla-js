@@ -47,3 +47,24 @@ export function createEditor(target, options = {}) {
 
 // Default export
 export default Editor;
+
+// For UMD builds, expose on window
+if (typeof window !== 'undefined') {
+  // Make Editor the default global
+  window.Summernote = Editor;
+  window.Editor = Editor;
+
+  // Also expose other exports for advanced usage
+  window.SummernoteExports = {
+    Editor,
+    EventEmitter,
+    PluginRegistry,
+    BasePlugin,
+    BoldPlugin,
+    ItalicPlugin,
+    UnderlinePlugin,
+    ListPlugin,
+    LinkPlugin,
+    createEditor
+  };
+}

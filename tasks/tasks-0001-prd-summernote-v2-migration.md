@@ -254,10 +254,10 @@
     - [x] 7.1.3 Document EventEmitter API and core events
     - [x] 7.1.4 Document plugin registration and usage
     - [x] 7.1.5 Document available configuration options
-  - [ ] 7.2 Create CDN usage examples:
-    - [ ] 7.2.1 Create `docs/examples/cdn-basic.html` - Basic initialization
-    - [ ] 7.2.2 Create `docs/examples/cdn-with-plugins.html` - Core + selected plugins
-    - [ ] 7.2.3 Create `docs/examples/cdn-events.html` - Event handling examples
+  - [x] 7.2 Create CDN usage examples:
+    - [x] 7.2.1 Create `docs/examples/cdn-basic.html` - Basic initialization
+    - [x] 7.2.2 Create `docs/examples/cdn-with-plugins.html` - Core + selected plugins
+    - [x] 7.2.3 Create `docs/examples/cdn-events.html` - Event handling examples
   - [ ] 7.3 Create NPM/ESM usage examples:
     - [ ] 7.3.1 Create `docs/examples/npm-basic.js` - Basic ES module import
     - [ ] 7.3.2 Create `docs/examples/npm-selective-plugins.js` - Selective plugin imports

@@ -64,6 +64,10 @@
     "@babel/plugin-external-helpers": "^7.27.1",
     "@babel/preset-env": "^7.28.3",
     "@popperjs/core": "^2.11.8",
+    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "@vitest/browser": "^3.2.4",
     "adm-zip": "^0.5.16",
     "autoprefixer": "^10.4.21",
@@ -75,11 +79,9 @@
     "css-loader": "^7.1.2",
     "cssnano": "^7.1.1",
     "eslint": "^9.37.0",
-    "eslint-config-standard": "^17.1.0",
     "eslint-plugin-chai-friendly": "^1.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-n": "^17.23.1",
-    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^7.2.1",
     "less": "^4.4.2",
     "less-loader": "^12.3.0",
@@ -89,6 +91,7 @@
     "postcss-escape-generated-content-string": "^3.0.0",
     "postcss-loader": "^8.2.0",
     "resolve-url-loader": "^5.0.0",
+    "rollup": "^4.52.4",
     "rollup-plugin-external-globals": "^0.13.0",
     "sass": "^1.93.2",
     "sass-loader": "^16.0.5",
@@ -98,11 +101,6 @@
     "vite-plugin-banner": "^0.8.1",
     "vitest": "^3.2.4",
     "webdriverio": "^9.20.0",
-    "webfont": "^11.2.26",
-    "rollup": "^4.52.4",
-    "@rollup/plugin-babel": "^6.1.0",
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-node-resolve": "^16.0.3",
-    "@rollup/plugin-terser": "^0.4.4"
+    "webfont": "^11.2.26"
   }
 }

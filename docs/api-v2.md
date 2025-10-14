@@ -9,9 +9,15 @@ Complete API reference for Summernote v2.0 WYSIWYG editor.
 npm install summernote@2.0.0
 ```
 
-### CDN
+### CDN (Production)
 ```html
 <script src="https://cdn.jsdelivr.net/npm/summernote@2.0.0/dist/v2/summernote.js"></script>
+```
+
+### Local Development
+```html
+<!-- After running 'npm run build:v2' -->
+<script src="path/to/dist/v2/summernote.js"></script>
 ```
 
 ## Quick Start
@@ -188,6 +194,27 @@ import { LinkPlugin } from 'summernote';
 - Events: `plugin.link.inserted`, `plugin.link.removed`
 
 ## Usage Examples
+
+### Browser Usage (Local Build)
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="editor"></div>
+
+  <!-- Local build (development) -->
+  <script src="dist/v2/summernote.js"></script>
+
+  <!-- CDN (production - once published) -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/summernote@2.0.0/dist/v2/summernote.js"></script> -->
+
+  <script>
+    const editor = new Summernote('#editor');
+    editor.init();
+  </script>
+</body>
+</html>
+```
 
 ### CDN Usage
 ```html
