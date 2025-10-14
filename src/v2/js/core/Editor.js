@@ -34,6 +34,7 @@
 import { $, $$, addClass, removeClass, hasClass, createElement, remove } from './dom.js';
 import { on, off, trigger, ready } from './events.js';
 import EventEmitter from './EventEmitter.js';
+import PluginRegistry from './PluginRegistry.js';
 
 /**
  * Default editor configuration
@@ -66,20 +67,21 @@ export default class Editor extends EventEmitter {
    */
   constructor(target, options = {}) {
     super(); // Initialize EventEmitter
-
+    
     this.target = typeof target === 'string' ? $(target) : target;
-
+    
     if (!this.target) {
       throw new Error('Summernote: Target element not found');
     }
-
+    
     this.options = { ...defaultOptions, ...options };
-    this.plugins = new Map();
+    this.pluginRegistry = new PluginRegistry();
+    this.plugins = new Map(); // Initialized plugin instances
     this.initialized = false;
     this.editable = null;
     this.toolbar = null;
     this.wrapper = null;
-
+    
     // Bind methods
     this.handleInput = this.handleInput.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
@@ -87,7 +89,7 @@ export default class Editor extends EventEmitter {
     this.handleKeydown = this.handleKeydown.bind(this);
     this.handlePaste = this.handlePaste.bind(this);
   }
-
+  
   /**
    * Initialize the editor
    * @fires summernote.init
@@ -97,38 +99,43 @@ export default class Editor extends EventEmitter {
       console.warn('Summernote: Editor already initialized');
       return this;
     }
-
+    
     // Create editor structure
     this.createEditorStructure();
-
+    
     // Setup event handlers
     this.attachEventHandlers();
-
+    
+    // Initialize plugins if provided in options
+    if (this.options.plugins && Array.isArray(this.options.plugins)) {
+      this.initializePlugins(this.options.plugins);
+    }
+    
     // Set initial content
     const initialContent = this.target.value || this.target.innerHTML || '';
     this.setContent(initialContent);
-
+    
     // Set placeholder
     if (this.options.placeholder) {
       this.editable.setAttribute('data-placeholder', this.options.placeholder);
     }
-
+    
     // Focus if specified
     if (this.options.focus) {
       this.focus();
     }
-
+    
     this.initialized = true;
-
+    
     // Trigger init callback
     this.triggerCallback('onInit');
-
+    
     // Emit init event
     this.emit('summernote.init');
-
+    
     return this;
   }
-
+  
   /**
    * Create editor DOM structure
    */
@@ -300,32 +307,81 @@ export default class Editor extends EventEmitter {
   }
 
   /**
-   * Register a plugin
-   * @param {string} name - Plugin name
-   * @param {Object} plugin - Plugin instance
+   * Initialize plugins
+   * @param {Array} pluginClasses - Array of plugin classes to register and initialize
    */
-  registerPlugin(name, plugin) {
-    if (this.plugins.has(name)) {
-      console.warn(`Summernote: Plugin '${name}' is already registered`);
-      return;
-    }
-
-    this.plugins.set(name, plugin);
-
-    if (typeof plugin.init === 'function') {
-      plugin.init(this);
+  initializePlugins(pluginClasses) {
+    // Register all plugins
+    pluginClasses.forEach(PluginClass => {
+      try {
+        this.pluginRegistry.register(PluginClass);
+      } catch (error) {
+        console.error('Failed to register plugin:', error);
+      }
+    });
+    
+    // Get plugin names to initialize
+    const pluginNames = pluginClasses.map(
+      PluginClass => PluginClass.pluginName || PluginClass.name
+    );
+    
+    // Initialize plugins through registry (handles dependencies)
+    try {
+      this.plugins = this.pluginRegistry.initializePlugins(this, pluginNames);
+      console.log(`Initialized ${this.plugins.size} plugins`);
+    } catch (error) {
+      console.error('Failed to initialize plugins:', error);
+      throw error;
     }
   }
-
+  
   /**
-   * Get registered plugin
+   * Register a plugin dynamically
+   * @param {Function} PluginClass - Plugin class to register
+   * @returns {Editor} - Returns this for chaining
+   */
+  registerPlugin(PluginClass) {
+    if (!this.initialized) {
+      throw new Error('Editor must be initialized before registering plugins');
+    }
+    
+    try {
+      this.pluginRegistry.register(PluginClass);
+      const name = PluginClass.pluginName || PluginClass.name;
+      const instances = this.pluginRegistry.initializePlugins(this, [name]);
+      
+      // Add to plugins map
+      instances.forEach((instance, pluginName) => {
+        this.plugins.set(pluginName, instance);
+      });
+      
+      console.log(`Plugin "${name}" registered and initialized`);
+    } catch (error) {
+      console.error('Failed to register plugin:', error);
+      throw error;
+    }
+    
+    return this;
+  }
+  
+  /**
+   * Get plugin instance by name
    * @param {string} name - Plugin name
-   * @returns {Object|null}
+   * @returns {Object|null} Plugin instance or null
    */
   getPlugin(name) {
     return this.plugins.get(name) || null;
   }
-
+  
+  /**
+   * Check if plugin is registered
+   * @param {string} name - Plugin name
+   * @returns {boolean}
+   */
+  hasPlugin(name) {
+    return this.plugins.has(name);
+  }
+  
   /**
    * Trigger callback function
    * @param {string} name - Callback name
@@ -346,45 +402,41 @@ export default class Editor extends EventEmitter {
     if (!this.initialized) {
       return;
     }
-
+    
     // Update original element one last time
     this.updateOriginalElement();
-
-    // Destroy all plugins
-    this.plugins.forEach(plugin => {
-      if (typeof plugin.destroy === 'function') {
-        plugin.destroy();
-      }
-    });
+    
+    // Destroy all plugins through registry
+    this.pluginRegistry.destroyAll();
     this.plugins.clear();
-
+    
     // Remove event handlers
     off(this.editable, 'input', this.handleInput);
     off(this.editable, 'focus', this.handleFocus);
     off(this.editable, 'blur', this.handleBlur);
     off(this.editable, 'keydown', this.handleKeydown);
     off(this.editable, 'paste', this.handlePaste);
-
+    
     // Clean up EventEmitter listeners
     this.removeAllListeners();
-
+    
     // Remove editor structure
     if (this.wrapper && this.wrapper.parentNode) {
       remove(this.wrapper);
     }
-
+    
     // Show original element
     this.target.style.display = '';
-
+    
     this.initialized = false;
-
+    
     // Trigger destroy callback
     this.triggerCallback('onDestroy');
-
+    
     // Emit destroy event
     this.emit('summernote.destroy');
   }
-
+  
   /**
    * Static method to initialize editor on selector
    * @param {string} selector - CSS selector

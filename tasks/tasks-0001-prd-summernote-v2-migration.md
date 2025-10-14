@@ -161,32 +161,32 @@
   - [x] 4.3 Document all core events with examples in comments
   - [x] 4.4 Create event naming convention guide (e.g., 'summernote.event', 'plugin.name.event')
 
-- [ ] 5.0 Design and Implement New Plugin Architecture
-  - [ ] 5.1 Create `src/js/core/PluginRegistry.js`:
-    - [ ] 5.1.1 Implement plugin registration method `register(plugin)`
-    - [ ] 5.1.2 Implement plugin retrieval by name `get(name)`
-    - [ ] 5.1.3 Implement plugin initialization with dependency resolution
-    - [ ] 5.1.4 Implement plugin load order management based on dependencies
-    - [ ] 5.1.5 Add validation for plugin interface compliance
-    - [ ] 5.1.6 Handle circular dependency detection
-  - [ ] 5.2 Define standard plugin interface/contract:
-    - [ ] 5.2.1 Required properties: `name` (string)
-    - [ ] 5.2.2 Optional properties: `dependencies` (array of plugin names)
-    - [ ] 5.2.3 Lifecycle methods: `init(editor)`, `destroy()`, `enable()`, `disable()`
-    - [ ] 5.2.4 Define plugin API access patterns (how plugins interact with editor)
-  - [ ] 5.3 Create plugin base class or template:
-    - [ ] 5.3.1 Create `src/js/core/BasePlugin.js` with default implementations
-    - [ ] 5.3.2 Add protected methods for accessing editor instance
-    - [ ] 5.3.3 Add methods for toolbar button registration (using Bootstrap Icons)
-    - [ ] 5.3.4 Add methods for keyboard shortcut registration
-    - [ ] 5.3.5 Add methods for context menu registration
-  - [ ] 5.4 Update Editor class to integrate PluginRegistry:
-    - [ ] 5.4.1 Accept `plugins` array in constructor options
-    - [ ] 5.4.2 Initialize plugins during editor init
-    - [ ] 5.4.3 Call plugin lifecycle methods appropriately
-    - [ ] 5.4.4 Expose plugin API to registered plugins
-  - [ ] 5.5 Create plugin developer documentation template
-  - [ ] 5.6 Add plugin isolation mechanisms (prevent global state pollution)
+- [x] 5.0 Design and Implement New Plugin Architecture
+  - [x] 4.1 Create `src/js/core/PluginRegistry.js`:
+    - [x] 4.1.1 Implement plugin registration method `register(plugin)`
+    - [x] 4.1.2 Implement plugin retrieval by name `get(name)`
+    - [x] 4.1.3 Implement plugin initialization with dependency resolution
+    - [x] 4.1.4 Implement plugin load order management based on dependencies
+    - [x] 4.1.5 Add validation for plugin interface compliance
+    - [x] 4.1.6 Handle circular dependency detection
+  - [x] 4.2 Define standard plugin interface/contract:
+    - [x] 4.2.1 Required properties: `name` (string)
+    - [x] 4.2.2 Optional properties: `dependencies` (array of plugin names)
+    - [x] 4.2.3 Lifecycle methods: `init(editor)`, `destroy()`, `enable()`, `disable()`
+    - [x] 4.2.4 Define plugin API access patterns (how plugins interact with editor)
+  - [x] 4.3 Create plugin base class or template:
+    - [x] 4.3.1 Create `src/js/core/BasePlugin.js` with default implementations
+    - [x] 4.3.2 Add protected methods for accessing editor instance
+    - [x] 4.3.3 Add methods for toolbar button registration
+    - [x] 4.3.4 Add methods for keyboard shortcut registration
+    - [x] 4.3.5 Add methods for context menu registration
+  - [x] 4.4 Update Editor class to integrate PluginRegistry:
+    - [x] 4.4.1 Accept `plugins` array in constructor options
+    - [x] 4.4.2 Initialize plugins during editor init
+    - [x] 4.4.3 Call plugin lifecycle methods appropriately
+    - [x] 4.4.4 Expose plugin API to registered plugins
+  - [x] 4.5 Create plugin developer documentation template
+  - [x] 4.6 Add plugin isolation mechanisms (prevent global state pollution)
 
 - [ ] 6.0 Migrate Essential Plugins to v2.0 (Phase 1)
   - [ ] 6.1 Create Bold Plugin (`src/js/plugins/Bold.js`):
