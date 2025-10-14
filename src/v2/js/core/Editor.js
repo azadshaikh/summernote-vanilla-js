@@ -308,6 +308,9 @@ export default class Editor extends EventEmitter {
    * Handle keyboard shortcuts
    */
   handleShortcuts(event) {
+    // Respect handlers that already consumed the event
+    if (event.defaultPrevented) return;
+
     // First, let plugins consume registered shortcuts
     let handled = false;
     if (this.plugins && this.plugins.size > 0) {
