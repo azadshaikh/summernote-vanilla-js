@@ -17,7 +17,7 @@ import LinkPlugin from './plugins/Link.js';
 
 // Export core components
 export {
-  Editor,
+  Editor as PureEditor,
   EventEmitter,
   PluginRegistry,
   BasePlugin
@@ -45,18 +45,28 @@ export function createEditor(target, options = {}) {
   return new Editor(target, { ...options, plugins });
 }
 
+// Default class that auto-loads essential plugins when none provided
+class SummernoteEditor extends Editor {
+  constructor(target, options = {}) {
+    const defaultPlugins = [BoldPlugin, ItalicPlugin, UnderlinePlugin, ListPlugin, LinkPlugin];
+    const plugins = Array.isArray(options.plugins) ? options.plugins : defaultPlugins;
+    super(target, { ...options, plugins });
+  }
+}
+
 // Default export
-export default Editor;
+export default SummernoteEditor;
 
 // For UMD builds, expose on window
 if (typeof window !== 'undefined') {
-  // Make Editor the default global
-  window.Summernote = Editor;
-  window.Editor = Editor;
+  // Make Editor the default global with auto plugins
+  window.Summernote = SummernoteEditor;
+  window.Editor = SummernoteEditor;
 
   // Also expose other exports for advanced usage
   window.SummernoteExports = {
-    Editor,
+    Editor: SummernoteEditor,
+    PureEditor: Editor,
     EventEmitter,
     PluginRegistry,
     BasePlugin,

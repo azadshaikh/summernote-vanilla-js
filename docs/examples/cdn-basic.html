@@ -11,6 +11,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
   <!-- Geist font from Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+  <!-- Summernote v2 minimal styles -->
+  <link href="../../src/css/summernote.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -25,7 +27,9 @@
       </button>
     </div>
 
-    <div id="editor" class="border rounded mb-3" style="min-height: 200px;"></div>
+    <div id="editor" class="border rounded mb-3" style="min-height: 600px;">
+      This is the initial content of the editor.
+    </div>
 
     <div class="btn-group mb-3" role="group">
       <button class="btn btn-primary" onclick="getContent()">Get Content</button>
@@ -64,7 +68,7 @@
 
     // Editor
     const editor = new Editor('#editor', {
-      height: 300,
+      height: 600,
       placeholder: 'Start typing your content here...'
     });
 

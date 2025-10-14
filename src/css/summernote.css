@@ -1,0 +1,30 @@
+/* Summernote v2 minimal styles (Bootstrap 5.3 companion) */
+/* Scope all styles to the editor wrapper */
+.summernote-editor {
+  border: 1px solid var(--bs-border-color);
+  background: var(--bs-body-bg);
+  border-radius: .375rem;
+}
+
+.summernote-editor .summernote-toolbar {
+  background: var(--bs-secondary-bg);
+  padding: .5rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.summernote-editor .btn.active {
+  /* Ensure active state is visible on light buttons */
+  box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+}
+
+.summernote-editor .summernote-editable {
+  padding: .75rem;
+  min-height: 150px;
+}
+
+/* Placeholder styling for empty editor */
+.summernote-editor .summernote-editable:empty:before {
+  content: attr(data-placeholder);
+  color: var(--sn-placeholder);
+}
+

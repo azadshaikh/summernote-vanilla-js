@@ -128,7 +128,12 @@ export default class BasePlugin {
 
     // Add to toolbar
     if (this.editor.toolbar) {
-      this.editor.toolbar.appendChild(button);
+      // Prefer configured group container when available
+      const groupEl = typeof this.editor.getToolbarGroupForAction === 'function'
+        ? this.editor.getToolbarGroupForAction(name)
+        : null;
+      const container = groupEl || this.editor.toolbar;
+      container.appendChild(button);
       this.buttons.get(name).element = button;
     }
 
@@ -145,7 +150,9 @@ export default class BasePlugin {
 
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = `summernote-btn summernote-btn-${name} ${className}`.trim();
+    // Use Bootstrap 5 button classes; allow extensions via className
+    const bootstrapBtn = 'btn btn-outline-secondary';
+    button.className = `${bootstrapBtn} summernote-btn summernote-btn-${name} ${className}`.trim();
     button.innerHTML = icon;
     button.setAttribute('data-plugin', this.constructor.pluginName);
     button.setAttribute('data-action', name);

@@ -16,7 +16,7 @@ export default class BoldPlugin extends BasePlugin {
     // Add toolbar button
     this.addButton({
       name: 'bold',
-      icon: '<strong>B</strong>',
+      icon: '<i class="bi bi-type-bold"></i>',
       tooltip: 'Bold (Ctrl+B)',
       callback: () => this.toggle(),
       className: 'summernote-btn-bold'
@@ -28,6 +28,7 @@ export default class BoldPlugin extends BasePlugin {
     // Listen to selection changes to update button state
     this.on('summernote.keyup', () => this.updateButtonState());
     this.on('summernote.mouseup', () => this.updateButtonState());
+    this.on('summernote.selectionchange', () => this.updateButtonState());
 
     // Initial button state
     setTimeout(() => this.updateButtonState(), 0);

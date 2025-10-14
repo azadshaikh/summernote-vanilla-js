@@ -16,7 +16,7 @@ export default class ListPlugin extends BasePlugin {
     // Add unordered list button
     this.addButton({
       name: 'insertUnorderedList',
-      icon: '• List',
+      icon: '<i class="bi bi-list-ul"></i>',
       tooltip: 'Unordered List',
       callback: () => this.toggleUnorderedList(),
       className: 'summernote-btn-ul'
@@ -25,7 +25,7 @@ export default class ListPlugin extends BasePlugin {
     // Add ordered list button
     this.addButton({
       name: 'insertOrderedList',
-      icon: '1. List',
+      icon: '<i class="bi bi-list-ol"></i>',
       tooltip: 'Ordered List',
       callback: () => this.toggleOrderedList(),
       className: 'summernote-btn-ol'
@@ -34,6 +34,7 @@ export default class ListPlugin extends BasePlugin {
     // Listen to selection changes to update button states
     this.on('summernote.keyup', () => this.updateButtonStates());
     this.on('summernote.mouseup', () => this.updateButtonStates());
+    this.on('summernote.selectionchange', () => this.updateButtonStates());
 
     // Initial button states
     setTimeout(() => this.updateButtonStates(), 0);

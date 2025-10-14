@@ -120,29 +120,29 @@
   - [x] 2.10 Remove all jQuery utility usage ($.each, $.extend, $.trim, etc.) with native equivalents
   - [x] 2.11 Remove all i18n/translation function calls and replace with hardcoded English text
 
-- [ ] 3.0 Implement Styling with Bootstrap 5.3 and Bootstrap Icons
-  - [ ] 3.1 Create minimal `src/css/summernote.css`:
-    - [ ] 3.1.1 Define only editor-specific styles not covered by Bootstrap 5.3
-    - [ ] 3.1.2 Use CSS custom properties (variables) for theme customization
-    - [ ] 3.1.3 Ensure all styles are scoped to `.summernote-editor` or similar
-    - [ ] 3.1.4 Remove all Bootstrap 3/4 specific styles
-    - [ ] 3.1.5 Remove all theme variants (lite, air, etc.)
-  - [ ] 3.2 Replace all icon references with Bootstrap Icons:
-    - [ ] 3.2.1 Create icon mapping document (`docs/icon-mapping.md`)
-    - [ ] 3.2.2 Replace Font Awesome icons with Bootstrap Icons equivalents
-    - [ ] 3.2.3 Update toolbar button rendering to use `<i class="bi bi-*"></i>`
-    - [ ] 3.2.4 Ensure icon sizing is consistent using Bootstrap utilities
-  - [ ] 3.3 Update toolbar to use Bootstrap 5.3 components:
-    - [ ] 3.3.1 Use Bootstrap button classes (`btn`, `btn-sm`, etc.)
-    - [ ] 3.3.2 Use Bootstrap button groups for grouped buttons
+- [x] 3.0 Implement Styling with Bootstrap 5.3 and Bootstrap Icons
+  - [x] 3.1 Create minimal `src/css/summernote.css`:
+    - [x] 3.1.1 Define only editor-specific styles not covered by Bootstrap 5.3
+    - [x] 3.1.2 Use CSS custom properties (variables) for theme customization
+    - [x] 3.1.3 Ensure all styles are scoped to `.summernote-editor` or similar
+    - [x] 3.1.4 Remove all Bootstrap 3/4 specific styles
+    - [x] 3.1.5 Remove all theme variants (lite, air, etc.)
+  - [x] 3.2 Replace all icon references with Bootstrap Icons:
+    - [x] 3.2.1 Create icon mapping document (`docs/icon-mapping.md`)
+    - [x] 3.2.2 Replace Font Awesome icons with Bootstrap Icons equivalents
+    - [x] 3.2.3 Update toolbar button rendering to use `<i class="bi bi-*"></i>`
+    - [x] 3.2.4 Ensure icon sizing is consistent using Bootstrap utilities
+  - [x] 3.3 Update toolbar to use Bootstrap 5.3 components:
+    - [x] 3.3.1 Use Bootstrap button classes (`btn`, `btn-sm`, etc.)
+    - [x] 3.3.2 Use Bootstrap button groups for grouped buttons
     - [ ] 3.3.3 Use Bootstrap dropdowns for dropdown menus
-    - [ ] 3.3.4 Apply proper spacing using Bootstrap utilities (`me-2`, `mb-2`, etc.)
-  - [ ] 3.4 Update modals/dialogs to use Bootstrap 5.3 modal component
-  - [ ] 3.5 Remove all references to Font Awesome CSS/fonts
+    - [x] 3.3.4 Apply proper spacing using Bootstrap utilities (`me-2`, `mb-2`, etc.)
+  - [x] 3.4 Update modals/dialogs to use Bootstrap 5.3 modal component
+  - [x] 3.5 Remove all references to Font Awesome CSS/fonts (v2 code path)
   - [ ] 3.6 Remove all legacy Bootstrap version CSS files
   - [ ] 3.7 Configure Google Fonts:
     - [ ] 3.7.1 Document recommended Google Font (e.g., Inter, Roboto)
-    - [ ] 3.7.2 Add Google Fonts link to demo page
+    - [x] 3.7.2 Add Google Fonts link to demo page
     - [ ] 3.7.3 Update documentation for users to choose their own fonts
 
 - [x] 4.0 Implement EventEmitter System

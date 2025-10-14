@@ -80,6 +80,7 @@ export default class Editor extends EventEmitter {
     this.initialized = false;
     this.editable = null;
     this.toolbar = null;
+    this.toolbarGroups = new Map();
     this.wrapper = null;
 
     // Bind methods
@@ -88,6 +89,9 @@ export default class Editor extends EventEmitter {
     this.handleBlur = this.handleBlur.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
     this.handlePaste = this.handlePaste.bind(this);
+    this.handleKeyup = this.handleKeyup.bind(this);
+    this.handleMouseup = this.handleMouseup.bind(this);
+    this.handleSelectionChange = this.handleSelectionChange.bind(this);
   }
 
   /**
@@ -143,15 +147,20 @@ export default class Editor extends EventEmitter {
     // Hide original element
     this.target.style.display = 'none';
 
-    // Create wrapper
+    // Create wrapper (scoped to .summernote-editor for CSS)
     this.wrapper = createElement('div', {
-      className: 'summernote-wrapper'
+      className: 'summernote-editor'
     });
 
-    // Create toolbar container
+    // Create toolbar container using Bootstrap toolbar semantics
+    // We'll render groups from options.toolbar
     this.toolbar = createElement('div', {
-      className: 'summernote-toolbar'
+      className: 'summernote-toolbar btn-toolbar',
+      role: 'toolbar',
+      ariaLabel: 'Editor toolbar'
     });
+
+    this.buildToolbarGroups();
 
     // Create editable area
     this.editable = createElement('div', {
@@ -175,6 +184,48 @@ export default class Editor extends EventEmitter {
   }
 
   /**
+   * Build toolbar groups based on options.toolbar configuration
+   * Each group is a Bootstrap .btn-group container
+   */
+  buildToolbarGroups() {
+    this.toolbarGroups.clear();
+
+    const toolbarConfig = Array.isArray(this.options.toolbar) ? this.options.toolbar : [];
+    for (const group of toolbarConfig) {
+      // Expected shape: [groupName, [action1, action2, ...]]
+      if (!Array.isArray(group) || group.length < 2) continue;
+      const [groupName, actions] = group;
+      if (!Array.isArray(actions)) continue;
+
+      const groupEl = createElement('div', {
+        className: 'btn-group me-2 mb-2',
+        role: 'group',
+        ariaLabel: `${groupName} group`
+      });
+
+      // Map each action to this group element, including common synonyms
+      for (const action of actions) {
+        this.toolbarGroups.set(action, groupEl);
+        // Provide mappings from legacy/short names to command names used by plugins
+        if (action === 'ul') this.toolbarGroups.set('insertUnorderedList', groupEl);
+        if (action === 'ol') this.toolbarGroups.set('insertOrderedList', groupEl);
+        if (action === 'link') this.toolbarGroups.set('createLink', groupEl);
+      }
+
+      this.toolbar.appendChild(groupEl);
+    }
+  }
+
+  /**
+   * Return the group element for a given action (if configured)
+   * @param {string} action
+   * @returns {HTMLElement|null}
+   */
+  getToolbarGroupForAction(action) {
+    return this.toolbarGroups.get(action) || null;
+  }
+
+  /**
    * Attach event handlers to editable area
    */
   attachEventHandlers() {
@@ -182,7 +233,12 @@ export default class Editor extends EventEmitter {
     on(this.editable, 'focus', this.handleFocus);
     on(this.editable, 'blur', this.handleBlur);
     on(this.editable, 'keydown', this.handleKeydown);
+    on(this.editable, 'keyup', this.handleKeyup);
+    on(this.editable, 'mouseup', this.handleMouseup);
     on(this.editable, 'paste', this.handlePaste);
+
+    // Track selection changes for snappy toolbar state updates
+    document.addEventListener('selectionchange', this.handleSelectionChange);
   }
 
   /**
@@ -227,6 +283,20 @@ export default class Editor extends EventEmitter {
   }
 
   /**
+   * Handle keyup event
+   */
+  handleKeyup(event) {
+    this.emit('summernote.keyup', event);
+  }
+
+  /**
+   * Handle mouseup event
+   */
+  handleMouseup(event) {
+    this.emit('summernote.mouseup', event);
+  }
+
+  /**
    * Handle paste event
    */
   handlePaste(event) {
@@ -238,13 +308,38 @@ export default class Editor extends EventEmitter {
    * Handle keyboard shortcuts
    */
   handleShortcuts(event) {
-    const isMac = /Mac/.test(navigator.platform);
-    const ctrlKey = isMac ? event.metaKey : event.ctrlKey;
+    // First, let plugins consume registered shortcuts
+    let handled = false;
+    if (this.plugins && this.plugins.size > 0) {
+      for (const [, plugin] of this.plugins) {
+        if (typeof plugin.handleShortcut === 'function' && plugin.handleShortcut(event)) {
+          handled = true;
+          break;
+        }
+      }
+    }
 
-    // Tab key handling
+    if (handled) return; // Plugin handled the key
+
+    // Built-in shortcuts (minimal)
     if (event.key === 'Tab' && !event.shiftKey) {
       event.preventDefault();
       document.execCommand('insertText', false, '\t');
+      return;
+    }
+  }
+
+  /**
+   * Emit selection change when caret moves inside the editor
+   */
+  handleSelectionChange() {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+    const anchor = sel.anchorNode;
+    if (!anchor) return;
+    const within = this.editable && (anchor === this.editable || this.editable.contains(anchor.nodeType === 3 ? anchor.parentElement : anchor));
+    if (within) {
+      this.emit('summernote.selectionchange');
     }
   }
 
@@ -415,7 +510,10 @@ export default class Editor extends EventEmitter {
     off(this.editable, 'focus', this.handleFocus);
     off(this.editable, 'blur', this.handleBlur);
     off(this.editable, 'keydown', this.handleKeydown);
+    off(this.editable, 'keyup', this.handleKeyup);
+    off(this.editable, 'mouseup', this.handleMouseup);
     off(this.editable, 'paste', this.handlePaste);
+    document.removeEventListener('selectionchange', this.handleSelectionChange);
 
     // Clean up EventEmitter listeners
     this.removeAllListeners();

@@ -16,7 +16,7 @@ export default class UnderlinePlugin extends BasePlugin {
     // Add toolbar button
     this.addButton({
       name: 'underline',
-      icon: '<u>U</u>',
+      icon: '<i class="bi bi-type-underline"></i>',
       tooltip: 'Underline (Ctrl+U)',
       callback: () => this.toggle(),
       className: 'summernote-btn-underline'
@@ -28,6 +28,7 @@ export default class UnderlinePlugin extends BasePlugin {
     // Listen to selection changes to update button state
     this.on('summernote.keyup', () => this.updateButtonState());
     this.on('summernote.mouseup', () => this.updateButtonState());
+    this.on('summernote.selectionchange', () => this.updateButtonState());
 
     // Initial button state
     setTimeout(() => this.updateButtonState(), 0);

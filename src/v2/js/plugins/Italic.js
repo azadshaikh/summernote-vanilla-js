@@ -16,7 +16,7 @@ export default class ItalicPlugin extends BasePlugin {
     // Add toolbar button
     this.addButton({
       name: 'italic',
-      icon: '<em>I</em>',
+      icon: '<i class="bi bi-type-italic"></i>',
       tooltip: 'Italic (Ctrl+I)',
       callback: () => this.toggle(),
       className: 'summernote-btn-italic'
@@ -28,6 +28,7 @@ export default class ItalicPlugin extends BasePlugin {
     // Listen to selection changes to update button state
     this.on('summernote.keyup', () => this.updateButtonState());
     this.on('summernote.mouseup', () => this.updateButtonState());
+    this.on('summernote.selectionchange', () => this.updateButtonState());
 
     // Initial button state
     setTimeout(() => this.updateButtonState(), 0);
