@@ -4,11 +4,13 @@
   border: 1px solid var(--bs-border-color);
   background: var(--bs-body-bg);
   border-radius: .375rem;
+  position: relative;
 }
 
 .summernote-editor .summernote-toolbar {
   background: var(--bs-secondary-bg);
   padding: .5rem;
+  padding-bottom: 0;
   border-bottom: 1px solid var(--bs-border-color);
 }
 
@@ -28,3 +30,5 @@
   color: var(--sn-placeholder);
 }
 
+/* Popover uses Bootstrap styles; no custom classes needed */
+.summernote-editor .popover { z-index: 1040; }
