@@ -118,7 +118,7 @@
   - [x] 2.8 Replace all jQuery AJAX calls with fetch API
   - [x] 2.9 Replace jQuery animations with CSS transitions or Web Animations API
   - [x] 2.10 Remove all jQuery utility usage ($.each, $.extend, $.trim, etc.) with native equivalents
-  - [ ] 2.11 Remove all i18n/translation function calls and replace with hardcoded English text
+  - [x] 2.11 Remove all i18n/translation function calls and replace with hardcoded English text
 
 - [ ] 3.0 Implement Styling with Bootstrap 5.3 and Bootstrap Icons
   - [ ] 3.1 Create minimal `src/css/summernote.css`:
@@ -219,36 +219,70 @@
   - [x] 5.6 Test each plugin individually in isolation
   - [x] 5.7 Test plugins working together without conflicts
 
-- [ ] 6.0 Configure Dual Module System (UMD + ESM) and Multiple Bundles
-  - [ ] 6.1 Create `src/js/summernote-core.js` entry point:
-    - [ ] 6.1.1 Import and export Editor class only
-    - [ ] 6.1.2 Import and export EventEmitter
-    - [ ] 6.1.3 Import and export core utilities
-  - [ ] 6.2 Create `src/js/summernote.js` entry point (standard bundle):
-    - [ ] 6.2.1 Import core editor
-    - [ ] 6.2.2 Import and register Phase 1 essential plugins
-    - [ ] 6.2.3 Export configured Summernote with plugins
-  - [ ] 6.3 Create `src/js/summernote-full.js` entry point (all plugins):
-    - [ ] 6.3.1 Import all available plugins (Phase 1 + future phases)
-    - [ ] 6.3.2 Auto-register all plugins
-  - [ ] 6.4 Configure Rollup for UMD output:
-    - [ ] 6.4.1 Set format to 'umd'
-    - [ ] 6.4.2 Define global name (e.g., 'Summernote')
-    - [ ] 6.4.3 Configure externals if needed
-  - [ ] 6.5 Configure Rollup for ESM output:
-    - [ ] 6.5.1 Set format to 'es'
-    - [ ] 6.5.2 Enable tree-shaking optimizations
-  - [ ] 6.6 Create individual plugin bundle configurations:
-    - [ ] 6.6.1 Configure each plugin as separate entry point
-    - [ ] 6.6.2 Output to `dist/plugins/` directory
-  - [ ] 6.7 Add CSS bundling to build process:
-    - [ ] 6.7.1 Configure CSS minification
-    - [ ] 6.7.2 Output to `dist/summernote.css`
-  - [ ] 6.8 Add bundle size reporting to build process
-  - [ ] 6.9 Test UMD bundles in browser (CDN-style usage)
-  - [ ] 6.10 Test ESM bundles with modern bundlers (Webpack, Vite, Rollup)
-  - [ ] 6.11 Verify tree-shaking works correctly for ESM builds
-  - [ ] 6.12 Test `package.json` exports field with different import patterns
+- [x] 6.0 Configure Dual Module System (UMD + ESM) and Multiple Bundles
+  - [x] 6.1 Create `src/js/summernote-core.js` entry point:
+    - [x] 6.1.1 Import and export Editor class only
+    - [x] 6.1.2 Import and export EventEmitter
+    - [x] 6.1.3 Import and export core utilities
+  - [x] 6.2 Create `src/js/summernote.js` entry point (standard bundle):
+    - [x] 6.2.1 Import core editor
+    - [x] 6.2.2 Import and register Phase 1 essential plugins
+    - [x] 6.2.3 Export configured Summernote with plugins
+  - [x] 6.3 Create `src/js/summernote-full.js` entry point (all plugins):
+    - [x] 6.3.1 Import all available plugins (Phase 1 + future phases)
+    - [x] 6.3.2 Auto-register all plugins
+  - [x] 6.4 Configure Rollup for UMD output:
+    - [x] 6.4.1 Set format to 'umd'
+    - [x] 6.4.2 Define global name (e.g., 'Summernote')
+    - [x] 6.4.3 Configure externals if needed
+  - [x] 6.5 Configure Rollup for ESM output:
+    - [x] 6.5.1 Set format to 'es'
+    - [x] 6.5.2 Enable tree-shaking optimizations
+  - [x] 6.6 Create individual plugin bundle configurations:
+    - [x] 6.6.1 Configure each plugin as separate entry point
+    - [x] 6.6.2 Output to `dist/plugins/` directory
+  - [x] 6.7 Add bundle size reporting to build process
+  - [x] 6.8 Test UMD bundles in browser (CDN-style usage)
+  - [x] 6.9 Test ESM bundles with modern bundlers (Webpack, Vite, Rollup)
+  - [x] 6.10 Verify tree-shaking works correctly for ESM builds
+  - [x] 6.11 Test `package.json` exports field with different import patterns
+
+- [x] 7.0 Create API Documentation and Usage Examples
+  - [x] 7.1 Create `docs/api-v2.md`:
+    - [x] 7.1.1 Document Editor class constructor and options
+    - [x] 7.1.2 Document all public methods (init, destroy, getContent, setContent, etc.)
+    - [x] 7.1.3 Document EventEmitter API and core events
+    - [x] 7.1.4 Document plugin registration and usage
+    - [x] 7.1.5 Document available configuration options
+  - [ ] 7.2 Create CDN usage examples:
+    - [ ] 7.2.1 Create `docs/examples/cdn-basic.html` - Basic initialization
+    - [ ] 7.2.2 Create `docs/examples/cdn-with-plugins.html` - Core + selected plugins
+    - [ ] 7.2.3 Create `docs/examples/cdn-events.html` - Event handling examples
+  - [ ] 7.3 Create NPM/ESM usage examples:
+    - [ ] 7.3.1 Create `docs/examples/npm-basic.js` - Basic ES module import
+    - [ ] 7.3.2 Create `docs/examples/npm-selective-plugins.js` - Selective plugin imports
+    - [ ] 7.3.3 Create `docs/examples/npm-custom-plugin.js` - Creating custom plugin
+  - [ ] 7.4 Document migration considerations from v1.x:
+    - [ ] 7.4.1 List major breaking changes (jQuery removal, i18n removal, theme removal)
+    - [ ] 7.4.2 Provide before/after code examples
+    - [ ] 7.4.3 Note Bootstrap 5.3 requirement and icon library change
+  - [ ] 7.5 Create plugin development guide:
+    - [ ] 7.5.1 Document plugin interface requirements
+    - [ ] 7.5.2 Provide plugin template/boilerplate
+    - [ ] 7.5.3 Show examples of toolbar button registration with Bootstrap Icons
+    - [ ] 7.5.4 Show examples of shortcut and event registration
+  - [ ] 7.6 Update main `README.md`:
+    - [ ] 7.6.1 Add v2.0 installation instructions (CDN and NPM)
+    - [ ] 7.6.2 Add quick start examples for both methods
+    - [ ] 7.6.3 Link to detailed documentation
+    - [ ] 7.6.4 Note v1.x vs v2.0 differences (jQuery removal, single Bootstrap version, English only)
+    - [ ] 7.6.5 Add badges and version information
+  - [ ] 7.7 Document styling and customization:
+    - [ ] 7.7.1 Explain how to customize using Bootstrap 5.3 variables
+    - [ ] 7.7.2 Provide examples of CSS custom properties
+    - [ ] 7.7.3 Document how to use custom Google Fonts
+  - [ ] 7.8 Document browser compatibility requirements
+  - [ ] 7.9 Create bundle size comparison chart (core vs standard vs full)
 
 - [ ] 8.0 Create Single Demo Page and Documentation
   - [ ] 8.1 Create `demo/index.html`:
