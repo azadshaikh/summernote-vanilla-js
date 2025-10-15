@@ -77,7 +77,9 @@
     function getContent() {
       const content = editor.getContent();
       const output = document.getElementById('output');
-      output.innerHTML = '<strong>HTML Output:</strong><pre class="mt-2">' + escapeHtml(content) + '</pre>';
+      // Pretty print the HTML for better readability
+      const prettyHtml = formatHtml(content);
+      output.innerHTML = '<strong>HTML Output:</strong><pre class="mt-2" style="white-space: pre-wrap; word-wrap: break-word; max-height: 400px; overflow-y: auto;">' + escapeHtml(prettyHtml) + '</pre>';
       output.classList.remove('d-none');
     }
 
@@ -93,6 +95,47 @@
     function escapeHtml(text) {
       const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
       return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    /**
+     * Format HTML with proper indentation for display
+     * @param {string} html - The HTML string to format
+     * @returns {string} Formatted HTML with indentation
+     */
+    function formatHtml(html) {
+      let formatted = '';
+      let indent = 0;
+      const tab = '  '; // 2 spaces for indentation
+
+      // Split by tags
+      const tokens = html.split(/(<[^>]+>)/g).filter(token => token.trim());
+
+      tokens.forEach((token) => {
+        if (token.startsWith('</')) {
+          // Closing tag - decrease indent before adding
+          indent = Math.max(0, indent - 1);
+          formatted += '\n' + tab.repeat(indent) + token;
+        } else if (token.startsWith('<')) {
+          // Opening or self-closing tag
+          formatted += '\n' + tab.repeat(indent) + token;
+          // Increase indent if not self-closing or void element
+          if (!token.endsWith('/>') && !token.match(/<(br|hr|img|input|meta|link)[^>]*>/i)) {
+            // Check if it's not immediately followed by closing tag
+            const tagName = token.match(/<(\w+)/)?.[1];
+            if (tagName && !html.includes(`<${tagName}></${tagName}>`)) {
+              indent++;
+            }
+          }
+        } else {
+          // Text content
+          const trimmed = token.trim();
+          if (trimmed) {
+            formatted += '\n' + tab.repeat(indent) + trimmed;
+          }
+        }
+      });
+
+      return formatted.trim();
     }
   </script>
 

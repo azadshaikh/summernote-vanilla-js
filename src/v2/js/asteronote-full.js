@@ -14,6 +14,8 @@ import BasePlugin from './core/BasePlugin.js';
 import BoldPlugin from './plugins/Bold.js';
 import ItalicPlugin from './plugins/Italic.js';
 import UnderlinePlugin from './plugins/Underline.js';
+import StrikethroughPlugin from './plugins/Strikethrough.js';
+import RemoveFormatPlugin from './plugins/RemoveFormat.js';
 import ListPlugin from './plugins/List.js';
 import LinkPlugin from './plugins/Link.js';
 
@@ -30,6 +32,8 @@ export {
   BoldPlugin,
   ItalicPlugin,
   UnderlinePlugin,
+  StrikethroughPlugin,
+  RemoveFormatPlugin,
   ListPlugin,
   LinkPlugin
 };
@@ -40,6 +44,8 @@ export function createEditor(target, options = {}) {
     BoldPlugin,
     ItalicPlugin,
     UnderlinePlugin,
+    StrikethroughPlugin,
+    RemoveFormatPlugin,
     ListPlugin,
     LinkPlugin
     // Additional plugins will be added in future phases

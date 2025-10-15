@@ -204,20 +204,32 @@
     - [x] 5.3.1 Implement similar to Bold plugin
     - [x] 5.3.2 Use `document.execCommand('underline')`
     - [x] 5.3.3 Add keyboard shortcut (Ctrl+U / Cmd+U)
-  - [x] 5.4 Create List Plugin (`src/js/plugins/List.js`):
-    - [x] 5.4.1 Implement ordered list functionality (`insertOrderedList`)
-    - [x] 5.4.2 Implement unordered list functionality (`insertUnorderedList`)
-    - [x] 5.4.3 Add toolbar buttons for both list types
-    - [x] 5.4.4 Handle nested lists appropriately
-  - [x] 5.5 Create Link Plugin (`src/js/plugins/Link.js`):
-    - [x] 5.5.1 Create link insertion dialog/modal using vanilla JS
-    - [x] 5.5.2 Implement `createLink` command with validation
-    - [x] 5.5.3 Implement link editing (update existing links)
-    - [x] 5.5.4 Implement unlink functionality
-    - [x] 5.5.5 Add toolbar button with icon
-    - [x] 5.5.6 Handle keyboard shortcut (Ctrl+K / Cmd+K)
-  - [x] 5.6 Test each plugin individually in isolation
-  - [x] 5.7 Test plugins working together without conflicts
+  - [x] 5.4 Create Strikethrough Plugin (`src/js/plugins/Strikethrough.js`):
+    - [x] 5.4.1 Implement similar to Bold plugin
+    - [x] 5.4.2 Use `document.execCommand('strikeThrough')`
+    - [x] 5.4.3 Add keyboard shortcut (Ctrl+Shift+S / Cmd+Shift+S)
+    - [x] 5.4.4 Handle button state updates based on selection
+  - [x] 5.5 Create RemoveFormat Plugin (`src/js/plugins/RemoveFormat.js`):
+    - [x] 5.5.1 Implement format removal functionality
+    - [x] 5.5.2 Remove class, style, and data-* attributes while preserving HTML structure
+    - [x] 5.5.3 Handle both selected text and entire content (when nothing selected)
+    - [x] 5.5.4 Add toolbar button with eraser icon
+    - [x] 5.5.5 Add keyboard shortcut (Ctrl+\ / Cmd+\)
+    - [x] 5.5.6 Trigger editor change event to update content
+  - [x] 5.6 Create List Plugin (`src/js/plugins/List.js`):
+    - [x] 5.6.1 Implement ordered list functionality (`insertOrderedList`)
+    - [x] 5.6.2 Implement unordered list functionality (`insertUnorderedList`)
+    - [x] 5.6.3 Add toolbar buttons for both list types
+    - [x] 5.6.4 Handle nested lists appropriately
+  - [x] 5.7 Create Link Plugin (`src/js/plugins/Link.js`):
+    - [x] 5.7.1 Create link insertion dialog/modal using vanilla JS
+    - [x] 5.7.2 Implement `createLink` command with validation
+    - [x] 5.7.3 Implement link editing (update existing links)
+    - [x] 5.7.4 Implement unlink functionality
+    - [x] 5.7.5 Add toolbar button with icon
+    - [x] 5.7.6 Handle keyboard shortcut (Ctrl+K / Cmd+K)
+  - [x] 5.8 Test each plugin individually in isolation
+  - [x] 5.9 Test plugins working together without conflicts
 
 - [x] 6.0 Configure Dual Module System (UMD + ESM) and Multiple Bundles
   - [x] 6.1 Create `src/js/summernote-core.js` entry point:
