@@ -46,7 +46,7 @@ export default class HeadingPlugin extends BasePlugin {
    */
   getHeadingIcon(level) {
     return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" class="pt-1">
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="15" font-weight="bold" font-family="system-ui, -apple-system, sans-serif">${level}</text>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="15" font-weight="700" font-family="system-ui, -apple-system, sans-serif">${level}</text>
 </svg>
 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-chevron-down ms-1" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>

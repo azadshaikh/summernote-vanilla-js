@@ -1,6 +1,7 @@
 /**
  * List Plugin - Creates ordered and unordered lists
- * Handles both bullet lists (UL) and numbered lists (OL)
+ * Displays dropdown menu with list options (UL/OL)
+ * Updates button icon to show current list type
  */
 
 import BasePlugin from '../core/BasePlugin.js';
@@ -13,39 +14,248 @@ export default class ListPlugin extends BasePlugin {
    * Initialize the List plugin
    */
   init() {
-    // Add unordered list button
+    this.currentListType = null;
+    this.dropdownVisible = false;
+
+    // Add list button with dropdown (default UL icon)
     this.addButton({
-      name: 'ul',
-      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-</svg>`,
-      tooltip: 'Bullet List',
-      callback: () => this.toggleUnorderedList(),
-      className: 'asteronote-btn-ul'
+      name: 'list',
+      icon: this.getListIcon('ul'),
+      tooltip: 'List',
+      callback: () => this.toggleDropdown(),
+      className: 'asteronote-btn-list'
     });
 
-    // Add ordered list button
-    this.addButton({
-      name: 'ol',
-      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-list-ol" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5"/>
-  <path d="M1.713 11.865v-.474H2c.217 0 .363-.137.363-.317 0-.185-.158-.31-.361-.31-.223 0-.367.152-.373.31h-.59c.016-.467.373-.787.986-.787.588-.002.954.291.957.703a.595.595 0 0 1-.492.594v.033a.615.615 0 0 1 .569.631c.003.533-.502.8-1.051.8-.656 0-1-.37-1.008-.794h.582c.008.178.186.306.422.309.254 0 .424-.145.422-.35-.002-.195-.155-.348-.414-.348h-.3zm-.004-4.699h-.604v-.035c0-.408.295-.844.958-.844.583 0 .96.326.96.756 0 .389-.257.617-.476.848l-.537.572v.03h1.054V9H1.143v-.395l.957-.99c.138-.142.293-.304.293-.508 0-.18-.147-.32-.342-.32a.33.33 0 0 0-.342.338zM2.564 5h-.635V2.924h-.031l-.598.42v-.567l.629-.443h.635z"/>
-</svg>`,
-      tooltip: 'Numbered List',
-      callback: () => this.toggleOrderedList(),
-      className: 'asteronote-btn-ol'
-    });
+    // Create dropdown menu
+    this.createDropdown();
 
-    // Listen to selection changes to update button states
-    this.on('asteronote.keyup', () => this.updateButtonStates());
-    this.on('asteronote.mouseup', () => this.updateButtonStates());
-    this.on('asteronote.selectionchange', () => this.updateButtonStates());
+    // Listen to selection changes to update button state
+    this.on('asteronote.keyup', () => this.updateButtonState());
+    this.on('asteronote.mouseup', () => this.updateButtonState());
+    this.on('asteronote.selectionchange', () => this.updateButtonState());
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', this.handleOutsideClick.bind(this));
 
     // Keyboard: Tab = indent/outdent, Backspace = outdent/exit on empty item or at start
     this.on('asteronote.keydown', (e) => this.handleKeydown(e));
 
-    // Initial button states
-    setTimeout(() => this.updateButtonStates(), 0);
+    // Initial button state
+    setTimeout(() => this.updateButtonState(), 0);
+  }
+
+  /**
+   * Get SVG icon for list type
+   */
+  getListIcon(type) {
+    if (type === 'ol') {
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-list-ol" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5"/>
+  <path d="M1.713 11.865v-.474H2c.217 0 .363-.137.363-.317 0-.185-.158-.31-.361-.31-.223 0-.367.152-.373.31h-.59c.016-.467.373-.787.986-.787.588-.002.954.291.957.703a.595.595 0 0 1-.492.594v.033a.615.615 0 0 1 .569.631c.003.533-.502.8-1.051.8-.656 0-1-.37-1.008-.794h.582c.008.178.186.306.422.309.254 0 .424-.145.422-.35-.002-.195-.155-.348-.414-.348h-.3zm-.004-4.699h-.604v-.035c0-.408.295-.844.958-.844.583 0 .96.326.96.756 0 .389-.257.617-.476.848l-.537.572v.03h1.054V9H1.143v-.395l.957-.99c.138-.142.293-.304.293-.508 0-.18-.147-.32-.342-.32a.33.33 0 0 0-.342.338zM2.564 5h-.635V2.924h-.031l-.598.42v-.567l.629-.443h.635z"/>
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-chevron-down ms-1" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+</svg>`;
+    } else {
+      // Default: UL
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-chevron-down ms-1" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+</svg>`;
+    }
+  }
+
+  /**
+   * Create dropdown menu
+   */
+  createDropdown() {
+    const button = this.buttons.get('list');
+    if (!button || !button.element) return;
+
+    // Wrap button in a container for positioning
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'relative';
+    wrapper.style.display = 'inline-block';
+
+    // Replace button with wrapper
+    button.element.parentNode.insertBefore(wrapper, button.element);
+    wrapper.appendChild(button.element);
+
+    // Create dropdown container
+    this.dropdown = document.createElement('div');
+    this.dropdown.className = 'dropdown-menu';
+    this.dropdown.style.position = 'absolute';
+    this.dropdown.style.top = '100%';
+    this.dropdown.style.left = '0';
+    this.dropdown.style.marginTop = '0.125rem';
+    this.dropdown.style.zIndex = '1000';
+    this.dropdown.style.minWidth = '200px';
+
+    // List options
+    const listTypes = [
+      {
+        type: 'ul',
+        label: 'Bullet List',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+</svg>`
+      },
+      {
+        type: 'ol',
+        label: 'Numbered List',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ol" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5"/>
+  <path d="M1.713 11.865v-.474H2c.217 0 .363-.137.363-.317 0-.185-.158-.31-.361-.31-.223 0-.367.152-.373.31h-.59c.016-.467.373-.787.986-.787.588-.002.954.291.957.703a.595.595 0 0 1-.492.594v.033a.615.615 0 0 1 .569.631c.003.533-.502.8-1.051.8-.656 0-1-.37-1.008-.794h.582c.008.178.186.306.422.309.254 0 .424-.145.422-.35-.002-.195-.155-.348-.414-.348h-.3zm-.004-4.699h-.604v-.035c0-.408.295-.844.958-.844.583 0 .96.326.96.756 0 .389-.257.617-.476.848l-.537.572v.03h1.054V9H1.143v-.395l.957-.99c.138-.142.293-.304.293-.508 0-.18-.147-.32-.342-.32a.33.33 0 0 0-.342.338zM2.564 5h-.635V2.924h-.031l-.598.42v-.567l.629-.443h.635z"/>
+</svg>`
+      }
+    ];
+
+    listTypes.forEach(({ type, label, icon }) => {
+      const item = document.createElement('button');
+      item.className = 'dropdown-item d-flex align-items-center';
+      item.type = 'button';
+      item.innerHTML = `
+        <span class="me-2" style="min-width: 24px;">${icon}</span>
+        <span>${label}</span>
+      `;
+
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.applyList(type);
+        this.hideDropdown();
+      });
+
+      this.dropdown.appendChild(item);
+    });
+
+    // Append dropdown to wrapper
+    wrapper.appendChild(this.dropdown);
+    this.dropdownWrapper = wrapper;
+  }
+
+  /**
+   * Toggle dropdown visibility
+   */
+  toggleDropdown() {
+    if (this.dropdownVisible) {
+      this.hideDropdown();
+    } else {
+      this.showDropdown();
+    }
+  }
+
+  /**
+   * Show dropdown
+   */
+  showDropdown() {
+    if (!this.dropdown) return;
+
+    const button = this.buttons.get('list');
+    if (!button || !button.element) return;
+
+    // Show dropdown with Bootstrap's show class
+    this.dropdown.classList.add('show');
+    this.dropdown.style.display = 'block';
+
+    this.dropdownVisible = true;
+    button.element.classList.add('active');
+  }
+
+  /**
+   * Hide dropdown
+   */
+  hideDropdown() {
+    if (!this.dropdown) return;
+
+    const button = this.buttons.get('list');
+    if (button && button.element) {
+      button.element.classList.remove('active');
+    }
+
+    this.dropdown.classList.remove('show');
+    this.dropdown.style.display = 'none';
+    this.dropdownVisible = false;
+  }
+
+  /**
+   * Handle clicks outside dropdown
+   */
+  handleOutsideClick(event) {
+    const button = this.buttons.get('list');
+    if (!button || !button.element) return;
+
+    if (this.dropdownVisible &&
+        !button.element.contains(event.target) &&
+        !this.dropdown.contains(event.target)) {
+      this.hideDropdown();
+    }
+  }
+
+  /**
+   * Apply list format
+   */
+  applyList(type) {
+    if (type === 'ul') {
+      this.execCommand('insertUnorderedList');
+      this.emitEvent('unordered-list-toggled');
+    } else if (type === 'ol') {
+      this.execCommand('insertOrderedList');
+      this.emitEvent('ordered-list-toggled');
+    }
+
+    this.updateButtonState();
+  }
+
+  /**
+   * Get current list type at cursor
+   */
+  getCurrentListType() {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return null;
+
+    let node = sel.anchorNode;
+    if (!node) return null;
+
+    // Walk up the DOM tree to find UL or OL
+    while (node && node !== this.editor.editable) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const tagName = node.tagName;
+        if (tagName === 'UL') return 'ul';
+        if (tagName === 'OL') return 'ol';
+      }
+      node = node.parentNode;
+    }
+
+    return null;
+  }
+
+  /**
+   * Update button icon based on current list type
+   */
+  updateButtonState() {
+    const button = this.buttons.get('list');
+    if (!button || !button.element) return;
+
+    const listType = this.getCurrentListType();
+
+    // Always update if list type changed or if we need to update active state
+    if (listType !== this.currentListType) {
+      this.currentListType = listType;
+
+      // Update button icon with full structure
+      const iconType = listType || 'ul'; // Default to UL icon
+      button.element.innerHTML = this.getListIcon(iconType);
+    }
+
+    // Always update active state regardless of icon change
+    if (listType) {
+      button.element.classList.add('active');
+    } else {
+      button.element.classList.remove('active');
+    }
   }
 
   /**
@@ -65,7 +275,7 @@ export default class ListPlugin extends BasePlugin {
         this.indentListItem(li);
         this.emitEvent('indented');
       }
-      setTimeout(() => this.updateButtonStates(), 0);
+      setTimeout(() => this.updateButtonState(), 0);
       return;
     }
 
@@ -94,7 +304,7 @@ export default class ListPlugin extends BasePlugin {
           this.placeCaretAtEnd(p);
         }
 
-        setTimeout(() => this.updateButtonStates(), 0);
+        setTimeout(() => this.updateButtonState(), 0);
       }
     }
   }
@@ -204,53 +414,13 @@ export default class ListPlugin extends BasePlugin {
   }
 
   /**
-   * Toggle unordered list
-   */
-  toggleUnorderedList() {
-    this.execCommand('insertUnorderedList');
-    this.updateButtonStates();
-    this.emitEvent('unordered-list-toggled');
-  }
-
-  /**
-   * Toggle ordered list
-   */
-  toggleOrderedList() {
-    this.execCommand('insertOrderedList');
-    this.updateButtonStates();
-    this.emitEvent('ordered-list-toggled');
-  }
-
-  /**
-   * Update button active states based on current selection
-   */
-  updateButtonStates() {
-    const ulButton = this.buttons.get('ul');
-    const olButton = this.buttons.get('ol');
-
-    if (ulButton && ulButton.element) {
-      const isUL = document.queryCommandState('insertUnorderedList');
-      if (isUL) {
-        ulButton.element.classList.add('active');
-      } else {
-        ulButton.element.classList.remove('active');
-      }
-    }
-
-    if (olButton && olButton.element) {
-      const isOL = document.queryCommandState('insertOrderedList');
-      if (isOL) {
-        olButton.element.classList.add('active');
-      } else {
-        olButton.element.classList.remove('active');
-      }
-    }
-  }
-
-  /**
    * Cleanup
    */
   destroy() {
+    if (this.dropdown && this.dropdown.parentNode) {
+      this.dropdown.parentNode.removeChild(this.dropdown);
+    }
+    document.removeEventListener('click', this.handleOutsideClick);
     console.log('List plugin destroyed');
     super.destroy();
   }
