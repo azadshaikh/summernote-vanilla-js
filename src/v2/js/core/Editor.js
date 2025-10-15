@@ -47,6 +47,8 @@ const defaultOptions = {
   // Toolbar: flat array of button names (no grouping)
   // Supports both flat format ['bold', 'italic'] and legacy nested format [['group', ['bold']]]
   toolbar: [
+    'heading',
+    'separator',
     'bold', 'italic', 'underline', 'strikethrough',
     'separator',
     'removeFormat',

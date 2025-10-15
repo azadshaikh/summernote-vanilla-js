@@ -16,6 +16,7 @@ import StrikethroughPlugin from './plugins/Strikethrough.js';
 import RemoveFormatPlugin from './plugins/RemoveFormat.js';
 import ListPlugin from './plugins/List.js';
 import LinkPlugin from './plugins/Link.js';
+import HeadingPlugin from './plugins/Heading.js';
 import SeparatorPlugin from './plugins/Separator.js';
 
 // Export core components
@@ -35,6 +36,7 @@ export {
   RemoveFormatPlugin,
   ListPlugin,
   LinkPlugin,
+  HeadingPlugin,
   SeparatorPlugin
 };
 
@@ -65,6 +67,7 @@ class AsteroNoteEditor extends Editor {
       'removeFormat': RemoveFormatPlugin,
       'list': ListPlugin,
       'link': LinkPlugin,
+      'heading': HeadingPlugin,
       'separator': SeparatorPlugin
     };
 
@@ -76,6 +79,8 @@ class AsteroNoteEditor extends Editor {
 
     // Otherwise, derive plugins from toolbar configuration
     const toolbar = options.toolbar || [
+      'heading',
+      'separator',
       'bold', 'italic', 'underline', 'strikethrough',
       'separator',
       'removeFormat',
@@ -150,6 +155,7 @@ if (typeof window !== 'undefined') {
     RemoveFormatPlugin,
     ListPlugin,
     LinkPlugin,
+    HeadingPlugin,
     SeparatorPlugin,
     createEditor
   };
