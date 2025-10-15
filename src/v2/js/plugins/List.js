@@ -15,18 +15,18 @@ export default class ListPlugin extends BasePlugin {
   init() {
     // Add unordered list button
     this.addButton({
-      name: 'insertUnorderedList',
+      name: 'ul',
       icon: '<i class="bi bi-list-ul"></i>',
-      tooltip: 'Unordered List',
+      tooltip: 'Bullet List',
       callback: () => this.toggleUnorderedList(),
       className: 'asteronote-btn-ul'
     });
 
     // Add ordered list button
     this.addButton({
-      name: 'insertOrderedList',
+      name: 'ol',
       icon: '<i class="bi bi-list-ol"></i>',
-      tooltip: 'Ordered List',
+      tooltip: 'Numbered List',
       callback: () => this.toggleOrderedList(),
       className: 'asteronote-btn-ol'
     });
@@ -220,8 +220,8 @@ export default class ListPlugin extends BasePlugin {
    * Update button active states based on current selection
    */
   updateButtonStates() {
-    const ulButton = this.buttons.get('insertUnorderedList');
-    const olButton = this.buttons.get('insertOrderedList');
+    const ulButton = this.buttons.get('ul');
+    const olButton = this.buttons.get('ol');
 
     if (ulButton && ulButton.element) {
       const isUL = document.queryCommandState('insertUnorderedList');

@@ -16,8 +16,7 @@ import ItalicPlugin from './plugins/Italic.js';
 import UnderlinePlugin from './plugins/Underline.js';
 import StrikethroughPlugin from './plugins/Strikethrough.js';
 import RemoveFormatPlugin from './plugins/RemoveFormat.js';
-import OrderedListPlugin from './plugins/OrderedList.js';
-import UnorderedListPlugin from './plugins/UnorderedList.js';
+import ListPlugin from './plugins/List.js';
 import LinkPlugin from './plugins/Link.js';
 
 // Export core components
@@ -35,8 +34,7 @@ export {
   UnderlinePlugin,
   StrikethroughPlugin,
   RemoveFormatPlugin,
-  OrderedListPlugin,
-  UnorderedListPlugin,
+  ListPlugin,
   LinkPlugin
 };
 
@@ -48,8 +46,7 @@ export function createEditor(target, options = {}) {
     UnderlinePlugin,
     StrikethroughPlugin,
     RemoveFormatPlugin,
-    OrderedListPlugin,
-    UnorderedListPlugin,
+    ListPlugin,
     LinkPlugin
     // Additional plugins will be added in future phases
   ];

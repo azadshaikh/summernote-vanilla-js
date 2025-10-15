@@ -14,8 +14,7 @@ import ItalicPlugin from './plugins/Italic.js';
 import UnderlinePlugin from './plugins/Underline.js';
 import StrikethroughPlugin from './plugins/Strikethrough.js';
 import RemoveFormatPlugin from './plugins/RemoveFormat.js';
-import OrderedListPlugin from './plugins/OrderedList.js';
-import UnorderedListPlugin from './plugins/UnorderedList.js';
+import ListPlugin from './plugins/List.js';
 import LinkPlugin from './plugins/Link.js';
 
 // Export core components
@@ -33,8 +32,7 @@ export {
   UnderlinePlugin,
   StrikethroughPlugin,
   RemoveFormatPlugin,
-  OrderedListPlugin,
-  UnorderedListPlugin,
+  ListPlugin,
   LinkPlugin
 };
 
@@ -63,8 +61,7 @@ class AsteroNoteEditor extends Editor {
       'underline': UnderlinePlugin,
       'strikethrough': StrikethroughPlugin,
       'removeFormat': RemoveFormatPlugin,
-      'ul': UnorderedListPlugin,
-      'ol': OrderedListPlugin,
+      'list': ListPlugin,
       'link': LinkPlugin
     };
 
@@ -78,7 +75,7 @@ class AsteroNoteEditor extends Editor {
     const toolbar = options.toolbar || [
       'bold', 'italic', 'underline', 'strikethrough',
       'removeFormat',
-      'ul', 'ol',
+      'list',
       'link'
     ];
 
@@ -143,8 +140,7 @@ if (typeof window !== 'undefined') {
     UnderlinePlugin,
     StrikethroughPlugin,
     RemoveFormatPlugin,
-    OrderedListPlugin,
-    UnorderedListPlugin,
+    ListPlugin,
     LinkPlugin,
     createEditor
   };

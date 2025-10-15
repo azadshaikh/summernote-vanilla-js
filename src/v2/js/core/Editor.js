@@ -49,7 +49,7 @@ const defaultOptions = {
   toolbar: [
     'bold', 'italic', 'underline', 'strikethrough',
     'removeFormat',
-    'ul', 'ol',
+    'list',
     'link'
   ],
   placeholder: 'Type something...',
