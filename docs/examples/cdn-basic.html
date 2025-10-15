@@ -69,7 +69,16 @@
     // Initialize AsteroNote Editor
     const editor = new AsteroNote('#editor', {
       height: 600,
-      placeholder: 'Start typing your content here...'
+      placeholder: 'Start typing your content here...',
+      toolbar: [
+        'bold', 'italic', 'underline', 'strikethrough',
+        'separator',
+        'removeFormat',
+        'separator',
+        'list',
+        'separator',
+        'link'
+      ]
     });
 
     editor.init();

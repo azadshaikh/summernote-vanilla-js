@@ -35,8 +35,9 @@ export default class BasePlugin {
   /**
    * Constructor
    * @param {Object} editor - Editor instance
+   * @param {string} instanceName - Unique instance name (for supporting multiple instances)
    */
-  constructor(editor) {
+  constructor(editor, instanceName = null) {
     if (!editor) {
       throw new Error('Plugin requires an editor instance');
     }
@@ -45,6 +46,7 @@ export default class BasePlugin {
     this.enabled = true;
     this.buttons = new Map();
     this.shortcuts = new Map();
+    this.instanceName = instanceName || this.constructor.pluginName || this.constructor.name;
   }
 
   /**

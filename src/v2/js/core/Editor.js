@@ -48,8 +48,11 @@ const defaultOptions = {
   // Supports both flat format ['bold', 'italic'] and legacy nested format [['group', ['bold']]]
   toolbar: [
     'bold', 'italic', 'underline', 'strikethrough',
+    'separator',
     'removeFormat',
+    'separator',
     'list',
+    'separator',
     'link'
   ],
   placeholder: 'Type something...',
@@ -215,11 +218,31 @@ export default class Editor extends EventEmitter {
     // Map each action to the toolbar itself
     for (const action of actions) {
       this.toolbarGroups.set(action, this.toolbar);
-      // Provide mappings from legacy/short names to command names used by plugins
-      if (action === 'ul') this.toolbarGroups.set('insertUnorderedList', this.toolbar);
-      if (action === 'ol') this.toolbarGroups.set('insertOrderedList', this.toolbar);
-      if (action === 'link') this.toolbarGroups.set('createLink', this.toolbar);
     }
+  }
+
+  /**
+   * Add a separator to the toolbar
+   * Note: This method is kept for backward compatibility but separators
+   * are now handled as plugins for better flexibility
+   */
+  addSeparatorToToolbar() {
+    if (!this.toolbar) return;
+
+    const separator = document.createElement('span');
+    separator.className = 'asteronote-separator';
+    separator.setAttribute('role', 'separator');
+    separator.setAttribute('aria-orientation', 'vertical');
+
+    // Add inline styles for a simple vertical line
+    separator.style.display = 'inline-block';
+    separator.style.width = '1px';
+    separator.style.height = '24px';
+    separator.style.backgroundColor = '#dee2e6'; // Bootstrap gray-300
+    separator.style.margin = '0 8px';
+    separator.style.verticalAlign = 'middle';
+
+    this.toolbar.appendChild(separator);
   }
 
   /**
@@ -430,8 +453,9 @@ export default class Editor extends EventEmitter {
    * @param {Array} pluginClasses - Array of plugin classes to register and initialize
    */
   initializePlugins(pluginClasses) {
-    // Register all plugins
-    pluginClasses.forEach(PluginClass => {
+    // Register all unique plugin classes
+    const uniqueClasses = new Set(pluginClasses);
+    uniqueClasses.forEach(PluginClass => {
       try {
         this.pluginRegistry.register(PluginClass);
       } catch (error) {
@@ -439,15 +463,34 @@ export default class Editor extends EventEmitter {
       }
     });
 
-    // Get plugin names to initialize
-    const pluginNames = pluginClasses.map(
-      PluginClass => PluginClass.pluginName || PluginClass.name
-    );
+    // Initialize plugins - allow duplicates for plugins that support it
+    // Create unique instance names for duplicate plugins
+    const pluginInstancesToCreate = [];
+    const pluginCounts = new Map();
 
-    // Initialize plugins through registry (handles dependencies)
+    pluginClasses.forEach(PluginClass => {
+      const baseName = PluginClass.pluginName || PluginClass.name;
+      const count = pluginCounts.get(baseName) || 0;
+      pluginCounts.set(baseName, count + 1);
+
+      // For duplicate instances, append a number
+      const instanceName = count > 0 ? `${baseName}_${count}` : baseName;
+      pluginInstancesToCreate.push({ PluginClass, instanceName, baseName });
+    });
+
+    // Initialize each plugin instance
     try {
-      this.plugins = this.pluginRegistry.initializePlugins(this, pluginNames);
-      console.log(`Initialized ${this.plugins.size} plugins`);
+      pluginInstancesToCreate.forEach(({ PluginClass, instanceName, baseName }) => {
+        const plugin = new PluginClass(this, instanceName);
+        this.plugins.set(instanceName, plugin);
+
+        // Initialize the plugin
+        if (typeof plugin.init === 'function') {
+          plugin.init();
+        }
+      });
+
+      console.log(`Initialized ${this.plugins.size} plugin instances`);
     } catch (error) {
       console.error('Failed to initialize plugins:', error);
       throw error;

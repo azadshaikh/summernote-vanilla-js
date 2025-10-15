@@ -16,6 +16,7 @@ import StrikethroughPlugin from './plugins/Strikethrough.js';
 import RemoveFormatPlugin from './plugins/RemoveFormat.js';
 import ListPlugin from './plugins/List.js';
 import LinkPlugin from './plugins/Link.js';
+import SeparatorPlugin from './plugins/Separator.js';
 
 // Export core components
 export {
@@ -33,7 +34,8 @@ export {
   StrikethroughPlugin,
   RemoveFormatPlugin,
   ListPlugin,
-  LinkPlugin
+  LinkPlugin,
+  SeparatorPlugin
 };
 
 // Create pre-configured editor with essential plugins
@@ -62,7 +64,8 @@ class AsteroNoteEditor extends Editor {
       'strikethrough': StrikethroughPlugin,
       'removeFormat': RemoveFormatPlugin,
       'list': ListPlugin,
-      'link': LinkPlugin
+      'link': LinkPlugin,
+      'separator': SeparatorPlugin
     };
 
     // If plugins are explicitly provided, use them
@@ -74,41 +77,46 @@ class AsteroNoteEditor extends Editor {
     // Otherwise, derive plugins from toolbar configuration
     const toolbar = options.toolbar || [
       'bold', 'italic', 'underline', 'strikethrough',
+      'separator',
       'removeFormat',
+      'separator',
       'list',
+      'separator',
       'link'
     ];
 
     // Extract plugin names from toolbar configuration
-    const toolbarActions = new Set();
+    const toolbarActions = [];
 
-    // Flatten toolbar configuration
+    // Flatten toolbar configuration (keep duplicates for separator)
     for (const item of toolbar) {
       if (Array.isArray(item)) {
         // Legacy format: [groupName, [action1, action2]]
         if (item.length >= 2 && Array.isArray(item[1])) {
-          item[1].forEach(action => toolbarActions.add(action));
+          item[1].forEach(action => toolbarActions.push(action));
         } else {
           // Flat nested array
-          item.forEach(action => toolbarActions.add(action));
+          item.forEach(action => toolbarActions.push(action));
         }
       } else if (typeof item === 'string') {
         // Direct string action
-        toolbarActions.add(item);
+        toolbarActions.push(item);
       }
     }
 
-    // Map toolbar actions to unique plugin classes
-    const pluginClasses = new Set();
+    // Map toolbar actions to plugin classes
+    // Keep duplicates (e.g., multiple separators)
+    const pluginClasses = [];
+
     for (const action of toolbarActions) {
       const PluginClass = pluginMap[action];
       if (PluginClass) {
-        pluginClasses.add(PluginClass);
+        // Always add to array, even if duplicate (for separator)
+        pluginClasses.push(PluginClass);
       }
     }
 
-    // Convert Set to Array
-    const plugins = Array.from(pluginClasses);
+    const plugins = pluginClasses;
 
     super(target, { ...options, plugins });
   }
@@ -142,6 +150,7 @@ if (typeof window !== 'undefined') {
     RemoveFormatPlugin,
     ListPlugin,
     LinkPlugin,
+    SeparatorPlugin,
     createEditor
   };
 }

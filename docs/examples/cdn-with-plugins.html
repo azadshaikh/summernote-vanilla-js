@@ -35,7 +35,7 @@
 
     <div id="editor" class="border rounded" style="min-height: 250px;"></div>
 
-    <div class="alert alert-secondary mt-3" role="alert">
+    <div class="alert alert-secondary mt-3 text-wrap" role="alert">
       <strong>Debug Info:</strong>
       <div id="plugin-info" class="mt-2 font-monospace small"></div>
     </div>
@@ -73,8 +73,11 @@
       // Flat toolbar format - plugins are loaded based on what's in toolbar
       toolbar: [
         'bold', 'italic', 'underline', 'strikethrough',  // Text formatting
+        'separator',                                      // Visual divider
         'removeFormat',                                   // Clear formatting
+        'separator',                                      // Visual divider
         'list',                                           // Lists (UL + OL)
+        'separator',                                      // Visual divider
         'link'                                            // Insert link
       ],
       callbacks: {
