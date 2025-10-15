@@ -20,13 +20,10 @@ export default class LinkPlugin extends BasePlugin {
     this._onDocPointerDown = (e) => this.onDocumentPointerDown(e);
     this._onDialogKeydown = (e) => this.onDialogKeydown(e);
 
-    // Toolbar button with Bootstrap Icon
+    // Toolbar button
     this.addButton({
       name: 'createLink',
-      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-link-45deg" viewBox="0 0 16 16">
-  <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"/>
-  <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"/>
-</svg>`,
+      icon: '<i class="ri-link"></i>',
       tooltip: 'Insert Link (Ctrl+K)',
       callback: () => this.showLinkDialog(),
       className: 'asteronote-btn-link'
@@ -109,7 +106,7 @@ export default class LinkPlugin extends BasePlugin {
             </div>
             <div class="mb-2">
               <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2" data-action="toggle-advanced">
-                <i class="bi bi-caret-right-fill me-1" data-role="adv-icon"></i>
+                <i class="ri-arrow-right-s-fill" data-role="adv-icon"></i>
                 Additional Props
               </button>
               <div class="collapse mt-2" id="asteronote-advanced">
@@ -572,5 +569,3 @@ export default class LinkPlugin extends BasePlugin {
     super.destroy();
   }
 }
-
-

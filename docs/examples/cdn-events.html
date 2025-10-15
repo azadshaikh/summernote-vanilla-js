@@ -7,8 +7,8 @@
   <title>AsteroNote v2.0 - Event Handling</title>
   <!-- Astero UI CSS -->
   <link href="https://asteroui-temp.pages.dev/styles/asteroui.min.css" rel="stylesheet" />
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Remix Icon -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
   <!-- Geist font from Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
   <!-- Asteronote v2 minimal styles -->
@@ -43,7 +43,7 @@
           <p class="text-muted mb-0">Demonstrates all editor events in real-time</p>
         </div>
         <button id="theme-toggle" class="btn btn-outline-secondary" aria-label="Toggle theme">
-          <i class="bi bi-sun-fill" id="theme-icon"></i>
+          <i class="ri-sun-fill" id="theme-icon"></i>
         </button>
       </div>
     </div>
@@ -96,7 +96,7 @@
     });
 
     function updateThemeIcon(theme) {
-      themeIcon.className = theme === 'light' ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+      themeIcon.className = theme === 'light' ? 'ri-moon-fill' : 'ri-sun-fill';
     }
 
     // Event Log
