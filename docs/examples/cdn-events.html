@@ -155,6 +155,8 @@
     editor.on('asteronote.keydown', (e) => logEvent('Event: asteronote.keydown', { key: e.key }));
     editor.on('asteronote.paste', () => logEvent('Event: asteronote.paste'));
 
+    editor.on('plugin.undo.executed', () => logEvent('Event: plugin.undo.executed'));
+    editor.on('plugin.redo.executed', () => logEvent('Event: plugin.redo.executed'));
     editor.on('plugin.bold.toggled', () => logEvent('Event: plugin.bold.toggled'));
     editor.on('plugin.italic.toggled', () => logEvent('Event: plugin.italic.toggled'));
     editor.on('plugin.underline.toggled', () => logEvent('Event: plugin.underline.toggled'));

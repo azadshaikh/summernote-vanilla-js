@@ -11,6 +11,8 @@ import PluginRegistry from './core/PluginRegistry.js';
 import BasePlugin from './core/BasePlugin.js';
 
 // Import all available plugins
+import UndoPlugin from './plugins/Undo.js';
+import RedoPlugin from './plugins/Redo.js';
 import BoldPlugin from './plugins/Bold.js';
 import ItalicPlugin from './plugins/Italic.js';
 import UnderlinePlugin from './plugins/Underline.js';
@@ -33,6 +35,8 @@ export {
 
 // Export all plugins
 export {
+  UndoPlugin,
+  RedoPlugin,
   BoldPlugin,
   ItalicPlugin,
   UnderlinePlugin,
@@ -49,6 +53,8 @@ export {
 // Create pre-configured editor with all plugins
 export function createEditor(target, options = {}) {
   const plugins = options.plugins || [
+    UndoPlugin,
+    RedoPlugin,
     BoldPlugin,
     ItalicPlugin,
     UnderlinePlugin,

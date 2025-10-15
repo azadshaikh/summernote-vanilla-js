@@ -69,14 +69,15 @@
     // Editor initialization with custom toolbar configuration
     const editor = new AsteroNote('#editor', {
       height: 600,
-      placeholder: 'Try the formatting tools! Use keyboard shortcuts: Ctrl+B (bold), Ctrl+I (italic), Ctrl+U (underline), Ctrl+K (link)',
+      placeholder: 'Try the formatting tools! Use keyboard shortcuts: Ctrl+Z (undo), Ctrl+Y (redo), Ctrl+B (bold), Ctrl+I (italic), Ctrl+U (underline), Ctrl+K (link)',
       // Flat toolbar format - plugins are loaded based on what's in toolbar
       toolbar: [
+        'undo', 'redo',                                   // History
+        'separator',                                      // Visual divider
         'heading',                                        // Headings (H1-H6)
         'separator',                                      // Visual divider
-        'bold', 'italic', 'underline', 'strikethrough',   // Text formatting
-        'separator',
-        'highlight', 'code',                                      // Visual divider
+        'bold', 'italic', 'underline', 'strikethrough', 'highlight', 'code',  // Text formatting
+        'separator',                                      // Visual divider
         'removeFormat',                                   // Clear formatting
         'separator',                                      // Visual divider
         'list',                                           // Lists (UL + OL)
@@ -105,6 +106,8 @@
     `;
 
     // Listen to plugin events
+    editor.on('plugin.undo.executed', () => console.log('Undo executed'));
+    editor.on('plugin.redo.executed', () => console.log('Redo executed'));
     editor.on('plugin.bold.toggled', () => console.log('Bold toggled'));
     editor.on('plugin.italic.toggled', () => console.log('Italic toggled'));
     editor.on('plugin.highlight.toggled', () => console.log('Highlight toggled'));

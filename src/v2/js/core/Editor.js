@@ -35,6 +35,7 @@ import { $, $$, addClass, removeClass, hasClass, createElement, remove } from '.
 import { on, off, trigger, ready } from './events.js';
 import EventEmitter from './EventEmitter.js';
 import PluginRegistry from './PluginRegistry.js';
+import History from './History.js';
 
 /**
  * Default editor configuration
@@ -85,6 +86,7 @@ export default class Editor extends EventEmitter {
     this.options = { ...defaultOptions, ...options };
     this.pluginRegistry = new PluginRegistry();
     this.plugins = new Map(); // Initialized plugin instances
+    this.history = null; // Will be initialized after editor setup
     this.initialized = false;
     this.editable = null;
     this.toolbar = null;
@@ -126,6 +128,11 @@ export default class Editor extends EventEmitter {
     // Set initial content
     const initialContent = this.target.value || this.target.innerHTML || '';
     this.setContent(initialContent);
+
+    // Initialize history manager
+    this.history = new History(this, {
+      maxSize: this.options.historySize || 100
+    });
 
     // Set placeholder
     if (this.options.placeholder) {

@@ -9,6 +9,8 @@ import PluginRegistry from './core/PluginRegistry.js';
 import BasePlugin from './core/BasePlugin.js';
 
 // Import essential plugins (Phase 1)
+import UndoPlugin from './plugins/Undo.js';
+import RedoPlugin from './plugins/Redo.js';
 import BoldPlugin from './plugins/Bold.js';
 import ItalicPlugin from './plugins/Italic.js';
 import UnderlinePlugin from './plugins/Underline.js';
@@ -31,6 +33,8 @@ export {
 
 // Export plugins
 export {
+  UndoPlugin,
+  RedoPlugin,
   BoldPlugin,
   ItalicPlugin,
   UnderlinePlugin,
@@ -64,6 +68,8 @@ class AsteroNoteEditor extends Editor {
   constructor(target, options = {}) {
     // Map of plugin names to plugin classes
     const pluginMap = {
+      'undo': UndoPlugin,
+      'redo': RedoPlugin,
       'bold': BoldPlugin,
       'italic': ItalicPlugin,
       'underline': UnderlinePlugin,
@@ -85,6 +91,8 @@ class AsteroNoteEditor extends Editor {
 
     // Otherwise, derive plugins from toolbar configuration
     const toolbar = options.toolbar || [
+      'undo', 'redo',
+      'separator',
       'heading',
       'separator',
       'bold', 'italic', 'underline', 'strikethrough', 'highlight', 'code',
