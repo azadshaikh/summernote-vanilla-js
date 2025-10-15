@@ -6,13 +6,18 @@
   border-radius: 1rem;
   position: relative;
   margin-bottom: 1rem;
+
+  .popover .btn-sm {
+    height: 1.35rem;
+    font-size: .725rem;
+}
 }
 
 .asteronote-editor .asteronote-toolbar {
   padding: .25rem 0.5rem;
 
   border-bottom: 1px solid var(--bs-border-color);
-  i { font-size: 1.25rem; }
+  i { font-size: 1.125rem; }
   button {
     border: none;
     background: transparent;

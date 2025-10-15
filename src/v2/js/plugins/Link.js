@@ -383,15 +383,15 @@ export default class LinkPlugin extends BasePlugin {
     pop.dataset.popperPlacement = 'top';
     pop.innerHTML = `
       <div class="popover-body d-flex align-items-center gap-1 py-1 px-2 small" style="max-width:380px">
-        <i class="bi bi-link-45deg"></i><span class="text-truncate" style="max-width:320px" data-role="url"></span>
+        <i class="ri-link"></i><span class="text-truncate" style="max-width:320px" data-role="url"></span>
         <button type="button" class="btn btn-sm btn-outline-secondary p-0 px-1" data-action="open-link" title="Open in new tab">
-          <i class="bi bi-box-arrow-up-right"></i>
+          <i class="ri-external-link-line"></i>
         </button>
         <button type="button" class="btn btn-sm btn-outline-secondary p-0 px-1" data-action="edit-link" title="Edit">
-          <i class="bi bi-pencil"></i>
+          <i class="ri-pencil-line"></i>
         </button>
         <button type="button" class="btn btn-sm btn-outline-secondary p-0 px-1" data-action="remove-link" title="Remove">
-          <i class="bi bi-trash"></i>
+          <i class="ri-delete-bin-line"></i>
         </button>
       </div>`;
     document.body.appendChild(pop);

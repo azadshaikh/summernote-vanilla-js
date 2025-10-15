@@ -74,8 +74,9 @@
       toolbar: [
         'heading',                                        // Headings (H1-H6)
         'separator',                                      // Visual divider
-        'bold', 'italic', 'underline', 'strikethrough',  // Text formatting
-        'separator',                                      // Visual divider
+        'bold', 'italic', 'underline', 'strikethrough',   // Text formatting
+        'separator',
+        'highlight', 'code',                                      // Visual divider
         'removeFormat',                                   // Clear formatting
         'separator',                                      // Visual divider
         'list',                                           // Lists (UL + OL)
@@ -106,6 +107,8 @@
     // Listen to plugin events
     editor.on('plugin.bold.toggled', () => console.log('Bold toggled'));
     editor.on('plugin.italic.toggled', () => console.log('Italic toggled'));
+    editor.on('plugin.highlight.toggled', () => console.log('Highlight toggled'));
+    editor.on('plugin.code.toggled', () => console.log('Code toggled'));
     editor.on('plugin.link.inserted', (data) => console.log('Link inserted:', data));
 
     // Set initial content
@@ -117,6 +120,8 @@
         <li><em>Italic</em> formatting (Ctrl+I)</li>
         <li><u>Underline</u> formatting (Ctrl+U)</li>
         <li><s>Strikethrough</s> formatting</li>
+        <li><mark>Highlight</mark> formatting (Ctrl+H)</li>
+        <li><code>Inline code</code> formatting</li>
         <li>Ordered and unordered lists</li>
         <li><a href="https://asteronote.org">Link</a> creation (Ctrl+K)</li>
       </ul>

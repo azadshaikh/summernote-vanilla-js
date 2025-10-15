@@ -158,6 +158,9 @@
     editor.on('plugin.bold.toggled', () => logEvent('Event: plugin.bold.toggled'));
     editor.on('plugin.italic.toggled', () => logEvent('Event: plugin.italic.toggled'));
     editor.on('plugin.underline.toggled', () => logEvent('Event: plugin.underline.toggled'));
+    editor.on('plugin.strikethrough.toggled', () => logEvent('Event: plugin.strikethrough.toggled'));
+    editor.on('plugin.highlight.toggled', () => logEvent('Event: plugin.highlight.toggled'));
+    editor.on('plugin.code.toggled', () => logEvent('Event: plugin.code.toggled'));
     editor.on('plugin.list.ordered-list-toggled', () => logEvent('Event: plugin.list.ordered-list-toggled'));
     editor.on('plugin.list.unordered-list-toggled', () => logEvent('Event: plugin.list.unordered-list-toggled'));
     editor.on('plugin.link.inserted', (data) => logEvent('Event: plugin.link.inserted', data));
