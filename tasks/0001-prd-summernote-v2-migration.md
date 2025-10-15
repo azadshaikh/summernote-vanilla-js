@@ -1,46 +1,46 @@
-# PRD: Summernote v2.0 - Modern Architecture Migration
+# PRD: AsteroNote v2.0 - Modern Architecture Migration
 
 ## Introduction/Overview
 
-Summernote v2.0 represents a major architectural overhaul of the popular WYSIWYG editor. The primary goal is to modernize the codebase to support both traditional CDN-based usage (CommonJS) and modern ES module imports via NPM, while redesigning the plugin architecture for better isolation and maintainability. This migration will create a new major version (v2.0.0) that runs alongside the current v1.x, allowing gradual adoption by the community.
+AsteroNote v2.0 (formerly Summernote) represents a major architectural overhaul and rebranding of the popular WYSIWYG editor. The primary goal is to modernize the codebase to support both traditional CDN-based usage (CommonJS) and modern ES module imports via NPM, while redesigning the plugin architecture for better isolation and maintainability. This migration will create a new major version (v2.0.0) with a new brand identity under Astero Digital.
 
-**Problem Statement:** The current Summernote architecture lacks modern module support, has a tightly-coupled plugin system, and doesn't provide flexible bundle options for different use cases.
+**Problem Statement:** The current architecture lacks modern module support, has a tightly-coupled plugin system, and doesn't provide flexible bundle options for different use cases.
 
-**Goal:** Create a modern, modular version of Summernote that supports both legacy CDN usage and modern NPM-based workflows, with a redesigned plugin architecture and multiple bundle options.
+**Goal:** Create a modern, modular version of the editor that supports both legacy CDN usage and modern NPM-based workflows, with a redesigned plugin architecture, multiple bundle options, and a fresh brand identity as AsteroNote.
 
 ## Goals
 
-1. **Dual Distribution Support:** Enable Summernote to work seamlessly as both a CDN-delivered CommonJS library and an NPM-importable ES module
+1. **Dual Distribution Support:** Enable AsteroNote to work seamlessly as both a CDN-delivered CommonJS library and an NPM-importable ES module
 2. **Remove jQuery Dependency:** Eliminate jQuery dependency entirely and rewrite all functionality using vanilla JavaScript
 3. **Simplify Styling and Design:** Use only Bootstrap 5.3 for styling, Google Fonts for typography, and Bootstrap Icons for all iconography
 4. **Plugin System Redesign:** Implement a completely redesigned plugin architecture with better isolation, preventing plugins from interfering with each other
 5. **Flexible Bundling:** Provide multiple bundle options (core + optional plugins) for optimized loading and tree-shaking
 6. **Simple Event Management:** Implement a lightweight EventEmitter pattern for internal and external event handling
-7. **Backward Compatibility Path:** Maintain v1.x alongside v2.0 to give users time to migrate
+7. **Brand Identity:** Establish AsteroNote as a modern, professional brand under Astero Digital
 8. **Phased Rollout:** Release core functionality first, followed by plugin ecosystem updates
 
 ## User Stories
 
 ### Story 1: Legacy CDN User
-**As a** developer using Summernote via CDN
-**I want to** upgrade to v2.0 without changing my integration method
+**As a** developer using a WYSIWYG editor via CDN
+**I want to** use AsteroNote v2.0 without changing my integration method
 **So that** I can benefit from improvements while maintaining my existing workflow
 
 **Acceptance Criteria:**
-- Can include Summernote v2.0 via `<script>` tag from CDN
-- Global `Summernote` object remains available
+- Can include AsteroNote v2.0 via `<script>` tag from CDN
+- Global `AsteroNote` object is available
 - CommonJS-style API works as expected
-- Existing initialization code requires minimal changes
+- Backward compatibility aliases (`Summernote`) available for gradual migration
 
 ### Story 2: Modern NPM User
 **As a** developer using modern JavaScript build tools
-**I want to** import Summernote as an ES module from NPM
+**I want to** import AsteroNote as an ES module from NPM
 **So that** I can tree-shake unused code and integrate it into my build pipeline
 
 **Acceptance Criteria:**
-- Can install via `npm install summernote@2.0.0`
-- Can import using `import Summernote from 'summernote'`
-- Can selectively import plugins: `import { BoldPlugin } from 'summernote/plugins'`
+- Can install via `npm install asteronote@2.0.0`
+- Can import using `import AsteroNote from 'asteronote'`
+- Can selectively import plugins: `import { BoldPlugin } from 'asteronote/plugins'`
 - Works with Webpack, Vite, Rollup, and other modern bundlers
 - Supports tree-shaking for unused plugins
 
@@ -196,21 +196,21 @@ summernote/
 ### API Example (Dual Usage)
 ```javascript
 // CDN Usage (UMD) - NO JQUERY REQUIRED
-<script src="https://cdn.example.com/summernote@2.0.0/summernote.js"></script>
+<script src="https://cdn.example.com/asteronote@2.0.0/asteronote.js"></script>
 <script>
   // Pure JavaScript API
-  const editor = new Summernote('#editor', { /* options */ });
+  const editor = new AsteroNote('#editor', { /* options */ });
 
   // Alternative: data-attribute initialization
-  // <div data-summernote data-height="300"></div>
-  Summernote.init(); // Auto-initializes all [data-summernote] elements
+  // <div data-asteronote data-height="300"></div>
+  AsteroNote.init(); // Auto-initializes all [data-asteronote] elements
 </script>
 
 // NPM Usage (ESM)
-import Summernote from 'summernote';
-import { Table, Image } from 'summernote/plugins';
+import AsteroNote from 'asteronote';
+import { Table, Image } from 'asteronote/plugins';
 
-const editor = new Summernote('#editor', {
+const editor = new AsteroNote('#editor', {
   plugins: [Table, Image],
   height: 300,
   callbacks: {
@@ -219,42 +219,6 @@ const editor = new Summernote('#editor', {
     }
   }
 });
-
-// Optional: If users want jQuery-style wrapper (separate package)
-// import 'summernote/jquery';
-// $('#editor').summernote({ /* options */ });
-```
-
-### Plugin API Example
-```javascript
-// Plugin structure
-export default class BoldPlugin {
-  constructor(editor) {
-    this.editor = editor;
-    this.name = 'bold';
-  }
-
-  init() {
-    // Register toolbar button
-    this.editor.toolbar.addButton({
-      name: 'bold',
-      icon: '<i class="fa fa-bold"></i>',
-      callback: () => this.toggle()
-    });
-
-    // Listen to events
-    this.editor.on('summernote.keydown', this.handleKeydown.bind(this));
-  }
-
-  toggle() {
-    document.execCommand('bold');
-    this.editor.emit('plugin.bold.toggled');
-  }
-
-  destroy() {
-    // Cleanup
-  }
-}
 ```
 
 ## Technical Considerations
@@ -292,18 +256,18 @@ export default class BoldPlugin {
 ### Package.json Configuration
 ```json
 {
-  "name": "summernote",
+  "name": "asteronote",
   "version": "2.0.0",
-  "main": "dist/summernote.js",
-  "module": "dist/summernote.esm.js",
+  "main": "dist/asteronote.js",
+  "module": "dist/asteronote.esm.js",
   "exports": {
     ".": {
-      "require": "./dist/summernote.js",
-      "import": "./dist/summernote.esm.js"
+      "require": "./dist/asteronote.js",
+      "import": "./dist/asteronote.esm.js"
     },
     "./core": {
-      "require": "./dist/summernote-core.js",
-      "import": "./dist/summernote-core.esm.js"
+      "require": "./dist/asteronote-core.js",
+      "import": "./dist/asteronote-core.esm.js"
     },
     "./plugins/*": {
       "require": "./dist/plugins/*.js",
@@ -330,6 +294,42 @@ export default class BoldPlugin {
 ### Styling Architecture
 ```
 summernote/
+├── src/
+│   ├── css/
+│   │   └── summernote.css     # Minimal custom styles only
+│   └── js/
+│       └── ...
+├── dist/
+│   ├── summernote.css         # Compiled styles
+│   └── summernote.js
+└── demo/
+    └── index.html             # Single demo page
+```
+
+### Demo Page Structure
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AsteroNote v2.0 Demo - Astero Digital</title>
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- AsteroNote CSS -->
+  <link href="../dist/asteronote.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>AsteroNote v2.0</h1>
 ├── src/
 │   ├── css/
 │   │   └── summernote.css     # Minimal custom styles only

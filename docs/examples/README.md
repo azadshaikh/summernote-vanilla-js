@@ -1,6 +1,6 @@
-# Summernote v2.0 Examples
+# AsteroNote v2.0 Examples
 
-This directory contains example HTML files demonstrating various features of Summernote v2.0.
+This directory contains example HTML files demonstrating various features of AsteroNote v2.0.
 
 ## Prerequisites
 
@@ -49,6 +49,7 @@ See `npm-*.js` files for module import examples. These require a bundler like We
 
 ## Notes
 
-- All examples use the local build from `../../dist/v2/summernote.js`
+- All examples use the local build from `../../dist/v2/AsteroNote.js`
 - Make sure to rebuild (`npm run build:v2`) after making changes to the source code
 - For production use, reference the published CDN version instead
+

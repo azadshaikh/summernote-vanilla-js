@@ -1,5 +1,5 @@
 /**
- * Summernote v2.0 - Full Bundle
+ * AsteroNote v2.0 - Full Bundle
  * Entry point for full bundle (core + all plugins)
  * Currently same as standard bundle (Phase 1 only)
  * Will include additional plugins in future phases
@@ -50,3 +50,4 @@ export function createEditor(target, options = {}) {
 
 // Default export
 export default Editor;
+

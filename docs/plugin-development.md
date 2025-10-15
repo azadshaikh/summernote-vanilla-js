@@ -1,8 +1,8 @@
-# Summernote v2.0 - Plugin Development Guide
+# AsteroNote v2.0 - Plugin Development Guide
 
 ## Overview
 
-Summernote v2.0 features a completely redesigned plugin architecture that provides:
+AsteroNote v2.0 features a completely redesigned plugin architecture that provides:
 - **Isolated plugin scope** - No global state pollution
 - **Dependency management** - Automatic resolution of plugin dependencies
 - **Standardized interface** - All plugins follow the same contract
@@ -46,7 +46,7 @@ class MyPlugin extends BasePlugin {
     this.addShortcut('Ctrl+M', () => this.performAction());
 
     // Listen to editor events
-    this.on('summernote.change', (content) => {
+    this.on('AsteroNote.change', (content) => {
       console.log('Content changed:', content);
     });
   }
@@ -103,7 +103,7 @@ init() {
   // Setup plugin
   this.addButton({ /* ... */ });
   this.addShortcut('Ctrl+B', this.toggle);
-  this.on('summernote.focus', this.onFocus);
+  this.on('AsteroNote.focus', this.onFocus);
 }
 ```
 
@@ -214,11 +214,11 @@ this.editor.focus();
 
 ```javascript
 // Listen to editor events
-this.on('summernote.change', (content) => {
+this.on('AsteroNote.change', (content) => {
   console.log('Content changed:', content);
 });
 
-this.on('summernote.focus', () => {
+this.on('AsteroNote.focus', () => {
   console.log('Editor focused');
 });
 
@@ -276,8 +276,8 @@ class HighlightPlugin extends BasePlugin {
     this.addShortcut('Ctrl+H', () => this.toggleHighlight());
 
     // Listen to selection changes
-    this.on('summernote.keyup', () => this.updateButtonState());
-    this.on('summernote.mouseup', () => this.updateButtonState());
+    this.on('AsteroNote.keyup', () => this.updateButtonState());
+    this.on('AsteroNote.mouseup', () => this.updateButtonState());
   }
 
   toggleHighlight() {
@@ -298,7 +298,7 @@ class HighlightPlugin extends BasePlugin {
       this.emitEvent('applied');
     }
 
-    this.editor.emit('summernote.change', this.editor.getContent());
+    this.editor.emit('AsteroNote.change', this.editor.getContent());
   }
 
   updateButtonState() {
@@ -400,3 +400,4 @@ editor.on('plugin.bold.toggled', () => {
 - Confirm event name spelling
 - Check that handler is registered before event fires
 - Verify plugin is enabled
+

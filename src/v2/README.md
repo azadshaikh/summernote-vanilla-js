@@ -1,46 +1,42 @@
-# Summernote v2.0 Source Code
+# AsteroNote v2.0 Source Code
 
-This directory contains the v2.0 rewrite of Summernote with vanilla JavaScript (no jQuery dependency).
+This directory contains the v2.0 rewrite of AsteroNote with vanilla JavaScript (no jQuery dependency).
 
 ## Directory Structure
 
-- `src/` - Contains the source code for Summernote.
+- `src/` - Contains the source code for AsteroNote.
 - `dist/` - Contains the compiled and minified files for production.
 - `test/` - Contains the test files and test runner.
 - `docs/` - Contains the documentation files.
-- `examples/` - Contains example files demonstrating how to use Summernote.
+- `examples/` - Contains example files demonstrating how to use AsteroNote.
 
 ## Installation
 
-To install Summernote, use npm:
+To install AsteroNote, use npm:
 
 ```bash
-npm install summernote
+npm install asteronote
 ```
-
-
 
 ## Usage
 
-To use Summernote, include the CSS and JavaScript files in your project:
+To use AsteroNote, include the CSS and JavaScript files in your project:
 
 ```html
-<link href="path/to/summernote.css" rel="stylesheet">
-<script src="path/to/summernote.js"></script>
+<link href="path/to/asteronote.css" rel="stylesheet">
+<script src="path/to/asteronote.js"></script>
 ```
 
-Then, initialize Summernote on your desired textarea:
+Then, initialize AsteroNote on your desired textarea:
 
 ```javascript
-$(document).ready(function() {
-  $('#summernote').summernote();
-});
+// See docs/examples for usage without jQuery
 ```
 
 ## Contributing
 
-We welcome contributions to Summernote! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for more information on how to contribute.
+We welcome contributions to AsteroNote! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for more information on how to contribute.
 
 ## License
 
-Summernote is licensed under the MIT license. See the [LICENSE.md](LICENSE.md) file for more information.
+AsteroNote is licensed under the MIT license. See the [LICENSE.md](LICENSE.md) file for more information.

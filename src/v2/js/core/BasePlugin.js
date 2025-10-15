@@ -1,5 +1,5 @@
 /**
- * BasePlugin - Base class for all Summernote plugins
+ * BasePlugin - Base class for all AsteroNote plugins
  * Defines the standard plugin interface and provides common functionality
  *
  * All plugins MUST extend this class and implement the required methods
@@ -152,7 +152,7 @@ export default class BasePlugin {
     button.type = 'button';
     // Use Bootstrap 5 button classes; allow extensions via className
     const bootstrapBtn = 'btn btn-outline-secondary';
-    button.className = `${bootstrapBtn} summernote-btn summernote-btn-${name} ${className}`.trim();
+    button.className = `${bootstrapBtn} asteronote-btn asteronote-btn-${name} ${className}`.trim();
     button.innerHTML = icon;
     button.setAttribute('data-plugin', this.constructor.pluginName);
     button.setAttribute('data-action', name);
@@ -171,7 +171,7 @@ export default class BasePlugin {
         callback.call(this, e);
         // Prompt immediate state refresh for snappy UI
         if (this.editor && typeof this.editor.emit === 'function') {
-          this.editor.emit('summernote.selectionchange');
+          this.editor.emit('asteronote.selectionchange');
         }
       }
     });
@@ -241,9 +241,9 @@ export default class BasePlugin {
     if (this.editor.editable) {
       this.ensureFocusAndRange();
       document.execCommand(command, false, value);
-      this.editor.emit('summernote.change', this.editor.getContent());
+      this.editor.emit('asteronote.change', this.editor.getContent());
       // Trigger quick UI refresh
-      this.editor.emit('summernote.selectionchange');
+      this.editor.emit('asteronote.selectionchange');
     }
   }
 

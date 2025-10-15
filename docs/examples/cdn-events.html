@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Summernote v2.0 - Event Handling</title>
+  <title>AsteroNote v2.0 - Event Handling</title>
   <!-- Astero UI CSS -->
   <link href="https://asteroui-temp.pages.dev/styles/asteroui.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
   <!-- Geist font from Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
-  <!-- Summernote v2 minimal styles -->
-  <link href="../../src/css/summernote.css" rel="stylesheet" />
+  <!-- Asteronote v2 minimal styles -->
+  <link href="../../src/css/asteronote.css" rel="stylesheet" />
   <style>
     .event-item {
       border-left: 3px solid #198754;
@@ -39,7 +39,7 @@
     <div class="row">
       <div class="col-12 d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h1 class="mb-2">Summernote v2.0 - Event Handling</h1>
+          <h1 class="mb-2">AsteroNote v2.0 - Event Handling</h1>
           <p class="text-muted mb-0">Demonstrates all editor events in real-time</p>
         </div>
         <button id="theme-toggle" class="btn btn-outline-secondary" aria-label="Toggle theme">
@@ -74,8 +74,8 @@
     </div>
   </div>
 
-  <!-- Include Summernote v2.0 from local build -->
-  <script src="../../dist/v2/summernote.js"></script>
+  <!-- Include AsteroNote v2.0 from local build -->
+  <script src="../../dist/v2/asteronote.js"></script>
 
   <script>
     // Theme Switcher
@@ -146,12 +146,12 @@
 
     editor.init();
 
-    editor.on('summernote.init', () => logEvent('Event: summernote.init'));
-    editor.on('summernote.change', (content) => logEvent('Event: summernote.change', { length: content.length }));
-    editor.on('summernote.focus', () => logEvent('Event: summernote.focus'));
-    editor.on('summernote.blur', () => logEvent('Event: summernote.blur'));
-    editor.on('summernote.keydown', (e) => logEvent('Event: summernote.keydown', { key: e.key }));
-    editor.on('summernote.paste', () => logEvent('Event: summernote.paste'));
+    editor.on('AsteroNote.init', () => logEvent('Event: AsteroNote.init'));
+    editor.on('AsteroNote.change', (content) => logEvent('Event: AsteroNote.change', { length: content.length }));
+    editor.on('AsteroNote.focus', () => logEvent('Event: AsteroNote.focus'));
+    editor.on('AsteroNote.blur', () => logEvent('Event: AsteroNote.blur'));
+    editor.on('AsteroNote.keydown', (e) => logEvent('Event: AsteroNote.keydown', { key: e.key }));
+    editor.on('AsteroNote.paste', () => logEvent('Event: AsteroNote.paste'));
 
     editor.on('plugin.bold.toggled', () => logEvent('Event: plugin.bold.toggled'));
     editor.on('plugin.italic.toggled', () => logEvent('Event: plugin.italic.toggled'));

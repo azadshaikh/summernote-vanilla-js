@@ -26,18 +26,18 @@ export default class LinkPlugin extends BasePlugin {
       icon: '<i class="bi bi-link-45deg"></i>',
       tooltip: 'Insert Link (Ctrl+K)',
       callback: () => this.showLinkDialog(),
-      className: 'summernote-btn-link'
+      className: 'asteronote-btn-link'
     });
 
     this.addShortcut('Ctrl+K', () => this.showLinkDialog());
     // Merge typed characters into adjacent links so typing next to a link continues the link
-    this.on('summernote.keydown', (e) => this.maybeMergeTypingIntoAdjacentLink(e));
+    this.on('asteronote.keydown', (e) => this.maybeMergeTypingIntoAdjacentLink(e));
 
     // Keep state in sync and manage popover visibility
     const refresh = () => { this.updateButtonState(); this.maybeShowLinkPopover(); };
-    this.on('summernote.keyup', refresh);
-    this.on('summernote.mouseup', refresh);
-    this.on('summernote.selectionchange', refresh);
+    this.on('asteronote.keyup', refresh);
+    this.on('asteronote.mouseup', refresh);
+    this.on('asteronote.selectionchange', refresh);
     setTimeout(() => this.updateButtonState(), 0);
 
     // Hover popover
@@ -55,10 +55,10 @@ export default class LinkPlugin extends BasePlugin {
 
     if (!this.dialog) this.createDialog();
 
-    const urlInput = this.dialog.querySelector('#sn-link-url');
-    const textInput = this.dialog.querySelector('#sn-link-text');
-    const targetInput = this.dialog.querySelector('#sn-link-target');
-    const relInput = this.dialog.querySelector('#sn-link-rel');
+    const urlInput = this.dialog.querySelector('#asteronote-link-url');
+    const textInput = this.dialog.querySelector('#asteronote-link-text');
+    const targetInput = this.dialog.querySelector('#asteronote-link-target');
+    const relInput = this.dialog.querySelector('#asteronote-link-rel');
     urlInput.value = existingUrl;
     textInput.value = existingText || this.getSelectedText();
     if (targetInput) targetInput.value = existing ? (existing.target || '_blank') : '_blank';
@@ -97,26 +97,26 @@ export default class LinkPlugin extends BasePlugin {
         <div class="modal-content">
           <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label small" for="sn-link-url">Link URL</label>
-              <input type="url" class="form-control" id="sn-link-url" placeholder="https://example.com">
+              <label class="form-label small" for="asteronote-link-url">Link URL</label>
+              <input type="url" class="form-control" id="asteronote-link-url" placeholder="https://example.com">
             </div>
             <div class="mb-3">
-              <label class="form-label small" for="sn-link-text">Link Text</label>
-              <input type="text" class="form-control" id="sn-link-text" placeholder="Link text">
+              <label class="form-label small" for="asteronote-link-text">Link Text</label>
+              <input type="text" class="form-control" id="asteronote-link-text" placeholder="Link text">
             </div>
             <div class="mb-2">
               <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2" data-action="toggle-advanced">
                 <i class="bi bi-caret-right-fill me-1" data-role="adv-icon"></i>
                 Additional Props
               </button>
-              <div class="collapse mt-2" id="sn-advanced">
+              <div class="collapse mt-2" id="asteronote-advanced">
                 <div class="mb-2">
-                  <label class="form-label small" for="sn-link-target">Link Target</label>
-                  <input type="text" class="form-control" id="sn-link-target" placeholder="_blank">
+                  <label class="form-label small" for="asteronote-link-target">Link Target</label>
+                  <input type="text" class="form-control" id="asteronote-link-target" placeholder="_blank">
                 </div>
                 <div class="mb-2">
-                  <label class="form-label small" for="sn-link-rel">Link rel</label>
-                  <input type="text" class="form-control" id="sn-link-rel" placeholder="noopener noreferrer">
+                  <label class="form-label small" for="asteronote-link-rel">Link rel</label>
+                  <input type="text" class="form-control" id="asteronote-link-rel" placeholder="noopener noreferrer">
                 </div>
               </div>
             </div>
@@ -150,10 +150,10 @@ export default class LinkPlugin extends BasePlugin {
   }
 
   insertLink() {
-    const urlInput = this.dialog.querySelector('#sn-link-url');
-    const textInput = this.dialog.querySelector('#sn-link-text');
-    const targetInput = this.dialog.querySelector('#sn-link-target');
-    const relInput = this.dialog.querySelector('#sn-link-rel');
+    const urlInput = this.dialog.querySelector('#asteronote-link-url');
+    const textInput = this.dialog.querySelector('#asteronote-link-text');
+    const targetInput = this.dialog.querySelector('#asteronote-link-target');
+    const relInput = this.dialog.querySelector('#asteronote-link-rel');
     const url = (urlInput.value || '').trim();
     const text = (textInput.value || '').trim();
     const target = (targetInput && targetInput.value || '').trim();
@@ -362,7 +362,7 @@ export default class LinkPlugin extends BasePlugin {
   }
 
   toggleAdvanced() {
-    const adv = this.dialog.querySelector('#sn-advanced');
+    const adv = this.dialog.querySelector('#asteronote-advanced');
     const icon = this.dialog.querySelector('[data-role="adv-icon"]');
     if (!adv) return;
     const shown = adv.classList.contains('show');
@@ -569,3 +569,5 @@ export default class LinkPlugin extends BasePlugin {
     super.destroy();
   }
 }
+
+

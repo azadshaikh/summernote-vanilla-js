@@ -19,7 +19,7 @@ export default class ListPlugin extends BasePlugin {
       icon: '<i class="bi bi-list-ul"></i>',
       tooltip: 'Unordered List',
       callback: () => this.toggleUnorderedList(),
-      className: 'summernote-btn-ul'
+      className: 'asteronote-btn-ul'
     });
 
     // Add ordered list button
@@ -28,16 +28,16 @@ export default class ListPlugin extends BasePlugin {
       icon: '<i class="bi bi-list-ol"></i>',
       tooltip: 'Ordered List',
       callback: () => this.toggleOrderedList(),
-      className: 'summernote-btn-ol'
+      className: 'asteronote-btn-ol'
     });
 
     // Listen to selection changes to update button states
-    this.on('summernote.keyup', () => this.updateButtonStates());
-    this.on('summernote.mouseup', () => this.updateButtonStates());
-    this.on('summernote.selectionchange', () => this.updateButtonStates());
+    this.on('asteronote.keyup', () => this.updateButtonStates());
+    this.on('asteronote.mouseup', () => this.updateButtonStates());
+    this.on('asteronote.selectionchange', () => this.updateButtonStates());
 
     // Keyboard: Tab = indent/outdent, Backspace = outdent/exit on empty item or at start
-    this.on('summernote.keydown', (e) => this.handleKeydown(e));
+    this.on('asteronote.keydown', (e) => this.handleKeydown(e));
 
     // Initial button states
     setTimeout(() => this.updateButtonStates(), 0);

@@ -1,34 +1,34 @@
 /**
- * Summernote Editor v2.0
+ * Asteronote Editor v2.0
  * Main editor class - No jQuery dependency
  *
- * @fires summernote.init - Fired when editor is initialized
- * @fires summernote.change - Fired when content changes
- * @fires summernote.focus - Fired when editor receives focus
- * @fires summernote.blur - Fired when editor loses focus
- * @fires summernote.keydown - Fired on keydown in editor
- * @fires summernote.paste - Fired on paste event
- * @fires summernote.destroy - Fired when editor is destroyed
+ * @fires asteronote.init - Fired when editor is initialized
+ * @fires asteronote.change - Fired when content changes
+ * @fires asteronote.focus - Fired when editor receives focus
+ * @fires asteronote.blur - Fired when editor loses focus
+ * @fires asteronote.keydown - Fired on keydown in editor
+ * @fires asteronote.paste - Fired on paste event
+ * @fires asteronote.destroy - Fired when editor is destroyed
  *
  * Event naming convention:
- * - Core events: summernote.[event]
+ * - Core events: asteronote.[event]
  * - Plugin events: plugin.[plugin-name].[event]
  *
  * @example
  * // Subscribe to events
- * editor.on('summernote.change', (content) => {
+ * editor.on('asteronote.change', (content) => {
  *   console.log('Content changed:', content);
  * });
  *
  * // One-time subscription
- * editor.once('summernote.init', () => {
+ * editor.once('asteronote.init', () => {
  *   console.log('Editor initialized');
  * });
  *
  * // Unsubscribe
  * const handler = (content) => console.log(content);
- * editor.on('summernote.change', handler);
- * editor.off('summernote.change', handler);
+ * editor.on('asteronote.change', handler);
+ * editor.off('asteronote.change', handler);
  */
 
 import { $, $$, addClass, removeClass, hasClass, createElement, remove } from './dom.js';
@@ -71,7 +71,7 @@ export default class Editor extends EventEmitter {
     this.target = typeof target === 'string' ? $(target) : target;
 
     if (!this.target) {
-      throw new Error('Summernote: Target element not found');
+      throw new Error('Asteronote: Target element not found');
     }
 
     this.options = { ...defaultOptions, ...options };
@@ -96,11 +96,11 @@ export default class Editor extends EventEmitter {
 
   /**
    * Initialize the editor
-   * @fires summernote.init
+   * @fires asteronote.init
    */
   init() {
     if (this.initialized) {
-      console.warn('Summernote: Editor already initialized');
+      console.warn('AsteroNote: Editor already initialized');
       return this;
     }
 
@@ -135,7 +135,7 @@ export default class Editor extends EventEmitter {
     this.triggerCallback('onInit');
 
     // Emit init event
-    this.emit('summernote.init');
+    this.emit('asteronote.init');
 
     return this;
   }
@@ -147,15 +147,15 @@ export default class Editor extends EventEmitter {
     // Hide original element
     this.target.style.display = 'none';
 
-    // Create wrapper (scoped to .summernote-editor for CSS)
+    // Create wrapper (scoped to .asteronote-editor for CSS)
     this.wrapper = createElement('div', {
-      className: 'summernote-editor'
+      className: 'asteronote-editor'
     });
 
     // Create toolbar container using Bootstrap toolbar semantics
     // We'll render groups from options.toolbar
     this.toolbar = createElement('div', {
-      className: 'summernote-toolbar btn-toolbar',
+      className: 'asteronote-toolbar btn-toolbar',
       role: 'toolbar',
       ariaLabel: 'Editor toolbar'
     });
@@ -164,7 +164,7 @@ export default class Editor extends EventEmitter {
 
     // Create editable area
     this.editable = createElement('div', {
-      className: 'summernote-editable',
+      className: 'asteronote-editable',
       contenteditable: 'true',
       style: {
         minHeight: this.options.minHeight ? `${this.options.minHeight}px` : null,
@@ -247,26 +247,26 @@ export default class Editor extends EventEmitter {
   handleInput(event) {
     this.updateOriginalElement();
     this.triggerCallback('onChange', this.getContent());
-    this.emit('summernote.change', this.getContent()); // Use EventEmitter
+    this.emit('asteronote.change', this.getContent()); // Use EventEmitter
   }
 
   /**
    * Handle focus event
    */
   handleFocus(event) {
-    addClass(this.wrapper, 'summernote-focused');
+    addClass(this.wrapper, 'asteronote-focused');
     this.triggerCallback('onFocus');
-    this.emit('summernote.focus'); // Use EventEmitter
+    this.emit('asteronote.focus'); // Use EventEmitter
   }
 
   /**
    * Handle blur event
    */
   handleBlur(event) {
-    removeClass(this.wrapper, 'summernote-focused');
+    removeClass(this.wrapper, 'asteronote-focused');
     this.updateOriginalElement();
     this.triggerCallback('onBlur');
-    this.emit('summernote.blur'); // Use EventEmitter
+    this.emit('asteronote.blur'); // Use EventEmitter
   }
 
   /**
@@ -274,7 +274,7 @@ export default class Editor extends EventEmitter {
    */
   handleKeydown(event) {
     this.triggerCallback('onKeydown', event);
-    this.emit('summernote.keydown', event); // Use EventEmitter
+    this.emit('asteronote.keydown', event); // Use EventEmitter
 
     // Handle shortcuts if enabled
     if (this.options.shortcuts) {
@@ -286,14 +286,14 @@ export default class Editor extends EventEmitter {
    * Handle keyup event
    */
   handleKeyup(event) {
-    this.emit('summernote.keyup', event);
+    this.emit('asteronote.keyup', event);
   }
 
   /**
    * Handle mouseup event
    */
   handleMouseup(event) {
-    this.emit('summernote.mouseup', event);
+    this.emit('asteronote.mouseup', event);
   }
 
   /**
@@ -301,7 +301,7 @@ export default class Editor extends EventEmitter {
    */
   handlePaste(event) {
     this.triggerCallback('onPaste', event);
-    this.emit('summernote.paste', event); // Use EventEmitter
+    this.emit('asteronote.paste', event); // Use EventEmitter
   }
 
   /**
@@ -342,7 +342,7 @@ export default class Editor extends EventEmitter {
     if (!anchor) return;
     const within = this.editable && (anchor === this.editable || this.editable.contains(anchor.nodeType === 3 ? anchor.parentElement : anchor));
     if (within) {
-      this.emit('summernote.selectionchange');
+      this.emit('asteronote.selectionchange');
     }
   }
 
@@ -508,7 +508,7 @@ export default class Editor extends EventEmitter {
 
   /**
    * Destroy the editor and cleanup
-   * @fires summernote.destroy
+   * @fires asteronote.destroy
    */
   destroy() {
     if (!this.initialized) {
@@ -549,7 +549,7 @@ export default class Editor extends EventEmitter {
     this.triggerCallback('onDestroy');
 
     // Emit destroy event
-    this.emit('summernote.destroy');
+    this.emit('asteronote.destroy');
   }
 
   /**
@@ -558,7 +558,7 @@ export default class Editor extends EventEmitter {
    * @param {Object} options - Editor options
    * @returns {Editor|Editor[]}
    */
-  static init(selector = '[data-summernote]', options = {}) {
+  static init(selector = '[data-asteronote]', options = {}) {
     const elements = $$(selector);
 
     if (elements.length === 0) {
@@ -575,7 +575,7 @@ export default class Editor extends EventEmitter {
 
 // Auto-initialize on DOM ready
 ready(() => {
-  const autoInit = $$('[data-summernote]');
+  const autoInit = $$('[data-asteronote]');
   autoInit.forEach(el => {
     const options = {};
     // Read data attributes for configuration

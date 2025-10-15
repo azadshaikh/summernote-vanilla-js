@@ -335,3 +335,43 @@
     - [ ] 8.10.3 Document how to use custom Google Fonts
   - [ ] 8.11 Document browser compatibility requirements
   - [ ] 8.12 Create bundle size comparison chart (core vs standard vs full)
+
+- [x] 9.0 Rebranding to AsteroNote
+  - [x] 9.1 Rename all v2 source files from summernote to asteronote:
+    - [x] 9.1.1 Renamed `summernote-core.js` to `asteronote-core.js`
+    - [x] 9.1.2 Updated `asteronote.js` with full implementation (removed alias)
+    - [x] 9.1.3 Updated `asteronote-full.js` with full implementation (removed alias)
+    - [x] 9.1.4 Deleted legacy `summernote*.js` files from v2 folder
+  - [x] 9.2 Update code references to use AsteroNote branding:
+    - [x] 9.2.1 Updated BasePlugin.js comment from "Summernote plugins" to "AsteroNote plugins"
+    - [x] 9.2.2 Updated Editor.js warning message from "Summernote:" to "AsteroNote:"
+    - [x] 9.2.3 Maintained backward compatibility aliases (window.Summernote) in UMD builds
+  - [x] 9.3 Update v2 source documentation:
+    - [x] 9.3.1 Updated src/v2/README.md title to "AsteroNote v2.0 Source Code"
+    - [x] 9.3.2 Updated all installation instructions to use "asteronote" package name
+    - [x] 9.3.3 Updated all code examples to reference AsteroNote instead of Summernote
+    - [x] 9.3.4 Updated license and contributing text to reference AsteroNote
+  - [x] 9.4 Update main documentation (docs/ folder):
+    - [x] 9.4.1 Updated docs/api-v2.md with AsteroNote branding throughout
+    - [x] 9.4.2 Updated docs/events.md with AsteroNote branding and event names
+    - [x] 9.4.3 Updated docs/icon-mapping.md references
+    - [x] 9.4.4 Updated docs/plugin-development.md with AsteroNote branding
+  - [x] 9.5 Update documentation examples:
+    - [x] 9.5.1 Updated docs/examples/cdn-basic.html with AsteroNote
+    - [x] 9.5.2 Updated docs/examples/cdn-events.html with AsteroNote
+    - [x] 9.5.3 Updated docs/examples/cdn-with-plugins.html with AsteroNote
+    - [x] 9.5.4 Updated docs/examples/README.md with AsteroNote branding
+  - [x] 9.6 Event namespace kept as 'asteronote.*' (asteronote.init, asteronote.change, etc.)
+  - [x] 9.7 Backward compatibility maintained with 'window.Summernote' alias for gradual migration
+  - [x] 9.8 Update build configuration:
+    - [x] 9.8.1 Updated rollup.config.js to use asteronote filenames
+    - [x] 9.8.2 Changed input files: asteronote-core.js, asteronote.js, asteronote-full.js
+    - [x] 9.8.3 Changed output files: dist/v2/asteronote*.js and asteronote*.esm.js
+    - [x] 9.8.4 Changed UMD global names: AsteroNote, AsteroNoteCore
+    - [x] 9.8.5 Successfully built all 6 bundles (3 UMD + 3 ESM)
+  - [x] 9.9 Updated example file paths:
+    - [x] 9.9.1 Updated cdn-basic.html to reference dist/v2/asteronote.js
+    - [x] 9.9.2 Updated cdn-events.html to reference dist/v2/asteronote.js
+    - [x] 9.9.3 Updated cdn-with-plugins.html to reference dist/v2/asteronote.js
+    - [x] 9.9.4 Updated docs/api-v2.md CDN and local paths
+

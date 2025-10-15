@@ -37,11 +37,11 @@ const sourcemap = isDevelopment || !isProduction;
 const configs = [
   // Core bundle - UMD
   {
-    input: 'src/v2/js/summernote-core.js',
+    input: 'src/v2/js/asteronote-core.js',
     output: {
-      file: 'dist/v2/summernote-core.js',
+      file: 'dist/v2/asteronote-core.js',
       format: 'umd',
-      name: 'SummernoteCore',
+      name: 'AsteroNoteCore',
       exports: 'named',
       sourcemap
     },
@@ -49,9 +49,9 @@ const configs = [
   },
   // Core bundle - ESM
   {
-    input: 'src/v2/js/summernote-core.js',
+    input: 'src/v2/js/asteronote-core.js',
     output: {
-      file: 'dist/v2/summernote-core.esm.js',
+      file: 'dist/v2/asteronote-core.esm.js',
       format: 'es',
       sourcemap
     },
@@ -59,21 +59,21 @@ const configs = [
   },
   // Standard bundle (core + essential plugins) - UMD
   {
-    input: 'src/v2/js/summernote.js',
+    input: 'src/v2/js/asteronote.js',
     output: {
-      file: 'dist/v2/summernote.js',
+      file: 'dist/v2/asteronote.js',
       format: 'umd',
-      name: 'Summernote',
-      exports: 'named', // Changed from 'default' to 'named'
+      name: 'AsteroNote',
+      exports: 'named',
       sourcemap
     },
     plugins: [...commonPlugins, ...productionPlugins]
   },
   // Standard bundle (core + essential plugins) - ESM
   {
-    input: 'src/v2/js/summernote.js',
+    input: 'src/v2/js/asteronote.js',
     output: {
-      file: 'dist/v2/summernote.esm.js',
+      file: 'dist/v2/asteronote.esm.js',
       format: 'es',
       sourcemap
     },
@@ -81,21 +81,21 @@ const configs = [
   },
   // Full bundle (core + all plugins) - UMD
   {
-    input: 'src/v2/js/summernote-full.js',
+    input: 'src/v2/js/asteronote-full.js',
     output: {
-      file: 'dist/v2/summernote-full.js',
+      file: 'dist/v2/asteronote-full.js',
       format: 'umd',
-      name: 'Summernote',
-      exports: 'named', // Changed from 'default' to 'named'
+      name: 'AsteroNote',
+      exports: 'named',
       sourcemap
     },
     plugins: [...commonPlugins, ...productionPlugins]
   },
   // Full bundle (core + all plugins) - ESM
   {
-    input: 'src/v2/js/summernote-full.js',
+    input: 'src/v2/js/asteronote-full.js',
     output: {
-      file: 'dist/v2/summernote-full.esm.js',
+      file: 'dist/v2/asteronote-full.esm.js',
       format: 'es',
       sourcemap
     },

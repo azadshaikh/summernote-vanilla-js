@@ -19,16 +19,16 @@ export default class ItalicPlugin extends BasePlugin {
       icon: '<i class="bi bi-type-italic"></i>',
       tooltip: 'Italic (Ctrl+I)',
       callback: () => this.toggle(),
-      className: 'summernote-btn-italic'
+      className: 'asteronote-btn-italic'
     });
 
     // Add keyboard shortcut
     this.addShortcut('Ctrl+I', () => this.toggle());
 
     // Listen to selection changes to update button state
-    this.on('summernote.keyup', () => this.updateButtonState());
-    this.on('summernote.mouseup', () => this.updateButtonState());
-    this.on('summernote.selectionchange', () => this.updateButtonState());
+    this.on('asteronote.keyup', () => this.updateButtonState());
+    this.on('asteronote.mouseup', () => this.updateButtonState());
+    this.on('asteronote.selectionchange', () => this.updateButtonState());
 
     // Initial button state
     setTimeout(() => this.updateButtonState(), 0);

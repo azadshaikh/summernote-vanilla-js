@@ -1,29 +1,29 @@
-# Summernote v2.0 API Documentation
+# AsteroNote v2.0 API Documentation
 
-Complete API reference for Summernote v2.0 WYSIWYG editor.
+Complete API reference for AsteroNote v2.0 WYSIWYG editor.
 
 ## Installation
 
 ### NPM
 ```bash
-npm install summernote@2.0.0
+npm install AsteroNote@2.0.0
 ```
 
 ### CDN (Production)
 ```html
-<script src="https://cdn.jsdelivr.net/npm/summernote@2.0.0/dist/v2/summernote.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/asteronote@2.0.0/dist/v2/asteronote.js"></script>
 ```
 
 ### Local Development
 ```html
 <!-- After running 'npm run build:v2' -->
-<script src="path/to/dist/v2/summernote.js"></script>
+<script src="path/to/dist/v2/asteronote.js"></script>
 ```
 
 ## Quick Start
 
 ```javascript
-import Editor from 'summernote';
+import Editor from 'AsteroNote';
 
 const editor = new Editor('#editor', {
   height: 300,
@@ -116,28 +116,28 @@ if (editor.hasPlugin('bold')) { /* ... */ }
 Subscribe to events using EventEmitter methods:
 
 ```javascript
-editor.on('summernote.change', (content) => {
+editor.on('AsteroNote.change', (content) => {
   console.log('Content:', content);
 });
 
-editor.once('summernote.init', () => {
+editor.once('AsteroNote.init', () => {
   console.log('Initialized once');
 });
 
-editor.off('summernote.change', handler);
+editor.off('AsteroNote.change', handler);
 ```
 
 #### Core Events
 
 | Event | Data | Description |
 |-------|------|-------------|
-| summernote.init | none | Editor initialized |
-| summernote.change | content | Content changed |
-| summernote.focus | none | Editor focused |
-| summernote.blur | none | Editor blurred |
-| summernote.keydown | event | Key pressed |
-| summernote.paste | event | Content pasted |
-| summernote.destroy | none | Editor destroyed |
+| AsteroNote.init | none | Editor initialized |
+| AsteroNote.change | content | Content changed |
+| AsteroNote.focus | none | Editor focused |
+| AsteroNote.blur | none | Editor blurred |
+| AsteroNote.keydown | event | Key pressed |
+| AsteroNote.paste | event | Content pasted |
+| AsteroNote.destroy | none | Editor destroyed |
 
 ### Callbacks
 
@@ -161,34 +161,34 @@ new Editor('#editor', {
 
 #### Bold
 ```javascript
-import { BoldPlugin } from 'summernote';
+import { BoldPlugin } from 'AsteroNote';
 ```
 - Shortcut: Ctrl+B (Cmd+B on Mac)
 - Event: `plugin.bold.toggled`
 
 #### Italic
 ```javascript
-import { ItalicPlugin } from 'summernote';
+import { ItalicPlugin } from 'AsteroNote';
 ```
 - Shortcut: Ctrl+I
 - Event: `plugin.italic.toggled`
 
 #### Underline
 ```javascript
-import { UnderlinePlugin } from 'summernote';
+import { UnderlinePlugin } from 'AsteroNote';
 ```
 - Shortcut: Ctrl+U
 - Event: `plugin.underline.toggled`
 
 #### List
 ```javascript
-import { ListPlugin } from 'summernote';
+import { ListPlugin } from 'AsteroNote';
 ```
 - Events: `plugin.list.ordered-list-toggled`, `plugin.list.unordered-list-toggled`
 
 #### Link
 ```javascript
-import { LinkPlugin } from 'summernote';
+import { LinkPlugin } from 'AsteroNote';
 ```
 - Shortcut: Ctrl+K
 - Events: `plugin.link.inserted`, `plugin.link.removed`
@@ -203,13 +203,13 @@ import { LinkPlugin } from 'summernote';
   <div id="editor"></div>
 
   <!-- Local build (development) -->
-  <script src="dist/v2/summernote.js"></script>
+  <script src="dist/v2/AsteroNote.js"></script>
 
   <!-- CDN (production - once published) -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/summernote@2.0.0/dist/v2/summernote.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/AsteroNote@2.0.0/dist/v2/AsteroNote.js"></script> -->
 
   <script>
-    const editor = new Summernote('#editor');
+    const editor = new AsteroNote('#editor');
     editor.init();
   </script>
 </body>
@@ -222,9 +222,9 @@ import { LinkPlugin } from 'summernote';
 <html>
 <body>
   <div id="editor"></div>
-  <script src="https://cdn.jsdelivr.net/npm/summernote@2.0.0/dist/v2/summernote.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/AsteroNote@2.0.0/dist/v2/AsteroNote.js"></script>
   <script>
-    const editor = new Summernote('#editor');
+    const editor = new AsteroNote('#editor');
     editor.init();
   </script>
 </body>
@@ -233,7 +233,7 @@ import { LinkPlugin } from 'summernote';
 
 ### NPM/ESM Usage
 ```javascript
-import Editor, { BoldPlugin, ItalicPlugin } from 'summernote';
+import Editor, { BoldPlugin, ItalicPlugin } from 'AsteroNote';
 
 const editor = new Editor('#editor', {
   plugins: [BoldPlugin, ItalicPlugin],
@@ -250,8 +250,8 @@ editor.init();
 
 ### Selective Imports (Tree-shaking)
 ```javascript
-import Editor from 'summernote/core';
-import { BoldPlugin } from 'summernote';
+import Editor from 'AsteroNote/core';
+import { BoldPlugin } from 'AsteroNote';
 
 const editor = new Editor('#editor', {
   plugins: [BoldPlugin]
@@ -267,7 +267,7 @@ const editors = Editor.init('.editor-class', {
 
 ### Event Handling
 ```javascript
-editor.on('summernote.change', (content) => {
+editor.on('AsteroNote.change', (content) => {
   document.getElementById('preview').innerHTML = content;
 });
 
@@ -295,8 +295,8 @@ Requires modern JavaScript features: ES6+, Fetch API, CustomEvent, classList, Pr
 
 ### Before (v1.x)
 ```javascript
-$('#editor').summernote({ height: 300 });
-$('#editor').on('summernote.change', function(we, contents) {
+$('#editor').AsteroNote({ height: 300 });
+$('#editor').on('AsteroNote.change', function(we, contents) {
   console.log(contents);
 });
 ```
@@ -305,7 +305,7 @@ $('#editor').on('summernote.change', function(we, contents) {
 ```javascript
 const editor = new Editor('#editor', { height: 300 });
 editor.init();
-editor.on('summernote.change', (contents) => {
+editor.on('AsteroNote.change', (contents) => {
   console.log(contents);
 });
 ```
@@ -315,3 +315,4 @@ editor.on('summernote.change', (contents) => {
 - [Plugin Development Guide](./plugin-development.md)
 - [Event System](./events.md)
 - [Migration Guide](../migration.md)
+

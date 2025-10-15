@@ -1,5 +1,5 @@
 /**
- * Summernote Core v2.0
+ * AsteroNote Core v2.0
  * Entry point for core-only bundle (no plugins)
  */
 

@@ -1,21 +1,21 @@
-# Summernote v2.0 - Event System Guide
+# AsteroNote v2.0 - Event System Guide
 
 ## Overview
 
-Summernote v2.0 uses a custom EventEmitter system for managing events throughout the editor. This allows both internal components and external code to subscribe to and react to editor events.
+AsteroNote v2.0 uses a custom EventEmitter system for managing events throughout the editor. This allows both internal components and external code to subscribe to and react to editor events.
 
 ## Event Naming Convention
 
 All events follow a namespaced pattern to prevent conflicts and provide clear context:
 
 ### Core Events
-Format: `summernote.[event-name]`
+Format: `AsteroNote.[event-name]`
 
 Examples:
-- `summernote.init`
-- `summernote.change`
-- `summernote.focus`
-- `summernote.blur`
+- `AsteroNote.init`
+- `AsteroNote.change`
+- `AsteroNote.focus`
+- `AsteroNote.blur`
 
 ### Plugin Events
 Format: `plugin.[plugin-name].[event-name]`
@@ -34,66 +34,66 @@ Examples:
 
 ## Core Editor Events
 
-### `summernote.init`
+### `AsteroNote.init`
 Fired when the editor is fully initialized.
 
 **Data:** None
 
 **Example:**
 ```javascript
-editor.on('summernote.init', () => {
+editor.on('AsteroNote.init', () => {
   console.log('Editor is ready!');
 });
 ```
 
-### `summernote.change`
+### `AsteroNote.change`
 Fired when the editor content changes.
 
 **Data:** `content` (string) - Current HTML content
 
 **Example:**
 ```javascript
-editor.on('summernote.change', (content) => {
+editor.on('AsteroNote.change', (content) => {
   console.log('Content:', content);
   // Auto-save content
   saveToServer(content);
 });
 ```
 
-### `summernote.focus`
+### `AsteroNote.focus`
 Fired when the editor receives focus.
 
 **Data:** None
 
 **Example:**
 ```javascript
-editor.on('summernote.focus', () => {
+editor.on('AsteroNote.focus', () => {
   console.log('Editor focused');
 });
 ```
 
-### `summernote.blur`
+### `AsteroNote.blur`
 Fired when the editor loses focus.
 
 **Data:** None
 
 **Example:**
 ```javascript
-editor.on('summernote.blur', () => {
+editor.on('AsteroNote.blur', () => {
   console.log('Editor blurred');
   // Validate content on blur
   validateContent();
 });
 ```
 
-### `summernote.keydown`
+### `AsteroNote.keydown`
 Fired on keydown events in the editor.
 
 **Data:** `event` (KeyboardEvent) - Original keyboard event
 
 **Example:**
 ```javascript
-editor.on('summernote.keydown', (event) => {
+editor.on('AsteroNote.keydown', (event) => {
   if (event.key === 'Enter' && event.ctrlKey) {
     console.log('Ctrl+Enter pressed');
     submitForm();
@@ -101,28 +101,28 @@ editor.on('summernote.keydown', (event) => {
 });
 ```
 
-### `summernote.paste`
+### `AsteroNote.paste`
 Fired when content is pasted into the editor.
 
 **Data:** `event` (ClipboardEvent) - Original paste event
 
 **Example:**
 ```javascript
-editor.on('summernote.paste', (event) => {
+editor.on('AsteroNote.paste', (event) => {
   console.log('Content pasted');
   // Clean pasted content
   cleanPastedContent(event);
 });
 ```
 
-### `summernote.destroy`
+### `AsteroNote.destroy`
 Fired when the editor is destroyed.
 
 **Data:** None
 
 **Example:**
 ```javascript
-editor.on('summernote.destroy', () => {
+editor.on('AsteroNote.destroy', () => {
   console.log('Editor destroyed');
   // Cleanup external references
 });
@@ -134,18 +134,18 @@ editor.on('summernote.destroy', () => {
 
 ```javascript
 // Basic subscription
-editor.on('summernote.change', (content) => {
+editor.on('AsteroNote.change', (content) => {
   console.log('Changed:', content);
 });
 
 // One-time subscription
-editor.once('summernote.init', () => {
+editor.once('AsteroNote.init', () => {
   console.log('Initialized once');
 });
 
 // Multiple events
-editor.on('summernote.focus', onFocus);
-editor.on('summernote.blur', onBlur);
+editor.on('AsteroNote.focus', onFocus);
+editor.on('AsteroNote.blur', onBlur);
 ```
 
 ### Unsubscribe from Events
@@ -153,11 +153,11 @@ editor.on('summernote.blur', onBlur);
 ```javascript
 // Unsubscribe specific handler
 const handler = (content) => console.log(content);
-editor.on('summernote.change', handler);
-editor.off('summernote.change', handler);
+editor.on('AsteroNote.change', handler);
+editor.off('AsteroNote.change', handler);
 
 // Unsubscribe all handlers for an event
-editor.off('summernote.change');
+editor.off('AsteroNote.change');
 
 // Unsubscribe all events
 editor.removeAllListeners();
@@ -204,12 +204,12 @@ editor.onAny((eventName, ...args) => {
 
 Typical event sequence during editor lifecycle:
 
-1. `summernote.init` - Editor initialized
-2. `summernote.focus` - User clicks editor (optional)
-3. `summernote.keydown` - User types (repeated)
-4. `summernote.change` - Content changes (repeated)
-5. `summernote.blur` - User clicks outside (optional)
-6. `summernote.destroy` - Editor destroyed
+1. `AsteroNote.init` - Editor initialized
+2. `AsteroNote.focus` - User clicks editor (optional)
+3. `AsteroNote.keydown` - User types (repeated)
+4. `AsteroNote.change` - Content changes (repeated)
+5. `AsteroNote.blur` - User clicks outside (optional)
+6. `AsteroNote.destroy` - Editor destroyed
 
 ## Migration from v1.x
 
@@ -217,12 +217,12 @@ v1.x used jQuery custom events. v2.0 uses a custom EventEmitter:
 
 ```javascript
 // v1.x (jQuery)
-$('#editor').on('summernote.change', function(we, contents) {
+$('#editor').on('AsteroNote.change', function(we, contents) {
   console.log(contents);
 });
 
 // v2.0 (EventEmitter)
-editor.on('summernote.change', (contents) => {
+editor.on('AsteroNote.change', (contents) => {
   console.log(contents);
 });
 ```
@@ -231,3 +231,4 @@ Key differences:
 - No `we` (window event) parameter in v2.0
 - Direct function syntax (no jQuery wrapper)
 - Proper `this` context binding
+

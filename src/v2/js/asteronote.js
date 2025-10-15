@@ -1,5 +1,5 @@
 /**
- * Summernote v2.0 - Standard Bundle
+ * AsteroNote v2.0 - Standard Bundle
  * Entry point for standard bundle (core + essential plugins)
  */
 
@@ -46,7 +46,7 @@ export function createEditor(target, options = {}) {
 }
 
 // Default class that auto-loads essential plugins when none provided
-class SummernoteEditor extends Editor {
+class AsteroNoteEditor extends Editor {
   constructor(target, options = {}) {
     const defaultPlugins = [BoldPlugin, ItalicPlugin, UnderlinePlugin, ListPlugin, LinkPlugin];
     const plugins = Array.isArray(options.plugins) ? options.plugins : defaultPlugins;
@@ -55,17 +55,22 @@ class SummernoteEditor extends Editor {
 }
 
 // Default export
-export default SummernoteEditor;
+export default AsteroNoteEditor;
 
 // For UMD builds, expose on window
 if (typeof window !== 'undefined') {
-  // Make Editor the default global with auto plugins
-  window.Summernote = SummernoteEditor;
-  window.Editor = SummernoteEditor;
+  // Make AsteroNote the primary global
+  window.AsteroNote = AsteroNoteEditor;
+  window.AsteroNoteEditor = AsteroNoteEditor;
+
+  // Backward compatibility aliases (deprecated, will be removed in v3)
+  window.Asteronote = AsteroNoteEditor; // lowercase 'n' for compat
+  window.Summernote = AsteroNoteEditor; // v1 compat
+  window.Editor = AsteroNoteEditor;
 
   // Also expose other exports for advanced usage
-  window.SummernoteExports = {
-    Editor: SummernoteEditor,
+  window.AsteroNoteExports = {
+    Editor: AsteroNoteEditor,
     PureEditor: Editor,
     EventEmitter,
     PluginRegistry,
@@ -78,3 +83,4 @@ if (typeof window !== 'undefined') {
     createEditor
   };
 }
+

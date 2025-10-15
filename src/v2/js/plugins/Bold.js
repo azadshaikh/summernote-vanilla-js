@@ -19,16 +19,16 @@ export default class BoldPlugin extends BasePlugin {
       icon: '<i class="bi bi-type-bold"></i>',
       tooltip: 'Bold (Ctrl+B)',
       callback: () => this.toggle(),
-      className: 'summernote-btn-bold'
+      className: 'asteronote-btn-bold'
     });
 
     // Add keyboard shortcut
     this.addShortcut('Ctrl+B', () => this.toggle());
 
     // Listen to selection changes to update button state
-    this.on('summernote.keyup', () => this.updateButtonState());
-    this.on('summernote.mouseup', () => this.updateButtonState());
-    this.on('summernote.selectionchange', () => this.updateButtonState());
+    this.on('asteronote.keyup', () => this.updateButtonState());
+    this.on('asteronote.mouseup', () => this.updateButtonState());
+    this.on('asteronote.selectionchange', () => this.updateButtonState());
 
     // Initial button state
     setTimeout(() => this.updateButtonState(), 0);
