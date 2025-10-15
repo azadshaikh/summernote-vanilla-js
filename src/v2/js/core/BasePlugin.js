@@ -150,8 +150,8 @@ export default class BasePlugin {
 
     const button = document.createElement('button');
     button.type = 'button';
-    // Use Bootstrap 5 button classes; allow extensions via className
-    const bootstrapBtn = 'btn btn-outline-secondary';
+    // Use Bootstrap 5 button classes with spacing for individual buttons
+    const bootstrapBtn = 'btn';
     button.className = `${bootstrapBtn} asteronote-btn asteronote-btn-${name} ${className}`.trim();
     button.innerHTML = icon;
     button.setAttribute('data-plugin', this.constructor.pluginName);
@@ -214,17 +214,18 @@ export default class BasePlugin {
     const alt = event.altKey;
     const key = event.key;
 
-    // Build shortcut string
+    // Build shortcut string - normalize key to uppercase for consistency
     let shortcut = '';
     if (ctrl) shortcut += 'Ctrl+';
     if (shift) shortcut += 'Shift+';
     if (alt) shortcut += 'Alt+';
-    shortcut += key;
+    shortcut += key.toUpperCase();
 
     // Check if we have a handler
     const handler = this.shortcuts.get(shortcut);
     if (handler) {
       event.preventDefault();
+      event.stopPropagation(); // Prevent browser from handling the shortcut
       handler.call(this, event);
       return true;
     }

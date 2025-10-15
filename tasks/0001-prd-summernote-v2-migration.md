@@ -2,15 +2,15 @@
 
 ## Introduction/Overview
 
-AsteroNote v2.0 (formerly Summernote) represents a major architectural overhaul and rebranding of the popular WYSIWYG editor. The primary goal is to modernize the codebase to support both traditional CDN-based usage (CommonJS) and modern ES module imports via NPM, while redesigning the plugin architecture for better isolation and maintainability. This migration will create a new major version (v2.0.0) with a new brand identity under Astero Digital.
+AsteroNote v2.0 (formerly Summernote) represents a complete rewrite and rebranding of the editor with a modern architecture. This is **NOT a backward-compatible upgrade** - it's a brand new version designed from scratch for modern JavaScript development. No legacy code or backward compatibility with v1.x will be maintained.
 
 **Problem Statement:** The current architecture lacks modern module support, has a tightly-coupled plugin system, and doesn't provide flexible bundle options for different use cases.
 
-**Goal:** Create a modern, modular version of the editor that supports both legacy CDN usage and modern NPM-based workflows, with a redesigned plugin architecture, multiple bundle options, and a fresh brand identity as AsteroNote.
+**Goal:** Create a modern, modular version of the editor that supports both CDN usage and modern NPM-based workflows, with a redesigned plugin architecture, multiple bundle options, and a fresh brand identity as AsteroNote. **This is a clean break from v1.x with zero backward compatibility.**
 
 ## Goals
 
-1. **Dual Distribution Support:** Enable AsteroNote to work seamlessly as both a CDN-delivered CommonJS library and an NPM-importable ES module
+1. **Dual Distribution Support:** Enable AsteroNote to work seamlessly as both a CDN-delivered UMD library and an NPM-importable ES module
 2. **Remove jQuery Dependency:** Eliminate jQuery dependency entirely and rewrite all functionality using vanilla JavaScript
 3. **Simplify Styling and Design:** Use only Bootstrap 5.3 for styling, Google Fonts for typography, and Bootstrap Icons for all iconography
 4. **Plugin System Redesign:** Implement a completely redesigned plugin architecture with better isolation, preventing plugins from interfering with each other
@@ -18,19 +18,20 @@ AsteroNote v2.0 (formerly Summernote) represents a major architectural overhaul 
 6. **Simple Event Management:** Implement a lightweight EventEmitter pattern for internal and external event handling
 7. **Brand Identity:** Establish AsteroNote as a modern, professional brand under Astero Digital
 8. **Phased Rollout:** Release core functionality first, followed by plugin ecosystem updates
+9. **No Backward Compatibility:** This is v2.0 - a complete rewrite with no support for v1.x APIs, configurations, or plugins
 
 ## User Stories
 
-### Story 1: Legacy CDN User
+### Story 1: Modern CDN User
 **As a** developer using a WYSIWYG editor via CDN
-**I want to** use AsteroNote v2.0 without changing my integration method
-**So that** I can benefit from improvements while maintaining my existing workflow
+**I want to** use AsteroNote v2.0 with a simple script tag
+**So that** I can get started quickly without a build process
 
 **Acceptance Criteria:**
 - Can include AsteroNote v2.0 via `<script>` tag from CDN
 - Global `AsteroNote` object is available
-- CommonJS-style API works as expected
-- Backward compatibility aliases (`Summernote`) available for gradual migration
+- UMD bundle works in all modern browsers
+- No backward compatibility with v1.x required (clean API)
 
 ### Story 2: Modern NPM User
 **As a** developer using modern JavaScript build tools

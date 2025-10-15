@@ -28,10 +28,17 @@
     </div>
 
     <div class="alert alert-info mb-4" role="alert">
-      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Lists, Link (Ctrl+K)
+      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Remove
+      Format, Lists, Link (Ctrl+K)<br>
+      <small class="text-muted">Plugins are automatically loaded based on toolbar configuration</small>
     </div>
 
     <div id="editor" class="border rounded" style="min-height: 250px;"></div>
+
+    <div class="alert alert-secondary mt-3" role="alert">
+      <strong>Debug Info:</strong>
+      <div id="plugin-info" class="mt-2 font-monospace small"></div>
+    </div>
   </div>
 
   <!-- Include AsteroNote v2.0 from local build -->
@@ -59,13 +66,20 @@
       themeIcon.className = theme === 'light' ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
     }
 
-    // Editor
-    const editor = new Editor('#editor', {
-      height: 400,
+    // Editor initialization with custom toolbar configuration
+    const editor = new AsteroNote('#editor', {
+      height: 600,
       placeholder: 'Try the formatting tools! Use keyboard shortcuts: Ctrl+B (bold), Ctrl+I (italic), Ctrl+U (underline), Ctrl+K (link)',
+      // Flat toolbar format - plugins are loaded based on what's in toolbar
+      toolbar: [
+        'bold', 'italic', 'underline', 'strikethrough',  // Text formatting
+        'removeFormat',                                   // Clear formatting
+        'ul', 'ol',                                       // Lists
+        'link'                                            // Insert link
+      ],
       callbacks: {
         onInit: function () {
-          console.log('Editor initialized with plugins');
+          console.log('Editor initialized with custom toolbar');
         },
         onChange: function (content) {
           console.log('Content changed:', content.substring(0, 50) + '...');
@@ -75,20 +89,34 @@
 
     editor.init();
 
+    // Display loaded plugins info
+    const pluginInfo = document.getElementById('plugin-info');
+    const loadedPlugins = Array.from(editor.plugins.keys());
+    pluginInfo.innerHTML = `
+      <strong>Loaded Plugins:</strong> ${loadedPlugins.join(', ') || 'None'}<br>
+      <strong>Toolbar Config:</strong> ${JSON.stringify(editor.options.toolbar)}<br>
+      <small class="text-muted">Plugins are automatically loaded based on toolbar configuration</small>
+    `;
+
+    // Listen to plugin events
     editor.on('plugin.bold.toggled', () => console.log('Bold toggled'));
+    editor.on('plugin.italic.toggled', () => console.log('Italic toggled'));
     editor.on('plugin.link.inserted', (data) => console.log('Link inserted:', data));
 
+    // Set initial content
     editor.setContent(`
       <h2>Welcome to AsteroNote v2.0!</h2>
-      <p>This editor includes all Phase 1 plugins:</p>
+      <p>This editor demonstrates the new <strong>flat toolbar layout</strong> with individual buttons:</p>
       <ul>
-        <li><strong>Bold</strong> formatting</li>
-        <li><em>Italic</em> formatting</li>
-        <li><u>Underline</u> formatting</li>
+        <li><strong>Bold</strong> formatting (Ctrl+B)</li>
+        <li><em>Italic</em> formatting (Ctrl+I)</li>
+        <li><u>Underline</u> formatting (Ctrl+U)</li>
+        <li><s>Strikethrough</s> formatting</li>
         <li>Ordered and unordered lists</li>
-        <li><a href="https://AsteroNote.org">Link</a> creation</li>
+        <li><a href="https://asteronote.org">Link</a> creation (Ctrl+K)</li>
       </ul>
-      <p>Try selecting text and using the toolbar buttons or keyboard shortcuts!</p>
+      <p>All toolbar buttons are rendered individually without button groups for a cleaner, more flexible interface!</p>
+      <p>Check the debug info below to see which plugins are loaded based on the toolbar configuration.</p>
     `);
   </script>
 

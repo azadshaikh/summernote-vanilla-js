@@ -14,7 +14,8 @@ import ItalicPlugin from './plugins/Italic.js';
 import UnderlinePlugin from './plugins/Underline.js';
 import StrikethroughPlugin from './plugins/Strikethrough.js';
 import RemoveFormatPlugin from './plugins/RemoveFormat.js';
-import ListPlugin from './plugins/List.js';
+import OrderedListPlugin from './plugins/OrderedList.js';
+import UnorderedListPlugin from './plugins/UnorderedList.js';
 import LinkPlugin from './plugins/Link.js';
 
 // Export core components
@@ -32,7 +33,8 @@ export {
   UnderlinePlugin,
   StrikethroughPlugin,
   RemoveFormatPlugin,
-  ListPlugin,
+  OrderedListPlugin,
+  UnorderedListPlugin,
   LinkPlugin
 };
 
@@ -51,11 +53,66 @@ export function createEditor(target, options = {}) {
   return new Editor(target, { ...options, plugins });
 }
 
-// Default class that auto-loads essential plugins when none provided
+// Default class that auto-loads plugins based on toolbar configuration
 class AsteroNoteEditor extends Editor {
   constructor(target, options = {}) {
-    const defaultPlugins = [BoldPlugin, ItalicPlugin, UnderlinePlugin, StrikethroughPlugin, RemoveFormatPlugin, ListPlugin, LinkPlugin];
-    const plugins = Array.isArray(options.plugins) ? options.plugins : defaultPlugins;
+    // Map of plugin names to plugin classes
+    const pluginMap = {
+      'bold': BoldPlugin,
+      'italic': ItalicPlugin,
+      'underline': UnderlinePlugin,
+      'strikethrough': StrikethroughPlugin,
+      'removeFormat': RemoveFormatPlugin,
+      'ul': UnorderedListPlugin,
+      'ol': OrderedListPlugin,
+      'link': LinkPlugin
+    };
+
+    // If plugins are explicitly provided, use them
+    if (Array.isArray(options.plugins)) {
+      super(target, options);
+      return;
+    }
+
+    // Otherwise, derive plugins from toolbar configuration
+    const toolbar = options.toolbar || [
+      'bold', 'italic', 'underline', 'strikethrough',
+      'removeFormat',
+      'ul', 'ol',
+      'link'
+    ];
+
+    // Extract plugin names from toolbar configuration
+    const toolbarActions = new Set();
+
+    // Flatten toolbar configuration
+    for (const item of toolbar) {
+      if (Array.isArray(item)) {
+        // Legacy format: [groupName, [action1, action2]]
+        if (item.length >= 2 && Array.isArray(item[1])) {
+          item[1].forEach(action => toolbarActions.add(action));
+        } else {
+          // Flat nested array
+          item.forEach(action => toolbarActions.add(action));
+        }
+      } else if (typeof item === 'string') {
+        // Direct string action
+        toolbarActions.add(item);
+      }
+    }
+
+    // Map toolbar actions to unique plugin classes
+    const pluginClasses = new Set();
+    for (const action of toolbarActions) {
+      const PluginClass = pluginMap[action];
+      if (PluginClass) {
+        pluginClasses.add(PluginClass);
+      }
+    }
+
+    // Convert Set to Array
+    const plugins = Array.from(pluginClasses);
+
     super(target, { ...options, plugins });
   }
 }
@@ -86,7 +143,8 @@ if (typeof window !== 'undefined') {
     UnderlinePlugin,
     StrikethroughPlugin,
     RemoveFormatPlugin,
-    ListPlugin,
+    OrderedListPlugin,
+    UnorderedListPlugin,
     LinkPlugin,
     createEditor
   };

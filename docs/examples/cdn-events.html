@@ -131,7 +131,8 @@
       eventCount = 0;
     }
 
-    const editor = new Editor('#editor', {
+    // Initialize AsteroNote Editor with event callbacks
+    const editor = new AsteroNote('#editor', {
       height: 300,
       placeholder: 'Type, format text, add links... All events will appear in the log →',
       callbacks: {
@@ -146,12 +147,13 @@
 
     editor.init();
 
-    editor.on('AsteroNote.init', () => logEvent('Event: AsteroNote.init'));
-    editor.on('AsteroNote.change', (content) => logEvent('Event: AsteroNote.change', { length: content.length }));
-    editor.on('AsteroNote.focus', () => logEvent('Event: AsteroNote.focus'));
-    editor.on('AsteroNote.blur', () => logEvent('Event: AsteroNote.blur'));
-    editor.on('AsteroNote.keydown', (e) => logEvent('Event: AsteroNote.keydown', { key: e.key }));
-    editor.on('AsteroNote.paste', () => logEvent('Event: AsteroNote.paste'));
+    // Subscribe to events using EventEmitter
+    editor.on('asteronote.init', () => logEvent('Event: asteronote.init'));
+    editor.on('asteronote.change', (content) => logEvent('Event: asteronote.change', { length: content.length }));
+    editor.on('asteronote.focus', () => logEvent('Event: asteronote.focus'));
+    editor.on('asteronote.blur', () => logEvent('Event: asteronote.blur'));
+    editor.on('asteronote.keydown', (e) => logEvent('Event: asteronote.keydown', { key: e.key }));
+    editor.on('asteronote.paste', () => logEvent('Event: asteronote.paste'));
 
     editor.on('plugin.bold.toggled', () => logEvent('Event: plugin.bold.toggled'));
     editor.on('plugin.italic.toggled', () => logEvent('Event: plugin.italic.toggled'));

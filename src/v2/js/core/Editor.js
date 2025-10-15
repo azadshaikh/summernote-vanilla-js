@@ -44,10 +44,13 @@ const defaultOptions = {
   minHeight: null,
   maxHeight: null,
   focus: false,
+  // Toolbar: flat array of button names (no grouping)
+  // Supports both flat format ['bold', 'italic'] and legacy nested format [['group', ['bold']]]
   toolbar: [
-    ['style', ['bold', 'italic', 'underline']],
-    ['para', ['ul', 'ol']],
-    ['insert', ['link']]
+    'bold', 'italic', 'underline', 'strikethrough',
+    'removeFormat',
+    'ul', 'ol',
+    'link'
   ],
   placeholder: 'Type something...',
   disableDragAndDrop: false,
@@ -152,10 +155,9 @@ export default class Editor extends EventEmitter {
       className: 'asteronote-editor'
     });
 
-    // Create toolbar container using Bootstrap toolbar semantics
-    // We'll render groups from options.toolbar
+    // Create toolbar container - no button groups, just individual buttons
     this.toolbar = createElement('div', {
-      className: 'asteronote-toolbar btn-toolbar',
+      className: 'asteronote-toolbar d-flex flex-wrap',
       role: 'toolbar',
       ariaLabel: 'Editor toolbar'
     });
@@ -184,40 +186,45 @@ export default class Editor extends EventEmitter {
   }
 
   /**
-   * Build toolbar groups based on options.toolbar configuration
-   * Each group is a Bootstrap .btn-group container
+   * Build toolbar based on options.toolbar configuration
+   * Renders individual buttons without button groups
    */
   buildToolbarGroups() {
     this.toolbarGroups.clear();
 
     const toolbarConfig = Array.isArray(this.options.toolbar) ? this.options.toolbar : [];
-    for (const group of toolbarConfig) {
-      // Expected shape: [groupName, [action1, action2, ...]]
-      if (!Array.isArray(group) || group.length < 2) continue;
-      const [groupName, actions] = group;
-      if (!Array.isArray(actions)) continue;
 
-      const groupEl = createElement('div', {
-        className: 'btn-group me-2 mb-2',
-        role: 'group',
-        ariaLabel: `${groupName} group`
-      });
-
-      // Map each action to this group element, including common synonyms
-      for (const action of actions) {
-        this.toolbarGroups.set(action, groupEl);
-        // Provide mappings from legacy/short names to command names used by plugins
-        if (action === 'ul') this.toolbarGroups.set('insertUnorderedList', groupEl);
-        if (action === 'ol') this.toolbarGroups.set('insertOrderedList', groupEl);
-        if (action === 'link') this.toolbarGroups.set('createLink', groupEl);
+    // Flatten toolbar configuration - can be either nested arrays or flat array
+    const actions = [];
+    for (const item of toolbarConfig) {
+      if (Array.isArray(item)) {
+        // Legacy format: [groupName, [action1, action2]]
+        if (item.length >= 2 && Array.isArray(item[1])) {
+          actions.push(...item[1]);
+        } else {
+          // Flat nested array
+          actions.push(...item);
+        }
+      } else if (typeof item === 'string') {
+        // Direct string action
+        actions.push(item);
       }
+    }
 
-      this.toolbar.appendChild(groupEl);
+    // Create individual buttons directly on toolbar (no button groups)
+    // Map each action to the toolbar itself
+    for (const action of actions) {
+      this.toolbarGroups.set(action, this.toolbar);
+      // Provide mappings from legacy/short names to command names used by plugins
+      if (action === 'ul') this.toolbarGroups.set('insertUnorderedList', this.toolbar);
+      if (action === 'ol') this.toolbarGroups.set('insertOrderedList', this.toolbar);
+      if (action === 'link') this.toolbarGroups.set('createLink', this.toolbar);
     }
   }
 
   /**
-   * Return the group element for a given action (if configured)
+   * Return the toolbar element for a given action
+   * All buttons are added directly to toolbar (no grouping)
    * @param {string} action
    * @returns {HTMLElement|null}
    */

@@ -63,12 +63,14 @@
 
 ### Notes
 
+- **No Backward Compatibility**: AsteroNote v2.0 is a complete rewrite. No support for v1.x APIs, plugins, configurations, or migration paths.
 - Manual testing will be performed for initial release; automated tests deferred to later phase.
 - Focus on clean, modular code from the start.
 - All code should use ES6+ features (const/let, arrow functions, classes, template literals, etc.).
 - Only Bootstrap 5.3 for styling, Google Fonts for typography, Bootstrap Icons for all icons.
 - No translation support; all UI text in English only.
 - Single demo page only.
+- No legacy code or aliases required - this is a fresh start.
 
 ## Tasks
 
@@ -180,6 +182,8 @@
     - [x] 4.3.3 Add methods for toolbar button registration
     - [x] 4.3.4 Add methods for keyboard shortcut registration
     - [x] 4.3.5 Add methods for context menu registration
+    - [x] 4.3.6 Fix keyboard shortcut handling with uppercase normalization
+    - [x] 4.3.7 Add stopPropagation to prevent browser default shortcuts
   - [x] 4.4 Update Editor class to integrate PluginRegistry:
     - [x] 4.4.1 Accept `plugins` array in constructor options
     - [x] 4.4.2 Initialize plugins during editor init
@@ -216,18 +220,28 @@
     - [x] 5.5.4 Add toolbar button with eraser icon
     - [x] 5.5.5 Add keyboard shortcut (Ctrl+\ / Cmd+\)
     - [x] 5.5.6 Trigger editor change event to update content
-  - [x] 5.6 Create List Plugin (`src/js/plugins/List.js`):
-    - [x] 5.6.1 Implement ordered list functionality (`insertOrderedList`)
-    - [x] 5.6.2 Implement unordered list functionality (`insertUnorderedList`)
-    - [x] 5.6.3 Add toolbar buttons for both list types
-    - [x] 5.6.4 Handle nested lists appropriately
-  - [x] 5.7 Create Link Plugin (`src/js/plugins/Link.js`):
+  - [x] 5.6 Create List Plugins (refactored into separate plugins - **NO LEGACY CODE**):
+    - [x] 5.6.1 Create OrderedListPlugin (`src/v2/js/plugins/OrderedList.js`)
+    - [x] 5.6.2 Implement ordered list functionality using `ol` action name
+    - [x] 5.6.3 Add toolbar button with numbered list icon
+    - [x] 5.6.4 Handle Tab/Shift+Tab for indent/outdent in OL
+    - [x] 5.6.5 Create UnorderedListPlugin (`src/v2/js/plugins/UnorderedList.js`)
+    - [x] 5.6.6 Implement unordered list functionality using `ul` action name
+    - [x] 5.6.7 Add toolbar button with bullet list icon
+    - [x] 5.6.8 Handle Tab/Shift+Tab for indent/outdent in UL
+    - [x] 5.6.9 Handle nested lists for both plugin types
+    - [x] 5.6.10 Handle Backspace to exit/outdent lists
+    - [x] 5.6.11 Update plugin mapping in asteronote.js (ul → UnorderedListPlugin, ol → OrderedListPlugin)
+    - [x] 5.6.12 Remove legacy execCommand names (insertOrderedList, insertUnorderedList) - v2.0 uses clean API only
+  - [x] 5.7 Create Link Plugin (`src/js/plugins/Link.js` - **NO LEGACY CODE**):
     - [x] 5.7.1 Create link insertion dialog/modal using vanilla JS
-    - [x] 5.7.2 Implement `createLink` command with validation
+    - [x] 5.7.2 Implement link insertion with validation using `link` action name
     - [x] 5.7.3 Implement link editing (update existing links)
     - [x] 5.7.4 Implement unlink functionality
     - [x] 5.7.5 Add toolbar button with icon
     - [x] 5.7.6 Handle keyboard shortcut (Ctrl+K / Cmd+K)
+    - [x] 5.7.7 Fix keyboard shortcut to prevent browser default behavior (stopPropagation)
+    - [x] 5.7.8 Remove legacy execCommand name (createLink) - v2.0 uses `link` only
   - [x] 5.8 Test each plugin individually in isolation
   - [x] 5.9 Test plugins working together without conflicts
 
