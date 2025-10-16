@@ -28,7 +28,7 @@
     </div>
 
     <div class="alert alert-info mb-4" role="alert">
-      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Highlight, Code, Blockquote, Remove
+      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Highlight, Code, Blockquote, Horizontal Line (Ctrl+Enter), Remove
       Format, Lists, Link (Ctrl+K)<br>
       <small class="text-muted">Plugins are automatically loaded based on toolbar configuration</small>
     </div>
@@ -79,7 +79,7 @@
         'separator',                                      // Visual divider
         'bold', 'italic', 'underline', 'strikethrough', 'highlight', 'code',  // Text formatting
         'separator',                                      // Visual divider
-        'removeFormat',                                   // Clear formatting
+        'removeFormat', 'hr',                              // Clear formatting, Horizontal rule
         'separator',                                      // Visual divider
         'list',                                           // Lists (UL + OL)
         'separator',                                      // Visual divider
@@ -114,6 +114,7 @@
     editor.on('plugin.highlight.toggled', () => console.log('Highlight toggled'));
     editor.on('plugin.code.toggled', () => console.log('Code toggled'));
     editor.on('plugin.blockquote.toggled', (data) => console.log('Blockquote toggled', data));
+    editor.on('plugin.hr.inserted', () => console.log('Horizontal rule inserted (Ctrl+Enter)'));
     editor.on('plugin.link.inserted', (data) => console.log('Link inserted:', data));
 
     // Set initial content
