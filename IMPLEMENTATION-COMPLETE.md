@@ -11,10 +11,11 @@ Successfully created two production-ready build variants of AsteroNote v2.0:
 - **Use Case**: CMS, blogs, documentation, rich content editing
 
 ### 2. **Lite Version** (asteronote-lite.js / asteronote-lite.esm.js)
-- **Size**: 147 KB (UMD) / 138 KB (ESM) - **31% smaller**
+- **Size**: 114 KB (UMD) / 107 KB (ESM) - **47% smaller**
 - **Plugins**: Essential plugins only (Heading instead of FormatBlock, no Align, Table, Video, RemoveFormat, CodeView, Undo/Redo buttons, HR)
-- **Core Features**: No ImageTool (image resize handles) - passes null to Editor constructor
+- **Core Features**: Uses EditorLite (no ImageTool - image resize handles)
 - **Default Toolbar**: Minimal formatting options (Heading, not FormatBlock)
+- **Default Toolbar Align**: Left (vs center in full version)
 - **Use Case**: Comments, notes, simple forms
 
 ---

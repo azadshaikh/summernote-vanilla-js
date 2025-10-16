@@ -28,7 +28,9 @@
 
 **Note**: Undo/Redo via browser shortcuts (Ctrl+Z / Ctrl+Y)
 
-**File Size:** ~147 KB (UMD) / ~138 KB (ESM) - **31% smaller!**
+**File Size:** ~114 KB (UMD) / ~107 KB (ESM) - **47% smaller!**
+
+**Default toolbar alignment:** Left (vs center in full version)
 
 **Use for:** Comments, notes, simple forms, minimal formatting needs
 

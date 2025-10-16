@@ -105,6 +105,9 @@ import AsteroNoteLite from 'asteronote/dist/v2/asteronote-lite.esm.js';
 - **UMD**: ~114 KB (unminified) - **~47% smaller than full version**
 - **ESM**: ~107 KB (unminified)
 
+### Default Settings:
+- **Toolbar Alignment**: Left (can be changed to 'center' or 'right')
+
 ---
 
 ## Comparison Table
@@ -123,7 +126,8 @@ import AsteroNoteLite from 'asteronote/dist/v2/asteronote-lite.esm.js';
 | Remove Format | ✅ | ❌ |
 | Code View | ✅ | ❌ |
 | Image Resize Tool | ✅ | ❌ |
-| **File Size (UMD)** | ~215 KB | ~147 KB (31% smaller) |
+| **Default Toolbar Align** | Center | Left |
+| **File Size (UMD)** | ~215 KB | ~114 KB (47% smaller) |
 
 ---
 
@@ -138,7 +142,8 @@ const editor = new AsteroNote('#editor', {
     'separator',
     'bold', 'italic'
     // Only plugins in toolbar will be loaded
-  ]
+  ],
+  toolbarAlign: 'left' // Options: 'left', 'center', 'right'
 });
 ```
 
