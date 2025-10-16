@@ -31,6 +31,8 @@ export default class ImageTool {
     this.handleSizeClick = this.handleSizeClick.bind(this);
     this.handleLinkClick = this.handleLinkClick.bind(this);
     this.handleUnlinkClick = this.handleUnlinkClick.bind(this);
+    this.handleWrapClick = this.handleWrapClick.bind(this);
+    this.handleAltClick = this.handleAltClick.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.handleResize = this.handleResize.bind(this);
   }
@@ -61,7 +63,7 @@ export default class ImageTool {
     this.overlay.style.left = '0';
     this.overlay.style.width = '100%';
     this.overlay.style.height = '100%';
-    this.overlay.style.background = 'rgba(0, 123, 255, 0.15)'; // light blue overlay
+    this.overlay.style.background = 'rgba(0, 123, 255, 0.25)'; // light blue overlay
     this.overlay.style.pointerEvents = 'none';
     this.handleBox.appendChild(this.overlay);
 
@@ -171,6 +173,63 @@ export default class ImageTool {
       sizeGrid.appendChild(btn);
     });
     li.appendChild(sizeGrid);
+    this.dropdown.appendChild(li);
+
+    // Text Wrap section - Icon grid (3 buttons in a row)
+    li = document.createElement('li');
+    const wrapHeader = document.createElement('h6');
+    wrapHeader.className = 'dropdown-header';
+    wrapHeader.style.fontSize = '11px';
+    wrapHeader.style.padding = '8px 12px 4px';
+    wrapHeader.textContent = 'TEXT WRAP';
+    li.appendChild(wrapHeader);
+    this.dropdown.appendChild(li);
+
+    li = document.createElement('li');
+    const wrapGrid = document.createElement('div');
+    wrapGrid.style.display = 'grid';
+    wrapGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    wrapGrid.style.gap = '4px';
+    wrapGrid.style.padding = '0 12px 8px';
+
+    const wraps = [
+      { icon: 'ri-text-wrap', value: 'none', title: 'No Wrap' },
+      { icon: 'ri-indent-decrease', value: 'left', title: 'Wrap Left' },
+      { icon: 'ri-indent-increase', value: 'right', title: 'Wrap Right' }
+    ];
+
+    wraps.forEach(wrap => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-sm btn-outline-secondary';
+      btn.style.padding = '6px';
+      btn.style.fontSize = '16px';
+      btn.title = wrap.title;
+      btn.innerHTML = `<i class="${wrap.icon}"></i>`;
+      btn.addEventListener('click', () => this.handleWrapClick(wrap.value));
+      wrapGrid.appendChild(btn);
+    });
+    li.appendChild(wrapGrid);
+    this.dropdown.appendChild(li);
+
+    // Divider
+    li = document.createElement('li');
+    li.innerHTML = '<hr class="dropdown-divider" style="margin: 4px 0;">';
+    this.dropdown.appendChild(li);
+
+    // Alt Text action
+    li = document.createElement('li');
+    const altItem = document.createElement('button');
+    altItem.className = 'dropdown-item d-flex align-items-center';
+    altItem.type = 'button';
+    altItem.style.fontSize = '14px';
+    altItem.style.padding = '6px 12px';
+    altItem.innerHTML = `
+      <i class="ri-text me-2"></i>
+      <span>Edit Alt Text</span>
+    `;
+    altItem.addEventListener('click', this.handleAltClick);
+    li.appendChild(altItem);
     this.dropdown.appendChild(li);
 
     // Divider
@@ -702,6 +761,100 @@ export default class ImageTool {
 
     // Show feedback
     this.showFeedback(img, 'Link removed');
+  }
+
+  handleWrapClick(wrapType) {
+    if (!this.currentImage) return;
+
+    // Save state before change for undo
+    if (this.editor.history) {
+      const content = this.editor.getContent();
+      this.editor.history.record(content);
+    }
+
+    const img = this.currentImage;
+
+    // Remove existing float/display styles
+    img.style.float = '';
+    img.style.display = '';
+    img.style.margin = '';
+
+    // Apply wrap type
+    switch (wrapType) {
+      case 'left':
+        img.style.float = 'left';
+        img.style.marginRight = '1rem';
+        img.style.marginBottom = '0.5rem';
+        break;
+      case 'right':
+        img.style.float = 'right';
+        img.style.marginLeft = '1rem';
+        img.style.marginBottom = '0.5rem';
+        break;
+      case 'none':
+      default:
+        // No float - block display
+        img.style.display = 'block';
+        break;
+    }
+
+    // Close dropdown using Bootstrap's API
+    if (this.menuButton) {
+      this.menuButton.click(); // Toggle to close
+    }
+
+    // Update editor and emit events
+    this.editor.updateOriginalElement();
+    this.editor.emit('image.wrap', { image: img, wrapType });
+    this.editor.emit('asteronote.change', this.editor.getContent());
+
+    // Show feedback
+    const wrapText = wrapType === 'none' ? 'No Wrap' : `Wrap ${wrapType.charAt(0).toUpperCase() + wrapType.slice(1)}`;
+    this.showFeedback(img, wrapText);
+
+    // Update handle positions
+    this.updateHandlePositions();
+  }
+
+  handleAltClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!this.currentImage) return;
+
+    const img = this.currentImage;
+    const currentAlt = img.getAttribute('alt') || '';
+
+    // Close dropdown using Bootstrap's API
+    if (this.menuButton) {
+      this.menuButton.click(); // Toggle to close
+    }
+
+    // Prompt for alt text
+    const altText = prompt('Enter alt text (for accessibility):', currentAlt);
+
+    if (altText === null) return; // User cancelled
+
+    // Save state before change for undo
+    if (this.editor.history) {
+      const content = this.editor.getContent();
+      this.editor.history.record(content);
+    }
+
+    // Set alt text
+    if (altText.trim() === '') {
+      img.removeAttribute('alt');
+    } else {
+      img.setAttribute('alt', altText.trim());
+    }
+
+    // Update editor and emit events
+    this.editor.updateOriginalElement();
+    this.editor.emit('image.alt', { image: img, alt: altText.trim() });
+    this.editor.emit('asteronote.change', this.editor.getContent());
+
+    // Show feedback
+    this.showFeedback(img, altText.trim() ? 'Alt text updated' : 'Alt text removed');
   }
 
   hide() {
