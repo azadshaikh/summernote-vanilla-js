@@ -77,13 +77,14 @@ export default class ListPlugin extends BasePlugin {
     this.dropdown = document.createElement('ul');
     this.dropdown.className = 'dropdown-menu';
 
-    // List options
-    const listTypes = [
-      { type: 'ul', label: 'Bullet List', icon: '<i class="ri-list-unordered"></i>' },
-      { type: 'ol', label: 'Numbered List', icon: '<i class="ri-list-ordered"></i>' }
-    ];
-
-    listTypes.forEach(({ type, label, icon }) => {
+    // Bulleted (UL) header
+    this.dropdown.appendChild(this.createHeader('Bulleted list'));
+    // UL styles
+    [
+      { style: 'disc', label: 'Bullet (•)', icon: '<i class="ri-list-unordered"></i>' },
+      { style: 'circle', label: 'Circle (○)', icon: '<i class="ri-list-unordered"></i>' },
+      { style: 'square', label: 'Square (■)', icon: '<i class="ri-list-unordered"></i>' },
+    ].forEach(({ style, label, icon }) => {
       const li = document.createElement('li');
       const item = document.createElement('button');
       item.className = 'dropdown-item d-flex align-items-center';
@@ -92,12 +93,39 @@ export default class ListPlugin extends BasePlugin {
         <span class="me-2" style="min-width: 24px;">${icon}</span>
         <span>${label}</span>
       `;
-
       item.addEventListener('click', (e) => {
         e.preventDefault();
-        this.applyList(type);
+        this.applyList('ul', style);
       });
+      li.appendChild(item);
+      this.dropdown.appendChild(li);
+    });
 
+    // Divider
+    this.dropdown.appendChild(this.createDivider());
+
+    // Numbered (OL) header
+    this.dropdown.appendChild(this.createHeader('Numbered list'));
+    // OL styles
+    [
+      { style: 'decimal', label: 'Decimal (1, 2, 3)', icon: '<i class="ri-list-ordered"></i>' },
+      { style: 'lower-alpha', label: 'Lower alpha (a, b, c)', icon: '<i class="ri-list-ordered"></i>' },
+      { style: 'upper-alpha', label: 'Upper alpha (A, B, C)', icon: '<i class="ri-list-ordered"></i>' },
+      { style: 'lower-roman', label: 'Lower roman (i, ii, iii)', icon: '<i class="ri-list-ordered"></i>' },
+      { style: 'upper-roman', label: 'Upper roman (I, II, III)', icon: '<i class="ri-list-ordered"></i>' },
+    ].forEach(({ style, label, icon }) => {
+      const li = document.createElement('li');
+      const item = document.createElement('button');
+      item.className = 'dropdown-item d-flex align-items-center';
+      item.type = 'button';
+      item.innerHTML = `
+        <span class="me-2" style="min-width: 24px;">${icon}</span>
+        <span>${label}</span>
+      `;
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.applyList('ol', style);
+      });
       li.appendChild(item);
       this.dropdown.appendChild(li);
     });
@@ -109,7 +137,33 @@ export default class ListPlugin extends BasePlugin {
   /**
    * Apply list format
    */
-  applyList(type) {
+  applyList(type, style = null) {
+    const currentRoot = this.getClosestListRoot();
+
+    if (currentRoot) {
+      const currentType = currentRoot.tagName.toLowerCase();
+      if (currentType !== type) {
+        // Convert UL <-> OL without removing the list first
+        const converted = this.convertListRoot(currentRoot, type);
+        if (converted) {
+          // Apply style after conversion
+          this.applyListStyle(converted, type, style);
+          // Emit events (keep backward compatible toggled event)
+          if (type === 'ul') this.emitEvent('unordered-list-toggled');
+          if (type === 'ol') this.emitEvent('ordered-list-toggled');
+          this.emitEvent('type-changed', { type, style: style || null });
+          this.updateButtonState();
+          return;
+        }
+      } else {
+        // Same list type: just apply style
+        this.applyListStyle(currentRoot, type, style);
+        this.updateButtonState();
+        return;
+      }
+    }
+
+    // Not currently in a list: toggle creation via execCommand
     if (type === 'ul') {
       this.execCommand('insertUnorderedList');
       this.emitEvent('unordered-list-toggled');
@@ -118,7 +172,93 @@ export default class ListPlugin extends BasePlugin {
       this.emitEvent('ordered-list-toggled');
     }
 
+    // Apply style to the newly created list
+    const list = this.getClosestListRoot();
+    if (list) this.applyListStyle(list, type, style);
+
     this.updateButtonState();
+  }
+
+  /** Convert the current list root to a different type (ul <-> ol) */
+  convertListRoot(listEl, toType) {
+    if (!listEl || (toType !== 'ul' && toType !== 'ol')) return null;
+    const newList = document.createElement(toType);
+    // Copy class and inline styles
+    if (listEl.getAttribute('class')) newList.setAttribute('class', listEl.getAttribute('class'));
+    if (listEl.getAttribute('style')) newList.setAttribute('style', listEl.getAttribute('style'));
+    // Move children
+    while (listEl.firstChild) newList.appendChild(listEl.firstChild);
+    // Replace in DOM
+    listEl.parentNode.insertBefore(newList, listEl);
+    listEl.parentNode.removeChild(listEl);
+    // Place caret in last item for stability
+    const li = newList.lastElementChild || newList;
+    this.placeCaretAtEnd(li);
+    return newList;
+  }
+
+  /** Apply list styling for UL/OL */
+  applyListStyle(list, type, style) {
+    if (!list) return;
+    // Clear previous specifics
+    list.removeAttribute('type');
+    if (style) {
+      if (type === 'ul') {
+        list.style.listStyleType = style; // disc, circle, square
+      } else if (type === 'ol') {
+        const typeAttr = this.mapOrderedType(style);
+        if (typeAttr) list.setAttribute('type', typeAttr); // 1,a,A,i,I
+        list.style.listStyleType = style; // decimal, lower-alpha, upper-alpha, lower-roman, upper-roman
+      }
+    }
+  }
+
+  /** Create a dropdown header element */
+  createHeader(text) {
+    const li = document.createElement('li');
+    const header = document.createElement('h6');
+    header.className = 'dropdown-header';
+    header.textContent = text;
+    li.appendChild(header);
+    return li;
+  }
+
+  /** Create a dropdown divider element */
+  createDivider() {
+    const li = document.createElement('li');
+    const hr = document.createElement('hr');
+    hr.className = 'dropdown-divider';
+    li.appendChild(hr);
+    return li;
+  }
+
+  /** Map CSS ordered list style to HTML type attribute when possible */
+  mapOrderedType(style) {
+    const map = {
+      'decimal': '1',
+      'lower-alpha': 'a',
+      'upper-alpha': 'A',
+      'lower-roman': 'i',
+      'upper-roman': 'I'
+    };
+    return map[style] || null;
+  }
+
+  /** Return the closest UL/OL element for current selection */
+  getClosestListRoot() {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return null;
+    let node = sel.anchorNode;
+    if (!node) return null;
+    if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+    while (node && node !== this.editor.editable) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const tag = node.tagName;
+        if (tag === 'UL' || tag === 'OL') return node;
+      }
+      node = node.parentElement;
+    }
+    return null;
   }
 
   /**
