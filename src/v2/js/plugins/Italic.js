@@ -50,13 +50,48 @@ export default class ItalicPlugin extends BasePlugin {
     const button = this.buttons.get('italic');
     if (!button || !button.element) return;
 
-    const isItalic = document.queryCommandState('italic');
+    const isItalic = this.isFormatActive();
 
     if (isItalic) {
       button.element.classList.add('active');
     } else {
       button.element.classList.remove('active');
     }
+  }
+
+  /**
+   * Check if italic formatting is active at current selection
+   * @returns {boolean}
+   */
+  isFormatActive() {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return false;
+
+    let node = selection.anchorNode;
+
+    // If text node, start from parent
+    if (node && node.nodeType === Node.TEXT_NODE) {
+      node = node.parentNode;
+    }
+
+    // Check if we're inside an italic tag or have italic font-style
+    while (node && node !== this.editor.editableElement) {
+      if (node.tagName === 'I' || node.tagName === 'EM') {
+        return true;
+      }
+
+      // Check computed style for font-style
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const style = window.getComputedStyle(node);
+        if (style.fontStyle === 'italic' || style.fontStyle === 'oblique') {
+          return true;
+        }
+      }
+
+      node = node.parentNode;
+    }
+
+    return false;
   }
 
   /**

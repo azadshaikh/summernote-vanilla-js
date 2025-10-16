@@ -50,13 +50,49 @@ export default class StrikethroughPlugin extends BasePlugin {
     const button = this.buttons.get('strikethrough');
     if (!button || !button.element) return;
 
-    const isActive = document.queryCommandState('strikeThrough');
+    const isActive = this.isFormatActive();
 
     if (isActive) {
       button.element.classList.add('active');
     } else {
       button.element.classList.remove('active');
     }
+  }
+
+  /**
+   * Check if strikethrough formatting is active at current selection
+   * @returns {boolean}
+   */
+  isFormatActive() {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return false;
+
+    let node = selection.anchorNode;
+
+    // If text node, start from parent
+    if (node && node.nodeType === Node.TEXT_NODE) {
+      node = node.parentNode;
+    }
+
+    // Check if we're inside a strikethrough tag or have line-through text-decoration
+    while (node && node !== this.editor.editableElement) {
+      if (node.tagName === 'S' || node.tagName === 'STRIKE' || node.tagName === 'DEL') {
+        return true;
+      }
+
+      // Check computed style for text-decoration
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const style = window.getComputedStyle(node);
+        const textDecoration = style.textDecoration || style.textDecorationLine;
+        if (textDecoration && textDecoration.includes('line-through')) {
+          return true;
+        }
+      }
+
+      node = node.parentNode;
+    }
+
+    return false;
   }
 
   /**

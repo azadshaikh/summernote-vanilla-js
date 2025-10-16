@@ -50,13 +50,50 @@ export default class BoldPlugin extends BasePlugin {
     const button = this.buttons.get('bold');
     if (!button || !button.element) return;
 
-    const isBold = document.queryCommandState('bold');
+    const isBold = this.isFormatActive();
 
     if (isBold) {
       button.element.classList.add('active');
     } else {
       button.element.classList.remove('active');
     }
+  }
+
+  /**
+   * Check if bold formatting is active at current selection
+   * @returns {boolean}
+   */
+  isFormatActive() {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return false;
+
+    let node = selection.anchorNode;
+
+    // If text node, start from parent
+    if (node && node.nodeType === Node.TEXT_NODE) {
+      node = node.parentNode;
+    }
+
+    // Check if we're inside a bold tag or have bold font-weight
+    while (node && node !== this.editor.editableElement) {
+      if (node.tagName === 'B' || node.tagName === 'STRONG') {
+        return true;
+      }
+
+      // Check computed style for font-weight
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const style = window.getComputedStyle(node);
+        const fontWeight = style.fontWeight;
+        // Font-weight >= 700 is considered bold (numeric check)
+        if (parseInt(fontWeight) >= 700 || fontWeight === 'bold') {
+          return true;
+        }
+      }
+
+      node = node.parentNode;
+    }
+
+    return false;
   }
 
   /**

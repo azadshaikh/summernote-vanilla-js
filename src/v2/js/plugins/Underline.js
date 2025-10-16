@@ -50,13 +50,49 @@ export default class UnderlinePlugin extends BasePlugin {
     const button = this.buttons.get('underline');
     if (!button || !button.element) return;
 
-    const isUnderline = document.queryCommandState('underline');
+    const isUnderline = this.isFormatActive();
 
     if (isUnderline) {
       button.element.classList.add('active');
     } else {
       button.element.classList.remove('active');
     }
+  }
+
+  /**
+   * Check if underline formatting is active at current selection
+   * @returns {boolean}
+   */
+  isFormatActive() {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return false;
+
+    let node = selection.anchorNode;
+
+    // If text node, start from parent
+    if (node && node.nodeType === Node.TEXT_NODE) {
+      node = node.parentNode;
+    }
+
+    // Check if we're inside an underline tag or have underline text-decoration
+    while (node && node !== this.editor.editableElement) {
+      if (node.tagName === 'U') {
+        return true;
+      }
+
+      // Check computed style for text-decoration
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const style = window.getComputedStyle(node);
+        const textDecoration = style.textDecoration || style.textDecorationLine;
+        if (textDecoration && textDecoration.includes('underline')) {
+          return true;
+        }
+      }
+
+      node = node.parentNode;
+    }
+
+    return false;
   }
 
   /**
