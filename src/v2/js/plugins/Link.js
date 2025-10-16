@@ -24,7 +24,7 @@ export default class LinkPlugin extends BasePlugin {
     this.addButton({
       name: 'createLink',
       icon: '<i class="ri-link"></i>',
-      tooltip: 'Insert Link (Ctrl+K)',
+      tooltip: 'Insert/Edit Link (Ctrl+K)',
       callback: () => this.showLinkDialog(),
       className: 'asteronote-btn-link'
     });
@@ -62,7 +62,7 @@ export default class LinkPlugin extends BasePlugin {
     urlInput.value = existingUrl;
     textInput.value = existingText || this.getSelectedText();
     if (targetInput) targetInput.value = existing ? (existing.target || '_blank') : '_blank';
-    if (relInput) relInput.value = existing ? (existing.rel || 'noopener noreferrer') : 'noopener noreferrer';
+    if (relInput) relInput.value = existing ? (existing.rel || 'noopener nofollow') : 'noopener nofollow';
 
     // Show minimal Bootstrap-like modal
     this.dialog.style.display = 'block';

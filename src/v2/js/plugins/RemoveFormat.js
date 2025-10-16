@@ -17,7 +17,7 @@ export default class RemoveFormatPlugin extends BasePlugin {
     this.addButton({
       name: 'removeFormat',
       icon: '<i class="ri-format-clear"></i>',
-      tooltip: 'Remove Formatting (Ctrl+\\)',
+      tooltip: 'Clear Formatting (Ctrl+\\)',
       callback: () => this.removeFormat(),
       className: 'asteronote-btn-remove-format'
     });
