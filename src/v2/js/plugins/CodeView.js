@@ -237,6 +237,22 @@ export default class CodeViewPlugin extends BasePlugin {
   }
 
   /**
+   * Update Code View container height (called by editor resizer)
+   * @param {number} px - height in pixels
+   */
+  setHeight(px) {
+    if (!this.container) return;
+    const h = Math.max(0, Math.round(px || 0));
+    this.container.style.height = `${h}px`;
+    // Ask Monaco to re-layout to new size
+    try {
+      if (this.monacoEditor && typeof this.monacoEditor.layout === 'function') {
+        this.monacoEditor.layout();
+      }
+    } catch (_) {}
+  }
+
+  /**
    * Get current height of the editable area in pixels
    */
   getEditableHeight() {

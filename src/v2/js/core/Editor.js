@@ -94,6 +94,10 @@ export default class Editor extends EventEmitter {
     this.toolbarGroups = new Map();
     this.wrapper = null;
   this.imageTool = null;
+    this.footer = null;
+    this._resizing = false;
+    this._resizeStartY = 0;
+    this._resizeStartHeight = 0;
 
     // Bind methods
     this.handleInput = this.handleInput.bind(this);
@@ -104,6 +108,9 @@ export default class Editor extends EventEmitter {
     this.handleKeyup = this.handleKeyup.bind(this);
     this.handleMouseup = this.handleMouseup.bind(this);
     this.handleSelectionChange = this.handleSelectionChange.bind(this);
+    this.handleResizeMouseDown = this.handleResizeMouseDown.bind(this);
+    this.handleResizeMouseMove = this.handleResizeMouseMove.bind(this);
+    this.handleResizeMouseUp = this.handleResizeMouseUp.bind(this);
   }
 
   /**
@@ -198,9 +205,70 @@ export default class Editor extends EventEmitter {
     // Build structure
     this.wrapper.appendChild(this.toolbar);
     this.wrapper.appendChild(this.editable);
+    // Footer resizer
+    this.createFooter();
+    if (this.footer) this.wrapper.appendChild(this.footer);
 
     // Insert after target
     this.target.parentNode.insertBefore(this.wrapper, this.target.nextSibling);
+  }
+
+  /**
+   * Create footer with a drag handle to resize editor height
+   */
+  createFooter() {
+    const footer = createElement('div', { className: 'asteronote-footer' });
+    const grip = createElement('div', { className: 'asteronote-resize-grip', role: 'separator', ariaOrientation: 'horizontal' });
+    footer.appendChild(grip);
+    footer.addEventListener('mousedown', this.handleResizeMouseDown);
+    this.footer = footer;
+  }
+
+  handleResizeMouseDown(e) {
+    e.preventDefault();
+    if (!this.editable) return;
+    this._resizing = true;
+    this._resizeStartY = e.clientY;
+    const cs = window.getComputedStyle(this.editable);
+    this._resizeStartHeight = parseFloat(cs.height) || this.editable.clientHeight || 0;
+    document.addEventListener('mousemove', this.handleResizeMouseMove);
+    document.addEventListener('mouseup', this.handleResizeMouseUp);
+    if (this.wrapper && this.wrapper.classList) this.wrapper.classList.add('asteronote-resizing');
+  }
+
+  handleResizeMouseMove(e) {
+    if (!this._resizing || !this.editable) return;
+    const dy = e.clientY - this._resizeStartY;
+    let newH = this._resizeStartHeight + dy;
+    const minH = typeof this.options.minHeight === 'number' ? this.options.minHeight : 150;
+    const maxH = typeof this.options.maxHeight === 'number' ? this.options.maxHeight : null;
+    if (newH < minH) newH = minH;
+    if (maxH && newH > maxH) newH = maxH;
+    this.editable.style.height = `${Math.round(newH)}px`;
+    this.options.height = Math.round(newH);
+
+    // Mirror height when Code View is active
+    const cv = this.getPlugin('codeview') || Array.from(this.plugins.values()).find(p => p && p.constructor && p.constructor.pluginName === 'codeview');
+    if (cv && cv.active && typeof cv.setHeight === 'function') {
+      cv.setHeight(newH);
+    }
+  }
+
+  handleResizeMouseUp() {
+    if (!this._resizing) return;
+    this._resizing = false;
+    document.removeEventListener('mousemove', this.handleResizeMouseMove);
+    document.removeEventListener('mouseup', this.handleResizeMouseUp);
+    if (this.wrapper && this.wrapper.classList) this.wrapper.classList.remove('asteronote-resizing');
+    // Finalize height for Code View if active
+    const cs = this.editable ? window.getComputedStyle(this.editable) : null;
+    const h = cs ? parseFloat(cs.height) : this.options.height;
+    const cv = this.getPlugin('codeview') || Array.from(this.plugins.values()).find(p => p && p.constructor && p.constructor.pluginName === 'codeview');
+    if (cv && cv.active && typeof cv.setHeight === 'function' && h) {
+      cv.setHeight(h);
+    }
+    // Announce size change
+    this.emit('asteronote.change', this.getContent());
   }
 
   /**
@@ -590,6 +658,12 @@ export default class Editor extends EventEmitter {
     if (this.imageTool) {
       try { this.imageTool.destroy(); } catch (e) { console.warn('ImageTool destroy failed', e); }
       this.imageTool = null;
+    }
+
+    // Remove footer events
+    if (this.footer) {
+      try { this.footer.removeEventListener('mousedown', this.handleResizeMouseDown); } catch (e) {}
+      this.footer = null;
     }
 
     // Remove event handlers
