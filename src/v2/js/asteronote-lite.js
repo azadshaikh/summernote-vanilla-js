@@ -1,30 +1,26 @@
 /**
- * AsteroNote v2.0 - Standard Bundle
- * Entry point for standard bundle (core + essential plugins)
+ * AsteroNote v2.0 - Lite Bundle
+ * Minimal editor for simple use cases (comments, notes, etc.)
+ * Includes: Heading, List, Bold, Italic, Underline, Strikethrough, Link
+ * Note: Undo/Redo available via browser native Ctrl+Z/Ctrl+Y
+ * ImageTool excluded for smaller bundle size
  */
 
-import Editor from './core/Editor.js';
-import ImageTool from './core/ImageTool.js';
+import Editor from './core/EditorLite.js';
 import EventEmitter from './core/EventEmitter.js';
 import PluginRegistry from './core/PluginRegistry.js';
 import BasePlugin from './core/BasePlugin.js';
 
-// Import essential plugins (Phase 1)
-import UndoPlugin from './plugins/Undo.js';
-import RedoPlugin from './plugins/Redo.js';
+// Using EditorLite which doesn't import ImageTool at all
+
+// Import lite plugins only
 import BoldPlugin from './plugins/Bold.js';
 import ItalicPlugin from './plugins/Italic.js';
 import UnderlinePlugin from './plugins/Underline.js';
 import StrikethroughPlugin from './plugins/Strikethrough.js';
-import RemoveFormatPlugin from './plugins/RemoveFormat.js';
 import ListPlugin from './plugins/List.js';
 import LinkPlugin from './plugins/Link.js';
-import FormatBlockPlugin from './plugins/FormatBlock/index.js';
-import HorizontalRulePlugin from './plugins/HorizontalRule.js';
-import AlignPlugin from './plugins/Align.js';
-import CodeViewPlugin from './plugins/CodeView.js';
-import VideoPlugin from './plugins/Video.js';
-import TablePlugin from './plugins/Table.js';
+import HeadingPlugin from './plugins/Heading.js';
 import SeparatorPlugin from './plugins/Separator.js';
 
 // Export core components
@@ -35,34 +31,25 @@ export {
   BasePlugin
 };
 
-// Export plugins
+// Export lite plugins
 export {
-  UndoPlugin,
-  RedoPlugin,
   BoldPlugin,
   ItalicPlugin,
   UnderlinePlugin,
   StrikethroughPlugin,
-  RemoveFormatPlugin,
   ListPlugin,
   LinkPlugin,
-  FormatBlockPlugin,
-  HorizontalRulePlugin,
-  AlignPlugin,
-  CodeViewPlugin,
-  VideoPlugin,
-  TablePlugin,
+  HeadingPlugin,
   SeparatorPlugin
 };
 
-// Create pre-configured editor with essential plugins
+// Create pre-configured editor with lite plugins
 export function createEditor(target, options = {}) {
   const plugins = options.plugins || [
     BoldPlugin,
     ItalicPlugin,
     UnderlinePlugin,
     StrikethroughPlugin,
-    RemoveFormatPlugin,
     ListPlugin,
     LinkPlugin
   ];
@@ -70,48 +57,35 @@ export function createEditor(target, options = {}) {
   return new Editor(target, { ...options, plugins });
 }
 
-// Default class that auto-loads plugins based on toolbar configuration
-class AsteroNoteEditor extends Editor {
+// Lite class that auto-loads plugins based on toolbar configuration
+class AsteroNoteLite extends Editor {
   constructor(target, options = {}) {
-    // Map of plugin names to plugin classes
+    // Map of plugin names to plugin classes (lite version)
     const pluginMap = {
-      'undo': UndoPlugin,
-      'redo': RedoPlugin,
       'bold': BoldPlugin,
       'italic': ItalicPlugin,
       'underline': UnderlinePlugin,
       'strikethrough': StrikethroughPlugin,
-      'removeFormat': RemoveFormatPlugin,
       'list': ListPlugin,
       'link': LinkPlugin,
-      'formatblock': FormatBlockPlugin,
-      'hr': HorizontalRulePlugin,
-      'align': AlignPlugin,
-      'codeview': CodeViewPlugin,
-      'video': VideoPlugin,
-      'table': TablePlugin,
+      'heading': HeadingPlugin,
       'separator': SeparatorPlugin
     };
 
     // If plugins are explicitly provided, use them
     if (Array.isArray(options.plugins)) {
-      super(target, options, ImageTool);
+      super(target, options);
       return;
     }
 
     // Otherwise, derive plugins from toolbar configuration
-    // Default: Full toolbar with all plugins
+    // Default: Lite toolbar for simple use cases (no undo/redo buttons - use Ctrl+Z/Y)
     const toolbar = options.toolbar || [
-      'undo', 'redo',
+      'heading', 'list',
       'separator',
-      'formatblock', 'list', 'table',
+      'bold', 'italic', 'underline', 'strikethrough',
       'separator',
-      'bold', 'italic', 'underline', 'strikethrough', 'align',
-      'separator',
-      'hr', 'link', 'video',
-      'separator',
-      'removeFormat',
-      'codeview'
+      'link'
     ];
 
     // Extract plugin names from toolbar configuration
@@ -147,27 +121,25 @@ class AsteroNoteEditor extends Editor {
 
     const plugins = pluginClasses;
 
-    super(target, { ...options, plugins }, ImageTool);
+    super(target, { ...options, plugins });
   }
 }
 
 // Default export
-export default AsteroNoteEditor;
+export default AsteroNoteLite;
 
 // For UMD builds, expose on window
 if (typeof window !== 'undefined') {
-  // Make AsteroNote the primary global
-  window.AsteroNote = AsteroNoteEditor;
-  window.AsteroNoteEditor = AsteroNoteEditor;
+  // Make AsteroNoteLite the primary global
+  window.AsteroNoteLite = AsteroNoteLite;
 
-  // Backward compatibility aliases (deprecated, will be removed in v3)
-  window.Asteronote = AsteroNoteEditor; // lowercase 'n' for compat
-  window.Summernote = AsteroNoteEditor; // v1 compat
-  window.Editor = AsteroNoteEditor;
+  // Also expose on main namespace for convenience
+  window.AsteroNote = window.AsteroNote || {};
+  window.AsteroNote.Lite = AsteroNoteLite;
 
   // Also expose other exports for advanced usage
-  window.AsteroNoteExports = {
-    Editor: AsteroNoteEditor,
+  window.AsteroNoteLiteExports = {
+    Editor: AsteroNoteLite,
     PureEditor: Editor,
     EventEmitter,
     PluginRegistry,
@@ -176,15 +148,9 @@ if (typeof window !== 'undefined') {
     ItalicPlugin,
     UnderlinePlugin,
     StrikethroughPlugin,
-    RemoveFormatPlugin,
     ListPlugin,
     LinkPlugin,
-    FormatBlockPlugin,
-    HorizontalRulePlugin,
-    AlignPlugin,
-    CodeViewPlugin,
-    VideoPlugin,
-    TablePlugin,
+    HeadingPlugin,
     SeparatorPlugin,
     createEditor
   };

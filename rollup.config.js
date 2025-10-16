@@ -35,7 +35,7 @@ const sourcemap = isDevelopment || !isProduction;
 
 // Bundle configurations
 const configs = [
-  // Single bundle - CJS (CommonJS/UMD for CDN)
+  // Full bundle - UMD (for CDN)
   {
     input: 'src/v2/js/asteronote.js',
     output: {
@@ -47,11 +47,33 @@ const configs = [
     },
     plugins: [...commonPlugins, ...productionPlugins]
   },
-  // Single bundle - ESM (for modern bundlers and import)
+  // Full bundle - ESM (for modern bundlers)
   {
     input: 'src/v2/js/asteronote.js',
     output: {
       file: 'dist/v2/asteronote.esm.js',
+      format: 'es',
+      sourcemap
+    },
+    plugins: [...commonPlugins, ...productionPlugins]
+  },
+  // Lite bundle - UMD (for CDN - minimal version)
+  {
+    input: 'src/v2/js/asteronote-lite.js',
+    output: {
+      file: 'dist/v2/asteronote-lite.js',
+      format: 'umd',
+      name: 'AsteroNoteLite',
+      exports: 'named',
+      sourcemap
+    },
+    plugins: [...commonPlugins, ...productionPlugins]
+  },
+  // Lite bundle - ESM (for modern bundlers)
+  {
+    input: 'src/v2/js/asteronote-lite.js',
+    output: {
+      file: 'dist/v2/asteronote-lite.esm.js',
       format: 'es',
       sourcemap
     },

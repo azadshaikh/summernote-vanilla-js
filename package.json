@@ -21,6 +21,10 @@
     ".": {
       "require": "./dist/v2/asteronote.js",
       "import": "./dist/v2/asteronote.esm.js"
+    },
+    "./lite": {
+      "require": "./dist/v2/asteronote-lite.js",
+      "import": "./dist/v2/asteronote-lite.esm.js"
     }
   },
   "files": [

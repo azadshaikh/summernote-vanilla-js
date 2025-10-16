@@ -28,7 +28,9 @@
     </div>
 
     <div class="alert alert-info mb-4" role="alert">
-      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Highlight, Code, Code View, Blockquote, Align (Ctrl+Shift+L/E/R/J), Indent/Outdent (Ctrl+[ / Ctrl+]), Horizontal Line (Ctrl+Enter), Remove
+      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Highlight,
+      Code, Code View, Blockquote, Align (Ctrl+Shift+L/E/R/J), Indent/Outdent (Ctrl+[ / Ctrl+]), Horizontal Line
+      (Ctrl+Enter), Remove
       Format, Lists, Link (Ctrl+K)<br>
       <small class="text-muted">Plugins are automatically loaded based on toolbar configuration</small>
     </div>
@@ -76,32 +78,11 @@
       return lines.map(l => l.slice(min)).join('\n');
     }
 
-    // Editor initialization with custom toolbar configuration
+    // Editor initialization with default full toolbar
     const editor = new AsteroNote('#editor', {
       height: 600,
-      placeholder: 'Try the formatting tools! Use keyboard shortcuts: Ctrl+Z (undo), Ctrl+Y (redo), Ctrl+B (bold), Ctrl+I (italic), Ctrl+U (underline), Ctrl+K (link)',
-      // Flat toolbar format - plugins are loaded based on what's in toolbar
-      toolbar: [
-        'undo', 'redo',                                   // History
-        'separator',                                      // Visual divider
-        'heading', 'blockquote', 'list', 'table',         // Headings, Blockquote, Lists, Table
-        'separator',                                      // Visual divider
-        'bold', 'italic', 'underline', 'strikethrough', 'highlight', 'code', 'align', // Text formatting + alignment
-        'separator',                                      // Visual divider
-        'removeFormat', 'hr', 'video',                    // Clear formatting, Horizontal rule, Video
-        'separator',                                      // Visual divider
-        'link',                                           // Insert link
-        'separator',                                      // Visual divider
-        'codeview'                                        // Code view (moved to last)
-      ],
-      callbacks: {
-        onInit: function () {
-          console.log('Editor initialized with custom toolbar');
-        },
-        onChange: function (content) {
-          console.log('Content changed:', content.substring(0, 50) + '...');
-        }
-      }
+      placeholder: 'Try the formatting tools! Use keyboard shortcuts: Ctrl+Z (undo), Ctrl+Y (redo), Ctrl+B (bold), Ctrl+I (italic), Ctrl+U (underline), Ctrl+K (link)'
+      // No toolbar config needed - uses default full toolbar automatically
     });
 
     editor.init();

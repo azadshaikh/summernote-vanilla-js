@@ -46,6 +46,8 @@ const defaultOptions = {
   minHeight: null,
   maxHeight: null,
   focus: false,
+  enableImageTool: true, // Enable image resize handles (can be disabled for lite builds)
+  toolbarAlign: 'center', // Toolbar button alignment: 'left', 'center', 'right'
   // Toolbar: flat array of button names (no grouping)
   // Supports both flat format ['bold', 'italic'] and legacy nested format [['group', ['bold']]]
   toolbar: [
@@ -74,8 +76,9 @@ export default class Editor extends EventEmitter {
    * Constructor
    * @param {string|Element} target - Target element selector or element
    * @param {Object} options - Editor configuration options
+   * @param {Class} ImageToolClass - Optional ImageTool class (can be null for lite builds)
    */
-  constructor(target, options = {}) {
+  constructor(target, options = {}, ImageToolClass = null) {
     super(); // Initialize EventEmitter
 
     this.target = typeof target === 'string' ? $(target) : target;
@@ -93,7 +96,8 @@ export default class Editor extends EventEmitter {
     this.toolbar = null;
     this.toolbarGroups = new Map();
     this.wrapper = null;
-  this.imageTool = null;
+    this.imageTool = null;
+    this.ImageToolClass = ImageToolClass; // Store for later initialization
     this.footer = null;
     this._resizing = false;
     this._resizeStartY = 0;
@@ -143,9 +147,11 @@ export default class Editor extends EventEmitter {
       maxSize: this.options.historySize || 100
     });
 
-    // Initialize image tool (core feature, no toolbar button)
-    this.imageTool = new ImageTool(this);
-    this.imageTool.init();
+    // Initialize image tool (optional, can be disabled for lite builds)
+    if (this.options.enableImageTool && this.ImageToolClass) {
+      this.imageTool = new this.ImageToolClass(this);
+      this.imageTool.init();
+    }
 
     // Set placeholder
     if (this.options.placeholder) {
@@ -180,9 +186,14 @@ export default class Editor extends EventEmitter {
       className: 'asteronote-editor'
     });
 
+    // Determine toolbar alignment class
+    const alignmentClass = this.options.toolbarAlign === 'left' ? 'justify-content-start' :
+                          this.options.toolbarAlign === 'right' ? 'justify-content-end' :
+                          'justify-content-center';
+
     // Create toolbar container - no button groups, just individual buttons
     this.toolbar = createElement('div', {
-      className: 'asteronote-toolbar d-flex flex-wrap',
+      className: `asteronote-toolbar d-flex flex-wrap ${alignmentClass}`,
       role: 'toolbar',
       ariaLabel: 'Editor toolbar'
     });
