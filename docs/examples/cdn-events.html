@@ -181,6 +181,7 @@
     editor.on('plugin.align.align', (data) => logEvent('Event: plugin.align.align', data));
     editor.on('plugin.align.indented', () => logEvent('Event: plugin.align.indented'));
     editor.on('plugin.align.outdented', () => logEvent('Event: plugin.align.outdented'));
+    editor.on('plugin.codeview.toggled', (data) => logEvent('Event: plugin.codeview.toggled', data));
     editor.on('plugin.link.inserted', (data) => logEvent('Event: plugin.link.inserted', data));
     editor.on('plugin.link.removed', () => logEvent('Event: plugin.link.removed'));
 

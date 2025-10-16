@@ -13,6 +13,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
   <!-- Asteronote v2 minimal styles -->
   <link href="../../src/css/asteronote.css" rel="stylesheet" />
+  <!-- PrismJS for Code View preview -->
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -28,7 +30,7 @@
     </div>
 
     <div class="alert alert-info mb-4" role="alert">
-      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Highlight, Code, Blockquote, Align (Ctrl+Shift+L/E/R/J), Indent/Outdent (Ctrl+[ / Ctrl+]), Horizontal Line (Ctrl+Enter), Remove
+      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Highlight, Code, Code View, Blockquote, Align (Ctrl+Shift+L/E/R/J), Indent/Outdent (Ctrl+[ / Ctrl+]), Horizontal Line (Ctrl+Enter), Remove
       Format, Lists, Link (Ctrl+K)<br>
       <small class="text-muted">Plugins are automatically loaded based on toolbar configuration</small>
     </div>
@@ -80,7 +82,9 @@
         'separator',                                      // Visual divider
         'removeFormat', 'hr',                             // Clear formatting, Horizontal rule
         'separator',                                      // Visual divider
-        'link'                                            // Insert link
+        'link',                                           // Insert link
+        'separator',                                      // Visual divider
+        'codeview'                                        // Code view (moved to last)
       ],
       callbacks: {
         onInit: function () {
@@ -139,6 +143,15 @@
 
   <!-- Astero UI JS -->
   <script src="https://asteroui-temp.pages.dev/scripts/asteroui.min.js"></script>
+  <!-- PrismJS -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script>
+    // Ensure markup language loads for HTML preview
+    if (window.Prism && Prism.plugins && Prism.plugins.autoloader) {
+      Prism.plugins.autoloader.languages_path = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/';
+    }
+  </script>
 </body>
 
 </html>
