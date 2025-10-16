@@ -13,8 +13,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
   <!-- Asteronote v2 minimal styles -->
   <link href="../../src/css/asteronote.css" rel="stylesheet" />
-  <!-- PrismJS for Code View preview -->
-  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -159,14 +157,7 @@
 
   <!-- Astero UI JS -->
   <script src="https://asteroui-temp.pages.dev/scripts/asteroui.min.js"></script>
-  <!-- PrismJS -->
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script>
-    if (window.Prism && Prism.plugins && Prism.plugins.autoloader) {
-      Prism.plugins.autoloader.languages_path = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/';
-    }
-  </script>
+  <!-- Monaco loads lazily when Code View opens; no loader needed here -->
 </body>
 
 </html>
