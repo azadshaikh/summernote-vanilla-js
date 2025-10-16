@@ -167,6 +167,9 @@
     editor.on('plugin.list.unordered-list-toggled', () => logEvent('Event: plugin.list.unordered-list-toggled'));
     editor.on('plugin.blockquote.toggled', (data) => logEvent('Event: plugin.blockquote.toggled', data));
     editor.on('plugin.hr.inserted', () => logEvent('Event: plugin.hr.inserted'));
+    editor.on('plugin.align.align', (data) => logEvent('Event: plugin.align.align', data));
+    editor.on('plugin.align.indented', () => logEvent('Event: plugin.align.indented'));
+    editor.on('plugin.align.outdented', () => logEvent('Event: plugin.align.outdented'));
     editor.on('plugin.link.inserted', (data) => logEvent('Event: plugin.link.inserted', data));
     editor.on('plugin.link.removed', () => logEvent('Event: plugin.link.removed'));
 

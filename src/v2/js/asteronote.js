@@ -23,6 +23,7 @@ import LinkPlugin from './plugins/Link.js';
 import HeadingPlugin from './plugins/Heading.js';
 import BlockquotePlugin from './plugins/Blockquote.js';
 import HorizontalRulePlugin from './plugins/HorizontalRule.js';
+import AlignPlugin from './plugins/Align.js';
 import SeparatorPlugin from './plugins/Separator.js';
 
 // Export core components
@@ -49,6 +50,7 @@ export {
   HeadingPlugin,
   BlockquotePlugin,
   HorizontalRulePlugin,
+  AlignPlugin,
   SeparatorPlugin
 };
 
@@ -86,6 +88,7 @@ class AsteroNoteEditor extends Editor {
       'heading': HeadingPlugin,
       'blockquote': BlockquotePlugin,
       'hr': HorizontalRulePlugin,
+      'align': AlignPlugin,
       'separator': SeparatorPlugin
     };
 
@@ -178,6 +181,7 @@ if (typeof window !== 'undefined') {
     HeadingPlugin,
     BlockquotePlugin,
     HorizontalRulePlugin,
+    AlignPlugin,
     SeparatorPlugin,
     createEditor
   };
