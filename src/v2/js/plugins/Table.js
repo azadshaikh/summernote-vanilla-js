@@ -156,12 +156,23 @@ export default class TablePlugin extends BasePlugin {
     cols = Math.max(1, Math.min(100, cols|0));
     const table = document.createElement('table');
     table.className = 'table table-bordered';
+    // Add table head
+    const thead = document.createElement('thead');
+    const headTr = document.createElement('tr');
+    for (let c = 0; c < cols; c++) {
+      const th = document.createElement('th');
+      th.innerHTML = '<br>';
+      headTr.appendChild(th);
+    }
+    thead.appendChild(headTr);
+    table.appendChild(thead);
+
     const tbody = document.createElement('tbody');
     for (let r = 0; r < rows; r++) {
       const tr = document.createElement('tr');
       for (let c = 0; c < cols; c++) {
         const td = document.createElement('td');
-        td.innerHTML = '<p><br></p>';
+        td.innerHTML = '<br>';
         tr.appendChild(td);
       }
       tbody.appendChild(tr);
@@ -169,19 +180,30 @@ export default class TablePlugin extends BasePlugin {
     table.appendChild(tbody);
 
     this.insertNode(table);
-    this.placeCaretInCell(table.querySelector('td,th'));
+    // Place caret in first body cell for immediate typing
+    this.placeCaretInCell(table.querySelector('tbody td'));
     this.emitEvent('inserted', { rows, cols });
     this.editor.emit('asteronote.change', this.editor.getContent());
   }
 
   placeCaretInCell(cell) {
     if (!cell) return;
+    this.ensureCellContent(cell);
     const range = document.createRange();
     range.selectNodeContents(cell);
     range.collapse(true);
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
+  }
+
+  ensureCellContent(cell) {
+    if (!cell) return;
+    const html = (cell.innerHTML || '').trim();
+    if (html === '' || html === '&nbsp;' || html === '<br>' || html === '<br/>' || html === '<br />') {
+      // Ensure a single br so caret can be placed inside
+      cell.innerHTML = '<br>';
+    }
   }
 
   getCurrentCell() {
@@ -215,7 +237,7 @@ export default class TablePlugin extends BasePlugin {
     const cols = tr.children.length;
     for (let i = 0; i < cols; i++) {
       const td = document.createElement('td');
-      td.innerHTML = '<p><br></p>';
+      td.innerHTML = '<br>';
       newTr.appendChild(td);
     }
     if (where === 'above') tbody.insertBefore(newTr, tr);
@@ -232,7 +254,7 @@ export default class TablePlugin extends BasePlugin {
     const rows = table.querySelectorAll('tr');
     rows.forEach((row) => {
       const td = document.createElement('td');
-      td.innerHTML = '<p><br></p>';
+      td.innerHTML = '<br>';
       if (where === 'left') row.insertBefore(td, row.children[colIndex] || row.firstElementChild);
       else row.insertBefore(td, row.children[colIndex + 1] || null);
     });
@@ -304,11 +326,11 @@ export default class TablePlugin extends BasePlugin {
     Array.from(first.children).forEach((cell) => {
       if (cell.tagName === 'TD') {
         const th = document.createElement('th');
-        th.innerHTML = cell.innerHTML || '<p><br></p>';
+        th.innerHTML = cell.innerHTML || '<br>';
         cell.parentElement.replaceChild(th, cell);
       } else if (cell.tagName === 'TH') {
         const td = document.createElement('td');
-        td.innerHTML = cell.innerHTML || '<p><br></p>';
+        td.innerHTML = cell.innerHTML || '<br>';
         cell.parentElement.replaceChild(td, cell);
       }
     });
@@ -326,11 +348,11 @@ export default class TablePlugin extends BasePlugin {
       if (!first) return;
       if (first.tagName === 'TD') {
         const th = document.createElement('th');
-        th.innerHTML = first.innerHTML || '<p><br></p>';
+        th.innerHTML = first.innerHTML || '<br>';
         row.replaceChild(th, first);
       } else if (first.tagName === 'TH') {
         const td = document.createElement('td');
-        td.innerHTML = first.innerHTML || '<p><br></p>';
+        td.innerHTML = first.innerHTML || '<br>';
         row.replaceChild(td, first);
       }
     });
