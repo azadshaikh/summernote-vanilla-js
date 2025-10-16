@@ -43,11 +43,11 @@ export default class UndoPlugin extends BasePlugin {
     }
 
     const success = this.editor.history.undo();
-    
+
     if (success) {
       this.updateButtonState();
       this.emitEvent('executed');
-      
+
       // Emit change event to update other plugins
       this.editor.emit('asteronote.change');
     }

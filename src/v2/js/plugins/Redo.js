@@ -44,11 +44,11 @@ export default class RedoPlugin extends BasePlugin {
     }
 
     const success = this.editor.history.redo();
-    
+
     if (success) {
       this.updateButtonState();
       this.emitEvent('executed');
-      
+
       // Emit change event to update other plugins
       this.editor.emit('asteronote.change');
     }

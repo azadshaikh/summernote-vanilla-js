@@ -49,7 +49,7 @@ export default class History {
    */
   recordIfChanged() {
     const currentContent = this.editor.getContent();
-    
+
     if (currentContent !== this.lastContent) {
       this.record(this.lastContent);
       this.lastContent = currentContent;
@@ -66,7 +66,7 @@ export default class History {
     }
 
     this.undoStack.push(content);
-    
+
     // Clear redo stack when new action is recorded
     this.redoStack = [];
   }
@@ -81,21 +81,21 @@ export default class History {
 
     // Get current content before undo
     const currentContent = this.editor.getContent();
-    
+
     // Get previous content from undo stack
     const previousContent = this.undoStack.pop();
-    
+
     // Save current content to redo stack
     this.redoStack.push(currentContent);
-    
+
     // Don't record this change
     this.ignoreChange = true;
     this.isRecording = false;
-    
+
     // Restore previous content
     this.editor.setContent(previousContent);
     this.lastContent = previousContent;
-    
+
     // Re-enable recording after a short delay
     setTimeout(() => {
       this.ignoreChange = false;
@@ -115,21 +115,21 @@ export default class History {
 
     // Get current content before redo
     const currentContent = this.editor.getContent();
-    
+
     // Get next content from redo stack
     const nextContent = this.redoStack.pop();
-    
+
     // Save current content to undo stack
     this.undoStack.push(currentContent);
-    
+
     // Don't record this change
     this.ignoreChange = true;
     this.isRecording = false;
-    
+
     // Restore next content
     this.editor.setContent(nextContent);
     this.lastContent = nextContent;
-    
+
     // Re-enable recording after a short delay
     setTimeout(() => {
       this.ignoreChange = false;
