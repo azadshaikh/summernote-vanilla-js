@@ -26,6 +26,7 @@ import HorizontalRulePlugin from './plugins/HorizontalRule.js';
 import AlignPlugin from './plugins/Align.js';
 import CodeViewPlugin from './plugins/CodeView.js';
 import VideoPlugin from './plugins/Video.js';
+import TablePlugin from './plugins/Table.js';
 import SeparatorPlugin from './plugins/Separator.js';
 
 // Export core components
@@ -55,6 +56,7 @@ export {
   AlignPlugin,
   CodeViewPlugin,
   VideoPlugin,
+  TablePlugin,
   SeparatorPlugin
 };
 
@@ -95,6 +97,7 @@ class AsteroNoteEditor extends Editor {
       'align': AlignPlugin,
       'codeview': CodeViewPlugin,
       'video': VideoPlugin,
+      'table': TablePlugin,
       'separator': SeparatorPlugin
     };
 
@@ -190,6 +193,7 @@ if (typeof window !== 'undefined') {
     AlignPlugin,
     CodeViewPlugin,
     VideoPlugin,
+    TablePlugin,
     SeparatorPlugin,
     createEditor
   };

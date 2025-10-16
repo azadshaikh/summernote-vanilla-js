@@ -35,29 +35,7 @@ const sourcemap = isDevelopment || !isProduction;
 
 // Bundle configurations
 const configs = [
-  // Core bundle - UMD
-  {
-    input: 'src/v2/js/asteronote-core.js',
-    output: {
-      file: 'dist/v2/asteronote-core.js',
-      format: 'umd',
-      name: 'AsteroNoteCore',
-      exports: 'named',
-      sourcemap
-    },
-    plugins: [...commonPlugins, ...productionPlugins]
-  },
-  // Core bundle - ESM
-  {
-    input: 'src/v2/js/asteronote-core.js',
-    output: {
-      file: 'dist/v2/asteronote-core.esm.js',
-      format: 'es',
-      sourcemap
-    },
-    plugins: [...commonPlugins, ...productionPlugins]
-  },
-  // Standard bundle (core + essential plugins) - UMD
+  // Single bundle - CJS (CommonJS/UMD for CDN)
   {
     input: 'src/v2/js/asteronote.js',
     output: {
@@ -69,33 +47,11 @@ const configs = [
     },
     plugins: [...commonPlugins, ...productionPlugins]
   },
-  // Standard bundle (core + essential plugins) - ESM
+  // Single bundle - ESM (for modern bundlers and import)
   {
     input: 'src/v2/js/asteronote.js',
     output: {
       file: 'dist/v2/asteronote.esm.js',
-      format: 'es',
-      sourcemap
-    },
-    plugins: [...commonPlugins, ...productionPlugins]
-  },
-  // Full bundle (core + all plugins) - UMD
-  {
-    input: 'src/v2/js/asteronote-full.js',
-    output: {
-      file: 'dist/v2/asteronote-full.js',
-      format: 'umd',
-      name: 'AsteroNote',
-      exports: 'named',
-      sourcemap
-    },
-    plugins: [...commonPlugins, ...productionPlugins]
-  },
-  // Full bundle (core + all plugins) - ESM
-  {
-    input: 'src/v2/js/asteronote-full.js',
-    output: {
-      file: 'dist/v2/asteronote-full.esm.js',
       format: 'es',
       sourcemap
     },

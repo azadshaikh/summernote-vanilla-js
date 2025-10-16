@@ -15,24 +15,12 @@
     "name": "hackerwins",
     "email": "susukang98@gmail.com"
   },
-  "main": "dist/v2/summernote.js",
-  "module": "dist/v2/summernote.esm.js",
+  "main": "dist/v2/asteronote.js",
+  "module": "dist/v2/asteronote.esm.js",
   "exports": {
     ".": {
-      "require": "./dist/v2/summernote.js",
-      "import": "./dist/v2/summernote.esm.js"
-    },
-    "./core": {
-      "require": "./dist/v2/summernote-core.js",
-      "import": "./dist/v2/summernote-core.esm.js"
-    },
-    "./full": {
-      "require": "./dist/v2/summernote-full.js",
-      "import": "./dist/v2/summernote-full.esm.js"
-    },
-    "./plugins/*": {
-      "require": "./dist/v2/plugins/*.js",
-      "import": "./dist/v2/plugins/*.esm.js"
+      "require": "./dist/v2/asteronote.js",
+      "import": "./dist/v2/asteronote.esm.js"
     }
   },
   "files": [
