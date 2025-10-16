@@ -57,3 +57,30 @@
 /* Popover uses Bootstrap styles; no custom classes needed */
 .asteronote-editor .popover { z-index: 1040; }
 
+
+/* Image resize handles styles */
+.asteronote-image-handles {
+  border: 1px dashed rgba(30, 144, 255, 0.5);
+  box-sizing: border-box;
+}
+
+.asteronote-resize-handle {
+  box-sizing: border-box;
+}
+
+.asteronote-image-overlay {
+  box-sizing: border-box;
+}
+
+.asteronote-image-menu-btn {
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.asteronote-image-menu-btn:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+.asteronote-image-badge {
+  pointer-events: none;
+}
+

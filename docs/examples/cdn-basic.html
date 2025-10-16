@@ -28,7 +28,10 @@
     </div>
 
     <div id="editor" class="border rounded mb-3" style="min-height: 600px;">
-      This is the initial content of the editor.
+      <p>This is the initial content of the editor.</p>
+      <p>
+        <img src="https://picsum.photos/800/450" alt="Sample" style="max-width:100%; height:auto; display:block;" />
+      </p>
     </div>
 
     <div class="btn-group mb-3" role="group">
@@ -97,7 +100,7 @@
     }
 
     function setContent() {
-      editor.setContent('<p><strong>Hello World!</strong></p><p>This is sample content.</p>');
+      editor.setContent('<p><strong>Hello World!</strong></p><p>This is sample content.</p><p><img src="https://picsum.photos/800/450" alt="Sample" style="max-width:100%; height:auto; display:block;" /></p>');
     }
 
     function clearContent() {

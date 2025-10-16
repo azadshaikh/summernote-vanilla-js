@@ -36,6 +36,7 @@ import { on, off, trigger, ready } from './events.js';
 import EventEmitter from './EventEmitter.js';
 import PluginRegistry from './PluginRegistry.js';
 import History from './History.js';
+import ImageTool from './ImageTool.js';
 
 /**
  * Default editor configuration
@@ -92,6 +93,7 @@ export default class Editor extends EventEmitter {
     this.toolbar = null;
     this.toolbarGroups = new Map();
     this.wrapper = null;
+  this.imageTool = null;
 
     // Bind methods
     this.handleInput = this.handleInput.bind(this);
@@ -133,6 +135,10 @@ export default class Editor extends EventEmitter {
     this.history = new History(this, {
       maxSize: this.options.historySize || 100
     });
+
+    // Initialize image tool (core feature, no toolbar button)
+    this.imageTool = new ImageTool(this);
+    this.imageTool.init();
 
     // Set placeholder
     if (this.options.placeholder) {
@@ -580,6 +586,11 @@ export default class Editor extends EventEmitter {
     // Destroy all plugins through registry
     this.pluginRegistry.destroyAll();
     this.plugins.clear();
+    // Destroy image tool
+    if (this.imageTool) {
+      try { this.imageTool.destroy(); } catch (e) { console.warn('ImageTool destroy failed', e); }
+      this.imageTool = null;
+    }
 
     // Remove event handlers
     off(this.editable, 'input', this.handleInput);

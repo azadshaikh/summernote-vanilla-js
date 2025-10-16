@@ -283,8 +283,25 @@ export default class LinkPlugin extends BasePlugin {
     if (!node) return null;
     if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
     if (!node) return null;
-    if (node.tagName === 'A') return node;
-    return node.closest('a');
+
+    // Find the link element
+    let link = null;
+    if (node.tagName === 'A') {
+      link = node;
+    } else {
+      link = node.closest('a');
+    }
+
+    // Ignore links that only contain images (no text content)
+    if (link) {
+      const hasText = link.textContent.trim().length > 0;
+      const hasOnlyImage = link.children.length === 1 && link.children[0].tagName === 'IMG';
+      if (hasOnlyImage && !hasText) {
+        return null; // This is an image link, ignore it
+      }
+    }
+
+    return link;
   }
 
   // Trim whitespace-only edges from a range (text nodes only)
@@ -448,6 +465,9 @@ export default class LinkPlugin extends BasePlugin {
     el.addEventListener('mouseover', (e) => {
       const a = e.target && e.target.closest('a');
       if (!a || !el.contains(a)) return;
+      // Ignore links that contain only an image
+      const onlyImage = a.children.length === 1 && a.children[0].tagName === 'IMG' && a.textContent.trim().length === 0;
+      if (onlyImage) return;
       this.showPopoverFor(a, 'hover');
     });
     el.addEventListener('mouseleave', () => this.hidePopoverDelayed(200));
@@ -456,6 +476,10 @@ export default class LinkPlugin extends BasePlugin {
   }
 
   showPopoverFor(link, trigger = 'hover') {
+    // Guard: do not show popover for links that only contain an image
+    const onlyImage = link && link.children && link.children.length === 1 && link.children[0].tagName === 'IMG' && link.textContent.trim().length === 0;
+    if (onlyImage) return;
+
     this._hoverLink = link;
     const urlSpan = this.popover.querySelector('[data-role="url"]');
     if (urlSpan) urlSpan.textContent = (link.getAttribute('href') || link.textContent || '');
