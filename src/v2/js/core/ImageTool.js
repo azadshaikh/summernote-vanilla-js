@@ -41,6 +41,8 @@ export default class ImageTool {
     if (!this.editable) return;
     this.createHandleBox();
     this.editable.addEventListener('click', this.handleClick);
+    // Track scroll on the editable itself to avoid stale overlays
+    this.editable.addEventListener('scroll', this.handleScroll, { passive: true });
     document.addEventListener('click', this.handleDocClick);
     window.addEventListener('scroll', this.handleScroll, true); // Use capture for all scroll events
     window.addEventListener('resize', this.handleResize);
@@ -310,8 +312,15 @@ export default class ImageTool {
       this.handleBox.appendChild(handle);
     });
 
-    // Append to body for absolute positioning
-    document.body.appendChild(this.handleBox);
+    // Append to editor wrapper so it's clipped within the editor bounds
+    // and positions can be calculated relative to the editor viewport.
+    if (this.wrapper) {
+      this.wrapper.appendChild(this.handleBox);
+      // Ensure wrapper can be a positioning context
+      try { if (getComputedStyle(this.wrapper).position === 'static') this.wrapper.style.position = 'relative'; } catch (e) {}
+    } else {
+      document.body.appendChild(this.handleBox);
+    }
   }
 
   handleClick(e) {
@@ -365,6 +374,9 @@ export default class ImageTool {
 
     // Disable text selection during drag
     document.body.style.userSelect = 'none';
+
+    // Keep the image selected throughout the drag
+    this.selectImage(this.currentImage);
   }
 
   handleMouseMove(e) {
@@ -465,7 +477,25 @@ export default class ImageTool {
 
       // Trigger change event
       this.editor.emit('asteronote.change', this.editor.getContent());
+
+      // Re-select the image so the overlay remains active after resizing
+      this.selectImage(this.currentImage);
+      this.showForImage(this.currentImage);
     }
+  }
+
+  /**
+   * Programmatically select the image node to keep selection/overlay
+   */
+  selectImage(img) {
+    if (!img) return;
+    try {
+      const range = document.createRange();
+      range.selectNode(img);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch (e) { /* ignore */ }
   }
 
   showForImage(img) {
@@ -475,28 +505,55 @@ export default class ImageTool {
   }
 
   updateHandlePositions() {
-    if (!this.currentImage) return;
+    if (!this.currentImage || !this.handleBox) return;
 
-    const rect = this.currentImage.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || 0;
+    const imgRect = this.currentImage.getBoundingClientRect();
+    const wrapRect = (this.wrapper || document.body).getBoundingClientRect();
+    const editRect = (this.editable || this.wrapper || document.body).getBoundingClientRect();
 
-    // Position handle box around image
-    this.handleBox.style.top = `${rect.top + scrollTop}px`;
-    this.handleBox.style.left = `${rect.left + scrollLeft}px`;
-    this.handleBox.style.width = `${rect.width}px`;
-    this.handleBox.style.height = `${rect.height}px`;
+    // Compute intersection of image with editable area to avoid drawing outside editor
+    const ix1 = Math.max(imgRect.left, editRect.left);
+    const iy1 = Math.max(imgRect.top, editRect.top);
+    const ix2 = Math.min(imgRect.right, editRect.right);
+    const iy2 = Math.min(imgRect.bottom, editRect.bottom);
+    const iW = Math.max(0, ix2 - ix1);
+    const iH = Math.max(0, iy2 - iy1);
 
-    // Position individual handles
+    if (iW <= 0 || iH <= 0) {
+      // Not visible at all inside editor
+      this.hide();
+      return;
+    }
+
+    // Position handle box using coordinates relative to wrapper
+    const top = iy1 - wrapRect.top;
+    const left = ix1 - wrapRect.left;
+    this.handleBox.style.top = `${top}px`;
+    this.handleBox.style.left = `${left}px`;
+    this.handleBox.style.width = `${iW}px`;
+    this.handleBox.style.height = `${iH}px`;
+
+    // Always show handles, but clamp their positions into the visible overlay region.
+    // Compute offset of the intersection relative to the image's top-left.
+    const offX = ix1 - imgRect.left;
+    const offY = iy1 - imgRect.top;
     this.handles.forEach(handle => {
+      handle.style.display = 'block';
       const xRatio = parseFloat(handle.dataset.xRatio);
       const yRatio = parseFloat(handle.dataset.yRatio);
-
-      const x = rect.width * xRatio - 4; // center handle (8px / 2)
-      const y = rect.height * yRatio - 4;
-
-      handle.style.left = `${x}px`;
-      handle.style.top = `${y}px`;
+      // Ideal position relative to the image box
+      let hx = imgRect.width * xRatio - 4;
+      let hy = imgRect.height * yRatio - 4;
+      // Translate to overlay (intersection) coordinates
+      hx = hx - offX;
+      hy = hy - offY;
+      // Clamp to overlay bounds so handles never render outside
+      const maxX = Math.max(0, iW - 8);
+      const maxY = Math.max(0, iH - 8);
+      if (hx < 0) hx = 0; else if (hx > maxX) hx = maxX;
+      if (hy < 0) hy = 0; else if (hy > maxY) hy = maxY;
+      handle.style.left = `${hx}px`;
+      handle.style.top = `${hy}px`;
     });
   }
 
@@ -535,10 +592,26 @@ export default class ImageTool {
   }
 
   handleScroll(e) {
-    // Update handle positions on scroll
-    if (this.currentImage && this.handleBox.style.display === 'block') {
-      this.updateHandlePositions();
-    }
+    // Update or hide on scroll to prevent lingering overlay
+    if (!this.currentImage || this.handleBox.style.display !== 'block') return;
+
+    // If the image is outside the visible area of the editor wrapper, hide the overlay
+    try {
+      const imgRect = this.currentImage.getBoundingClientRect();
+      const wrapRect = (this.wrapper || this.editable || document.body).getBoundingClientRect();
+      const visible = (
+        imgRect.right > wrapRect.left &&
+        imgRect.left < wrapRect.right &&
+        imgRect.bottom > wrapRect.top &&
+        imgRect.top < wrapRect.bottom
+      );
+      if (!visible) {
+        this.hide();
+        return;
+      }
+    } catch (_) {}
+
+    this.updateHandlePositions();
   }
 
   handleResize(e) {
@@ -879,6 +952,7 @@ export default class ImageTool {
     this.handles = [];
     this.currentImage = null;
     this.editable.removeEventListener('click', this.handleClick);
+    try { this.editable.removeEventListener('scroll', this.handleScroll); } catch (e) {}
     document.removeEventListener('click', this.handleDocClick);
     document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseup', this.handleMouseUp);
