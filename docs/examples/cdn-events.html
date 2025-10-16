@@ -135,6 +135,17 @@
     const editor = new AsteroNote('#editor', {
       height: 300,
       placeholder: 'Type, format text, add links... All events will appear in the log →',
+      toolbar: [
+        'undo', 'redo',
+        'separator',
+        'heading', 'blockquote', 'list',
+        'separator',
+        'bold', 'italic', 'underline', 'strikethrough', 'highlight', 'code', 'align',
+        'separator',
+        'removeFormat', 'hr',
+        'separator',
+        'link'
+      ],
       callbacks: {
         onInit: () => logEvent('Callback: onInit'),
         onChange: (content) => logEvent('Callback: onChange', { length: content.length }),
