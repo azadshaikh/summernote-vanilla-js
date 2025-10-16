@@ -28,7 +28,7 @@
     </div>
 
     <div class="alert alert-info mb-4" role="alert">
-      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Remove
+      <strong>Included Plugins:</strong> Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Strikethrough, Highlight, Code, Blockquote, Remove
       Format, Lists, Link (Ctrl+K)<br>
       <small class="text-muted">Plugins are automatically loaded based on toolbar configuration</small>
     </div>
@@ -75,6 +75,7 @@
         'undo', 'redo',                                   // History
         'separator',                                      // Visual divider
         'heading',                                        // Headings (H1-H6)
+        'blockquote',                                     // Blockquote
         'separator',                                      // Visual divider
         'bold', 'italic', 'underline', 'strikethrough', 'highlight', 'code',  // Text formatting
         'separator',                                      // Visual divider
@@ -112,6 +113,7 @@
     editor.on('plugin.italic.toggled', () => console.log('Italic toggled'));
     editor.on('plugin.highlight.toggled', () => console.log('Highlight toggled'));
     editor.on('plugin.code.toggled', () => console.log('Code toggled'));
+    editor.on('plugin.blockquote.toggled', (data) => console.log('Blockquote toggled', data));
     editor.on('plugin.link.inserted', (data) => console.log('Link inserted:', data));
 
     // Set initial content
@@ -129,6 +131,7 @@
         <li><a href="https://asteronote.org">Link</a> creation (Ctrl+K)</li>
       </ul>
       <p>All toolbar buttons are rendered individually without button groups for a cleaner, more flexible interface!</p>
+      <blockquote><p>This is a sample blockquote. Use the Blockquote button to toggle.</p></blockquote>
       <p>Check the debug info below to see which plugins are loaded based on the toolbar configuration.</p>
     `);
   </script>
