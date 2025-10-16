@@ -61,8 +61,8 @@ export default class LinkPlugin extends BasePlugin {
     const relInput = this.dialog.querySelector('#asteronote-link-rel');
     urlInput.value = existingUrl;
     textInput.value = existingText || this.getSelectedText();
-    if (targetInput) targetInput.value = existing ? (existing.target || '_blank') : '_blank';
-    if (relInput) relInput.value = existing ? (existing.rel || 'noopener nofollow') : 'noopener nofollow';
+    if (targetInput) targetInput.value = existing ? (existing.target || '') : '_blank';
+    if (relInput) relInput.value = existing ? (existing.rel || '') : 'noopener nofollow';
 
     // Show minimal Bootstrap-like modal
     this.dialog.style.display = 'block';
@@ -158,7 +158,6 @@ export default class LinkPlugin extends BasePlugin {
     const text = (textInput.value || '').trim();
     const target = (targetInput && targetInput.value || '').trim();
     const rel = (relInput && relInput.value || '').trim();
-    if (!url) return;
 
     // Ensure focus; if we have a saved range use it, else place caret at end
     this.ensureFocusAndRange();
@@ -175,41 +174,62 @@ export default class LinkPlugin extends BasePlugin {
       }
     }
 
+    let didInsertOrUpdate = false;
     let existing = this.getLinkAtCursor();
     if (existing) {
-      existing.setAttribute('href', url);
+      if (url) existing.setAttribute('href', url); else existing.removeAttribute('href');
       if (text) existing.textContent = text;
       if (target) existing.target = target; else existing.removeAttribute('target');
       if (rel) existing.rel = rel; else existing.removeAttribute('rel');
-      // Move caret to end of the updated link
       this._placeCaretAfter(existing);
+      didInsertOrUpdate = true;
     } else {
       if (sel && sel.rangeCount > 0 && !sel.getRangeAt(0).collapsed) {
-        // If there is a selection, use execCommand to preserve formatting, then update text if provided
-        document.execCommand('createLink', false, url);
-        const newLink = this.getLinkAtCursor();
-        if (newLink) {
-          newLink.setAttribute('href', url);
-          if (text) newLink.textContent = text;
-          newLink.target = target || '_blank';
-          newLink.rel = rel || 'noopener noreferrer';
-          this._placeCaretAfter(newLink);
+        if (url) {
+          // Create link from selection
+          document.execCommand('createLink', false, url);
+          const newLink = this.getLinkAtCursor();
+          if (newLink) {
+            newLink.setAttribute('href', url);
+            if (text) newLink.textContent = text;
+            // Defaults for new links when not provided
+            newLink.target = target || '_blank';
+            newLink.rel = rel || 'noopener nofollow';
+            this._placeCaretAfter(newLink);
+            didInsertOrUpdate = true;
+          }
+        } else if (text) {
+          // Replace selection with plain text
+          const range = sel.getRangeAt(0);
+          range.deleteContents();
+          range.insertNode(document.createTextNode(text));
+          const r = document.createRange();
+          r.setStart(range.endContainer, range.endOffset);
+          r.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(r);
         }
       } else {
-        // No selection: insert link node at caret
-        const a = document.createElement('a');
-        a.setAttribute('href', url);
-        a.textContent = text || url;
-        a.target = target || '_blank';
-        a.rel = rel || 'noopener noreferrer';
-        this.insertNode(a);
-        this._placeCaretAfter(a);
+        // No selection
+        if (url) {
+          const a = document.createElement('a');
+          a.setAttribute('href', url);
+          a.textContent = text || url;
+          // Defaults for new links when not provided
+          a.target = target || '_blank';
+          a.rel = rel || 'noopener nofollow';
+          this.insertNode(a);
+          this._placeCaretAfter(a);
+          didInsertOrUpdate = true;
+        } else if (text) {
+          this.insertNode(document.createTextNode(text));
+        }
       }
     }
 
     this.hideDialog();
     this.editor.focus();
-    this.emitEvent('inserted', { url, text });
+    if (didInsertOrUpdate) this.emitEvent('inserted', { url, text });
   }
 
   removeLink() {
