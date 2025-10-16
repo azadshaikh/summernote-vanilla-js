@@ -130,3 +130,18 @@
 .asteronote-editor.asteronote-resizing {
   cursor: ns-resize;
 }
+
+/* Responsive video wrapper */
+.asteronote-editor .asteronote-video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  margin: .5rem 0;
+}
+.asteronote-editor .asteronote-video-wrapper iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}

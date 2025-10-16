@@ -27,6 +27,7 @@ import BlockquotePlugin from './plugins/Blockquote.js';
 import HorizontalRulePlugin from './plugins/HorizontalRule.js';
 import AlignPlugin from './plugins/Align.js';
 import CodeViewPlugin from './plugins/CodeView.js';
+import VideoPlugin from './plugins/Video.js';
 import SeparatorPlugin from './plugins/Separator.js';
 
 // Export core components
@@ -55,7 +56,8 @@ export {
   HorizontalRulePlugin,
   AlignPlugin,
   CodeViewPlugin,
-  SeparatorPlugin
+  SeparatorPlugin,
+  VideoPlugin
 };
 
 // Create pre-configured editor with all plugins
