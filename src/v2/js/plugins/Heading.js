@@ -15,16 +15,22 @@ export default class HeadingPlugin extends BasePlugin {
    */
   init() {
     this.currentHeading = null;
-    this.dropdownVisible = false;
 
     // Add heading button with dropdown
     this.addButton({
       name: 'heading',
       icon: this.getHeadingIcon('H'),
       tooltip: 'Heading',
-      callback: () => this.toggleDropdown(),
-      className: 'asteronote-btn-heading'
+      callback: () => {}, // No callback needed, Bootstrap handles it
+      className: 'asteronote-btn-heading dropdown-toggle'
     });
+
+    // Add Bootstrap dropdown attributes to button
+    const button = this.buttons.get('heading');
+    if (button && button.element) {
+      button.element.setAttribute('data-bs-toggle', 'dropdown');
+      button.element.setAttribute('aria-expanded', 'false');
+    }
 
     // Create dropdown menu
     this.createDropdown();
@@ -33,9 +39,6 @@ export default class HeadingPlugin extends BasePlugin {
     this.on('asteronote.keyup', () => this.updateButtonState());
     this.on('asteronote.mouseup', () => this.updateButtonState());
     this.on('asteronote.selectionchange', () => this.updateButtonState());
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', this.handleOutsideClick.bind(this));
 
     // Initial button state
     setTimeout(() => this.updateButtonState(), 0);
@@ -55,7 +58,7 @@ export default class HeadingPlugin extends BasePlugin {
       'H6': 'ri-h-6'
     };
     const cls = ri[level] || ri['H'];
-    return `<i class="${cls}"></i><i class="ri-arrow-down-s-line"></i>`;
+    return `<i class="${cls}"></i>`;
   }
 
   /**
@@ -65,24 +68,17 @@ export default class HeadingPlugin extends BasePlugin {
     const button = this.buttons.get('heading');
     if (!button || !button.element) return;
 
-    // Wrap button in a container for positioning
-    const wrapper = document.createElement('div');
-    wrapper.style.position = 'relative';
-    wrapper.style.display = 'inline-block';
+    // Wrap button in btn-group for Bootstrap dropdown
+    const btnGroup = document.createElement('div');
+    btnGroup.className = 'btn-group';
 
-    // Replace button with wrapper
-    button.element.parentNode.insertBefore(wrapper, button.element);
-    wrapper.appendChild(button.element);
+    // Replace button with btn-group
+    button.element.parentNode.insertBefore(btnGroup, button.element);
+    btnGroup.appendChild(button.element);
 
     // Create dropdown container
-    this.dropdown = document.createElement('div');
+    this.dropdown = document.createElement('ul');
     this.dropdown.className = 'dropdown-menu';
-    this.dropdown.style.position = 'absolute';
-    this.dropdown.style.top = '100%';
-    this.dropdown.style.left = '0';
-    this.dropdown.style.marginTop = '0.125rem';
-    this.dropdown.style.zIndex = '1000';
-    this.dropdown.style.minWidth = '200px';
 
     // Heading options
     const headings = [
@@ -96,6 +92,7 @@ export default class HeadingPlugin extends BasePlugin {
     ];
 
     headings.forEach(({ level, label, tag }) => {
+      const li = document.createElement('li');
       const item = document.createElement('button');
       item.className = 'dropdown-item d-flex align-items-center';
       item.type = 'button';
@@ -106,75 +103,15 @@ export default class HeadingPlugin extends BasePlugin {
 
       item.addEventListener('click', (e) => {
         e.preventDefault();
-        e.stopPropagation();
         this.applyHeading(level);
-        this.hideDropdown();
       });
 
-      this.dropdown.appendChild(item);
+      li.appendChild(item);
+      this.dropdown.appendChild(li);
     });
 
-    // Append dropdown to wrapper
-    wrapper.appendChild(this.dropdown);
-    this.dropdownWrapper = wrapper;
-  }
-
-  /**
-   * Toggle dropdown visibility
-   */
-  toggleDropdown() {
-    if (this.dropdownVisible) {
-      this.hideDropdown();
-    } else {
-      this.showDropdown();
-    }
-  }
-
-  /**
-   * Show dropdown
-   */
-  showDropdown() {
-    if (!this.dropdown) return;
-
-    const button = this.buttons.get('heading');
-    if (!button || !button.element) return;
-
-    // Show dropdown with Bootstrap's show class
-    this.dropdown.classList.add('show');
-    this.dropdown.style.display = 'block';
-
-    this.dropdownVisible = true;
-    button.element.classList.add('active');
-  }
-
-  /**
-   * Hide dropdown
-   */
-  hideDropdown() {
-    if (!this.dropdown) return;
-
-    const button = this.buttons.get('heading');
-    if (button && button.element) {
-      button.element.classList.remove('active');
-    }
-
-    this.dropdown.classList.remove('show');
-    this.dropdown.style.display = 'none';
-    this.dropdownVisible = false;
-  }
-
-  /**
-   * Handle clicks outside dropdown
-   */
-  handleOutsideClick(event) {
-    const button = this.buttons.get('heading');
-    if (!button || !button.element) return;
-
-    if (this.dropdownVisible &&
-        !button.element.contains(event.target) &&
-        !this.dropdown.contains(event.target)) {
-      this.hideDropdown();
-    }
+    // Append dropdown to btn-group
+    btnGroup.appendChild(this.dropdown);
   }
 
   /**
